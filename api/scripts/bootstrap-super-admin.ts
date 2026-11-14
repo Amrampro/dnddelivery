@@ -11,7 +11,7 @@ const input = z
   .safeParse(process.env);
 if (!input.success) {
   console.error(
-    "Bootstrap refused: supply BOOTSTRAP_CONFIRM, BOOTSTRAP_EMAIL, BOOTSTRAP_NAME and a password of 12-128 characters via the private environment. No account created.",
+    "Bootstrap refused: supply BOOTSTRAP_CONFIRM, BOOTSTRAP_EMAIL, BOOTSTRAP_NAME and a password of 12–128 characters via the private environment. No account created.",
   );
   process.exit(1);
 }

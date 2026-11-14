@@ -5,6 +5,7 @@ permissions:
 jobs:
   mariadb:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     services:
       mariadb:
         image: mariadb:10.11.19

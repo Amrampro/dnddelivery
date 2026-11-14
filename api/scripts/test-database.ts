@@ -19,6 +19,9 @@ if (
 const environment = { ...process.env, DATABASE_URL: value, NODE_ENV: "test" };
 for (const args of [
   ["--import", "tsx", "scripts/migrate-deploy.ts"],
+  // Business fixtures require the reference roles, permissions and subscription plan.
+  // Seed before the suite as well as afterwards to exercise repeatable initialization.
+  ["--import", "tsx", "prisma/seed.ts"],
   [
     "--import",
     "tsx",

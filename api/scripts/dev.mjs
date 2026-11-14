@@ -23,7 +23,7 @@ const watcher = spawn(node, [...command, ...process.argv.slice(2)], {
 });
 
 watcher.on("error", (error) => {
-  logError(`Impossible de lancer l'API : ${error.message}`);
+  logError(`Impossible de lancer l’API : ${error.message}`);
   process.exitCode = 1;
 });
 watcher.on("exit", (code, signal) => {

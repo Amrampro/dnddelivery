@@ -1,0 +1,20 @@
+export const tokens = {
+  colors: {
+    navy: "#033173",
+    green: "#0BB058",
+    action: "#087C42",
+    white: "#FFFFFF",
+    text: "#172B45",
+    muted: "#637287",
+    border: "#E4E9EF",
+    background: "#F6F8FB",
+    softGreen: "#EAF7F0",
+    danger: "#B42335",
+    warning: "#916114",
+  },
+  spacing: { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32, section: 48 },
+  radius: { sm: 8, md: 12, lg: 18, pill: 999 },
+  typography: { caption: 12, body: 15, subtitle: 18, title: 28, display: 36 },
+  motion: { fast: 140, normal: 220 },
+  shadow: { color: "#152D48", opacity: 0.05, radius: 16, offset: 4 },
+} as const;

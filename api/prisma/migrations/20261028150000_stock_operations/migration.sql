@@ -1,0 +1,99 @@
+ALTER TABLE Product MODIFY COLUMN sku VARCHAR(80) NULL, ADD COLUMN category VARCHAR(160) NULL, ADD COLUMN imageKey VARCHAR(80) NULL, ADD COLUMN version INT NOT NULL DEFAULT 1;
+ALTER TABLE Transfer ADD COLUMN version INT NOT NULL DEFAULT 1;
+ALTER TABLE TransferItem ADD COLUMN receivedQuantity INT UNSIGNED NOT NULL DEFAULT 0, ADD COLUMN lostQuantity INT UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE TransferItem ADD CONSTRAINT TransferItem_received_check CHECK(receivedQuantity+lostQuantity<=quantity);
+ALTER TABLE StockReservation MODIFY COLUMN orderItemId CHAR(36) NULL, ADD COLUMN reference VARCHAR(60) NULL, ADD COLUMN status VARCHAR(12) NOT NULL DEFAULT 'ACTIVE', ADD COLUMN version INT NOT NULL DEFAULT 1, ADD COLUMN notes VARCHAR(1000) NULL;
+CREATE UNIQUE INDEX StockReservation_companyId_reference_key ON StockReservation(companyId,reference);
+ALTER TABLE StockReservation ADD CONSTRAINT StockReservation_status_check CHECK(status IN ('ACTIVE','RELEASED','CONSUMED'));
+CREATE TABLE StockDeposit (
+ id CHAR(36) PRIMARY KEY,companyId CHAR(36) NOT NULL,agencyId CHAR(36) NOT NULL,shopId CHAR(36) NOT NULL,reference VARCHAR(60) NOT NULL,status VARCHAR(12) NOT NULL DEFAULT 'DRAFT',version INT NOT NULL DEFAULT 1,actorId CHAR(36) NOT NULL,confirmedById CHAR(36) NULL,confirmedAt DATETIME(3) NULL,cancelledAt DATETIME(3) NULL,notes VARCHAR(1000) NULL,createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),updatedAt DATETIME(3) NOT NULL,
+ UNIQUE INDEX StockDeposit_companyId_reference_key(companyId,reference),UNIQUE INDEX StockDeposit_companyId_id_key(companyId,id),INDEX StockDeposit_companyId_agencyId_createdAt_idx(companyId,agencyId,createdAt),
+ FOREIGN KEY(companyId,agencyId) REFERENCES Agency(companyId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+ FOREIGN KEY(companyId,shopId) REFERENCES CompanyShop(companyId,shopId) ON DELETE RESTRICT ON UPDATE RESTRICT,
+ FOREIGN KEY(actorId) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+ FOREIGN KEY(confirmedById) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+ CHECK(status IN ('DRAFT','CONFIRMED','CANCELLED')),CHECK(version>0)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE StockDepositItem (
+ id CHAR(36) PRIMARY KEY,companyId CHAR(36) NOT NULL,depositId CHAR(36) NOT NULL,shopId CHAR(36) NOT NULL,productId CHAR(36) NOT NULL,quantity INT UNSIGNED NOT NULL,
+ UNIQUE INDEX StockDepositItem_companyId_depositId_productId_key(companyId,depositId,productId),FOREIGN KEY(companyId,depositId) REFERENCES StockDeposit(companyId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(shopId,productId) REFERENCES Product(shopId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,CHECK(quantity>0)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE StockWithdrawal (
+ id CHAR(36) PRIMARY KEY,companyId CHAR(36) NOT NULL,agencyId CHAR(36) NOT NULL,shopId CHAR(36) NOT NULL,stockId CHAR(36) NOT NULL,reference VARCHAR(60) NOT NULL,quantity INT UNSIGNED NOT NULL,kind VARCHAR(12) NOT NULL,reason VARCHAR(500) NOT NULL,recipient VARCHAR(160) NULL,actorId CHAR(36) NOT NULL,createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+ UNIQUE INDEX StockWithdrawal_companyId_reference_key(companyId,reference),INDEX StockWithdrawal_companyId_agencyId_createdAt_idx(companyId,agencyId,createdAt),FOREIGN KEY(companyId,stockId) REFERENCES Stock(companyId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(actorId) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,CHECK(quantity>0),CHECK(kind IN ('RETURN','WITHDRAWAL'))
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE TransferIncident (
+ id CHAR(36) PRIMARY KEY,companyId CHAR(36) NOT NULL,transferId CHAR(36) NOT NULL,itemId CHAR(36) NOT NULL,shopId CHAR(36) NOT NULL,productId CHAR(36) NOT NULL,quantity INT UNSIGNED NOT NULL,kind VARCHAR(12) NOT NULL,description VARCHAR(1000) NOT NULL,status VARCHAR(12) NOT NULL DEFAULT 'OPEN',actorId CHAR(36) NOT NULL,resolvedById CHAR(36) NULL,resolution VARCHAR(30) NULL,reason VARCHAR(500) NULL,resolvedAt DATETIME(3) NULL,createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),updatedAt DATETIME(3) NOT NULL,
+ INDEX TransferIncident_companyId_transferId_createdAt_idx(companyId,transferId,createdAt),FOREIGN KEY(companyId,transferId) REFERENCES Transfer(companyId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(companyId,itemId) REFERENCES TransferItem(companyId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(actorId) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(resolvedById) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,CHECK(quantity>0),CHECK(kind IN ('MISSING','DAMAGED','REFUSED','OTHER')),CHECK(status IN ('OPEN','RESOLVED'))
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE InventorySession (
+ id CHAR(36) PRIMARY KEY,companyId CHAR(36) NOT NULL,agencyId CHAR(36) NOT NULL,shopId CHAR(36) NULL,reference VARCHAR(60) NOT NULL,status VARCHAR(12) NOT NULL DEFAULT 'DRAFT',version INT NOT NULL DEFAULT 1,actorId CHAR(36) NOT NULL,submittedById CHAR(36) NULL,submittedAt DATETIME(3) NULL,decidedById CHAR(36) NULL,decidedAt DATETIME(3) NULL,reason VARCHAR(500) NULL,notes VARCHAR(1000) NULL,createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),updatedAt DATETIME(3) NOT NULL,
+ UNIQUE INDEX InventorySession_companyId_reference_key(companyId,reference),UNIQUE INDEX InventorySession_companyId_id_key(companyId,id),INDEX InventorySession_companyId_agencyId_createdAt_idx(companyId,agencyId,createdAt),FOREIGN KEY(companyId,agencyId) REFERENCES Agency(companyId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(companyId,shopId) REFERENCES CompanyShop(companyId,shopId) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(actorId) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(submittedById) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(decidedById) REFERENCES User(id) ON DELETE RESTRICT ON UPDATE RESTRICT,CHECK(status IN ('DRAFT','SUBMITTED','APPROVED','REJECTED')),CHECK(version>0)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE TABLE InventoryItem (
+ id CHAR(36) PRIMARY KEY,companyId CHAR(36) NOT NULL,inventoryId CHAR(36) NOT NULL,stockId CHAR(36) NOT NULL,shopId CHAR(36) NOT NULL,productId CHAR(36) NOT NULL,expectedPhysical INT UNSIGNED NOT NULL,expectedReserved INT UNSIGNED NOT NULL,stockVersion INT UNSIGNED NOT NULL,countedQuantity INT UNSIGNED NULL,reason VARCHAR(500) NULL,
+ UNIQUE INDEX InventoryItem_companyId_inventoryId_stockId_key(companyId,inventoryId,stockId),FOREIGN KEY(companyId,inventoryId) REFERENCES InventorySession(companyId,id) ON DELETE RESTRICT ON UPDATE RESTRICT,FOREIGN KEY(companyId,stockId,shopId,productId) REFERENCES Stock(companyId,id,shopId,productId) ON DELETE RESTRICT ON UPDATE RESTRICT,CHECK(expectedReserved<=expectedPhysical)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.read','stocks.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.read' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.deposit','stocks.deposit',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.deposit' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.withdraw','stocks.withdraw',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.withdraw' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.reserve','stocks.reserve',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.reserve' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.transfer','stocks.transfer',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.transfer' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.inventory','stocks.inventory',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.inventory' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.approve','stocks.approve',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.approve' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.threshold','stocks.threshold',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.threshold' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.read','stocks.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.read' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.deposit','stocks.deposit',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.deposit' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.withdraw','stocks.withdraw',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.withdraw' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.reserve','stocks.reserve',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.reserve' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.transfer','stocks.transfer',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.transfer' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.inventory','stocks.inventory',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.inventory' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.approve','stocks.approve',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.approve' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.threshold','stocks.threshold',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.threshold' WHERE r.code='agency_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.read','stocks.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.read' WHERE r.code='stock_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.deposit','stocks.deposit',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.deposit' WHERE r.code='stock_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.withdraw','stocks.withdraw',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.withdraw' WHERE r.code='stock_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.reserve','stocks.reserve',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.reserve' WHERE r.code='stock_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.transfer','stocks.transfer',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.transfer' WHERE r.code='stock_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.inventory','stocks.inventory',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.inventory' WHERE r.code='stock_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'stocks.threshold','stocks.threshold',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='stocks.threshold' WHERE r.code='stock_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.products.read','shop.products.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.products.read' WHERE r.code='shop_owner' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.products.manage','shop.products.manage',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.products.manage' WHERE r.code='shop_owner' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.stocks.read','shop.stocks.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.stocks.read' WHERE r.code='shop_owner' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.products.read','shop.products.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.products.read' WHERE r.code='shop_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.products.manage','shop.products.manage',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.products.manage' WHERE r.code='shop_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.stocks.read','shop.stocks.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.stocks.read' WHERE r.code='shop_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.products.read','shop.products.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.products.read' WHERE r.code='shop_employee' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
+INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.stocks.read','shop.stocks.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.stocks.read' WHERE r.code='shop_employee' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);

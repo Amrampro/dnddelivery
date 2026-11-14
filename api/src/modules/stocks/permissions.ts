@@ -1,0 +1,42 @@
+export const stockGrants: Record<string, readonly string[]> = {
+  company_admin: [
+    "stocks.read",
+    "stocks.deposit",
+    "stocks.withdraw",
+    "stocks.reserve",
+    "stocks.transfer",
+    "stocks.inventory",
+    "stocks.approve",
+    "stocks.threshold",
+  ],
+  agency_manager: [
+    "stocks.read",
+    "stocks.deposit",
+    "stocks.withdraw",
+    "stocks.reserve",
+    "stocks.transfer",
+    "stocks.inventory",
+    "stocks.approve",
+    "stocks.threshold",
+  ],
+  stock_manager: [
+    "stocks.read",
+    "stocks.deposit",
+    "stocks.withdraw",
+    "stocks.reserve",
+    "stocks.transfer",
+    "stocks.inventory",
+    "stocks.threshold",
+  ],
+  shop_owner: [
+    "shop.products.read",
+    "shop.products.manage",
+    "shop.stocks.read",
+  ],
+  shop_manager: [
+    "shop.products.read",
+    "shop.products.manage",
+    "shop.stocks.read",
+  ],
+  shop_employee: ["shop.products.read", "shop.stocks.read"],
+};

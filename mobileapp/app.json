@@ -1,0 +1,57 @@
+{
+  "expo": {
+    "name": "DND Delivery",
+    "slug": "dnd-delivery",
+    "version": "1.0.0",
+    "scheme": "dnddelivery",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "icon": "./assets/generated/icon.png",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.goulbam.dnddelivery"
+    },
+    "android": {
+      "package": "com.goulbam.dnddelivery",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/generated/icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/generated/icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/generated/icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#FFFFFF"
+        }
+      ],
+      "expo-font",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Autorisez DND Delivery à photographier le colis pour conserver une preuve de remise.",
+          "photosPermission": "Autorisez DND Delivery à joindre une photo du colis comme preuve.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#0BB058"
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      "./plugins/with-windows-cmake-paths.cjs"
+    ]
+  }
+}

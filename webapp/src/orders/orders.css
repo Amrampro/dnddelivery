@@ -1,0 +1,75 @@
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.order-wide {
+  grid-column: 1/-1;
+}
+.order-form {
+  display: grid;
+  gap: 22px;
+  max-width: 1100px;
+}
+.order-steps {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.order-steps span {
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: #eef3fa;
+  color: #64748b;
+  font-size: 13px;
+}
+.order-steps .active {
+  background: #033173;
+  color: #fff;
+}
+.order-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+.order-item,
+.order-directory {
+  border-top: 1px solid #dbe4ef;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+.order-history {
+  padding-left: 22px;
+}
+.order-history li {
+  padding: 12px 0;
+}
+.order-history span {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.order-history pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.order-reference {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.order-review p {
+  margin: 14px 0;
+}
+@media (max-width: 700px) {
+  .order-grid {
+    grid-template-columns: 1fr;
+  }
+  .order-steps span {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}

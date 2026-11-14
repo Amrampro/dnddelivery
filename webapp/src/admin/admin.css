@@ -1,0 +1,176 @@
+.admin-toolbar,
+.admin-filters {
+  display: flex;
+  gap: 16px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+.admin-toolbar p {
+  font-size: 12px;
+}
+.admin-toolbar .ds-field {
+  min-width: 230px;
+}
+.admin-filters > .ds-field:first-child {
+  flex: 2;
+  min-width: 230px;
+}
+.admin-filters > .ds-field {
+  flex: 1;
+  min-width: 130px;
+}
+.admin-form {
+  display: grid;
+  gap: 24px;
+}
+.admin-company-name {
+  font-weight: 650;
+  color: var(--ds-navy);
+  display: grid;
+  gap: 5px;
+}
+.admin-company-name small,
+.admin-block {
+  font-size: 11px;
+  color: var(--ds-muted);
+  font-weight: 400;
+  display: block;
+}
+.admin-details {
+  display: grid;
+  gap: 15px;
+  margin: 0;
+}
+.admin-details > div {
+  display: grid;
+  gap: 5px;
+  border-bottom: 1px solid var(--ds-border);
+  padding-bottom: 12px;
+}
+.admin-details dt {
+  font-size: 11px;
+  color: var(--ds-muted);
+}
+.admin-details dd {
+  margin: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--ds-border);
+  padding-bottom: 12px;
+}
+.admin-tabs a {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--ds-muted);
+  min-height: 44px;
+}
+.admin-tabs a[aria-current="page"] {
+  background: var(--ds-navy);
+  color: white;
+}
+.admin-person {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--ds-border);
+  padding: 20px 0;
+  align-items: center;
+}
+.admin-person p {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.admin-person small {
+  font-size: 10px;
+  color: var(--ds-muted);
+}
+.admin-notice {
+  background: #edf8f1;
+  color: var(--ds-ink);
+  border: 1px solid #d5edde;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+}
+.admin-notice p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+.admin-lookup {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+.admin-lookup > .ds-button {
+  justify-self: start;
+}
+.admin-lookup p {
+  font-size: 13px;
+}
+.admin-company-logo {
+  max-height: 150px;
+  max-width: 240px;
+  object-fit: contain;
+  display: block;
+  margin-top: 20px;
+}
+.ws-shell .ds-table td {
+  overflow-wrap: anywhere;
+  max-width: 350px;
+}
+.admin-form input[type="file"] {
+  padding: 10px;
+  font-size: 12px;
+}
+.admin-form input:disabled {
+  opacity: 0.7;
+}
+.admin-form .ds-form-grid > .ws-disclaimer {
+  grid-column: 1/-1;
+}
+.ws-shell .ds-stat strong {
+  color: var(--ds-ink);
+}
+@media (max-width: 700px) {
+  .admin-person {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .admin-notice {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .admin-filters > .ds-field,
+  .admin-filters > .ds-field:first-child {
+    min-width: 100%;
+    flex: 1;
+  }
+  .admin-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .admin-toolbar .ds-field {
+    min-width: 0;
+  }
+  .admin-tabs a {
+    font-size: 11px;
+    padding: 10px;
+  }
+  .admin-person .ds-actions {
+    gap: 8px;
+  }
+  .admin-person .ds-button {
+    font-size: 11px;
+  }
+}

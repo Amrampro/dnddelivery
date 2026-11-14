@@ -1,0 +1,49 @@
+import { createAuthRouter } from "../modules/auth/auth.routes.js";
+import {
+  createAdminRouter,
+  createInvitationRouter,
+} from "../modules/admin/routes.js";
+import { Router } from "express";
+import { createReportRouter } from "../modules/reports/routes.js";
+import { createSubscriptionRouter } from "../modules/subscriptions/routes.js";
+import { health, readiness } from "../controllers/health.controller.js";
+import { createOrganizationRouter } from "../modules/organization/routes.js";
+import {
+  createPartnerRouter,
+  createCompanyPartnerRouter,
+  createPartnerRegistrationRouter,
+} from "../modules/partners/routes.js";
+import { createProductRouter } from "../modules/products/routes.js";
+import { createStockRouter } from "../modules/stocks/routes.js";
+import { createOrderRouter } from "../modules/orders/routes.js";
+import { createDeliveryRouter } from "../modules/deliveries/routes.js";
+import { createFinancialRouter } from "../modules/collections/routes.js";
+import { createTrackingRouter, createConfirmationRouter } from "../modules/confirmation/routes.js";
+export const routes = Router();
+routes.get("/health", health);
+routes.get("/ready", readiness);
+routes.use("/tracking", createTrackingRouter());
+routes.use(createConfirmationRouter());
+routes.use("/auth", createAuthRouter());
+routes.use("/reports", createReportRouter());
+routes.use("/admin", createSubscriptionRouter(true));
+routes.use("/admin", createAdminRouter());
+routes.use("/company", createSubscriptionRouter(false));
+routes.use("/company", createOrganizationRouter());
+routes.use("/company", createCompanyPartnerRouter());
+routes.use("/partners", createPartnerRouter());
+routes.use("/partner-registration", createPartnerRegistrationRouter());
+routes.use("/products", createProductRouter());
+routes.use(createStockRouter());
+routes.use(createOrderRouter());
+routes.use(createDeliveryRouter());
+routes.use(createFinancialRouter());
+routes.use("/driver", createOrganizationRouter(false, true));
+routes.use(
+  "/admin/companies/:companyId/organization",
+  createOrganizationRouter(true),
+);
+routes.use("/invitations", createInvitationRouter());
+const v1 = Router();
+v1.get("/health", health);
+routes.use("/v1", v1);

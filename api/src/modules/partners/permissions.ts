@@ -1,0 +1,30 @@
+export const partnerGrants: Record<string, readonly string[]> = {
+  company_admin: ["partners.read", "partners.manage"],
+  shop_owner: [
+    "workspace.access",
+    "shop.profile.read",
+    "shop.profile.write",
+    "shop.users.read",
+    "shop.users.manage",
+    "shop.collaborations.read",
+    "shop.collaborations.manage",
+    "shop.history.read",
+    "shop.notifications.read",
+  ],
+  shop_manager: [
+    "workspace.access",
+    "shop.profile.read",
+    "shop.profile.write",
+    "shop.users.read",
+    "shop.collaborations.read",
+    "shop.collaborations.manage",
+    "shop.history.read",
+    "shop.notifications.read",
+  ],
+  shop_employee: [
+    "workspace.access",
+    "shop.profile.read",
+    "shop.collaborations.read",
+    "shop.notifications.read",
+  ],
+};

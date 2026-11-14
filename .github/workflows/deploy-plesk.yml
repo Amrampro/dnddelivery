@@ -1,0 +1,82 @@
+name: Build and publish Plesk application
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: plesk-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+  build:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.2'
+          cache: npm
+          cache-dependency-path: |
+            api/package-lock.json
+            webapp/package-lock.json
+      - name: Build API
+        working-directory: api
+        run: npm ci && npm run build
+      - name: Build web for the same origin
+        working-directory: webapp
+        env:
+          VITE_API_URL: /api
+        run: npm ci && npm run build
+      - name: Assemble a single application
+        run: node scripts/package-plesk.mjs
+      - name: Archive release including dotfiles
+        run: tar -C .local-preserved/plesk-release -czf plesk-release.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plesk-${{ github.sha }}
+          path: plesk-release.tar.gz
+          retention-days: 14
+  publish:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: plesk-${{ github.sha }}
+          path: ${{ runner.temp }}/dnd-artifact
+      - name: Update the dedicated Plesk branch
+        env:
+          RELEASE_COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          release="$RUNNER_TEMP/dnd-release"
+          mkdir "$release"
+          if git show-ref --verify --quiet refs/remotes/origin/plesk-deploy; then
+            git worktree add "$release" origin/plesk-deploy
+            git -C "$release" rm -r --ignore-unmatch .
+          else
+            git worktree add --detach "$release" HEAD
+            git -C "$release" checkout --orphan plesk-release
+            git -C "$release" rm -rf .
+          fi
+          tar -xzf "$RUNNER_TEMP/dnd-artifact/plesk-release.tar.gz" -C "$release"
+          git -C "$release" config user.name 'github-actions[bot]'
+          git -C "$release" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$release" add -A
+          git -C "$release" commit -m "Deploy $RELEASE_COMMIT"
+          git -C "$release" push origin HEAD:refs/heads/plesk-deploy

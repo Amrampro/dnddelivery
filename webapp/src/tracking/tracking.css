@@ -1,0 +1,131 @@
+.recipient-tracking {
+  min-height: 100vh;
+  background: #f4f7fb;
+  color: #033173;
+}
+.recipient-tracking > header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 5%;
+  background: #fff;
+  border-bottom: 1px solid #e4eaf2;
+}
+.recipient-tracking > header img {
+  max-width: 160px;
+}
+.recipient-tracking > header span {
+  font-size: 13px;
+}
+.recipient-tracking-content {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 32px 18px 48px;
+  display: grid;
+  gap: 20px;
+}
+.recipient-tracking h1 {
+  font-size: clamp(28px, 6vw, 40px);
+  line-height: 1.15;
+  margin: 0;
+}
+.recipient-tracking h2 {
+  font-size: 21px;
+}
+.recipient-tracking p {
+  line-height: 1.6;
+  margin: 6px 0;
+}
+.recipient-tracking .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: #078743;
+  font-weight: 700;
+}
+.recipient-tracking form {
+  display: grid;
+  gap: 18px;
+  margin-top: 20px;
+}
+.recipient-tracking input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid #c7d1e1;
+  border-radius: 10px;
+  font: inherit;
+}
+.recipient-tracking button {
+  min-height: 48px;
+  max-width: 100%;
+  white-space: normal;
+}
+.tracking-reference {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  letter-spacing: 0.03em;
+  color: #53647c;
+}
+.recipient-tracking .muted {
+  font-size: 13px;
+  color: #53647c;
+}
+.recipient-timeline {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0 0 0 16px;
+  border-left: 2px solid #dce6e0;
+}
+.recipient-timeline li {
+  position: relative;
+  padding: 0 0 28px 18px;
+}
+.recipient-timeline li::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #0bb058;
+  border: 3px solid #e5f5ed;
+  border-radius: 50%;
+  left: -23px;
+  top: 1px;
+}
+.recipient-timeline time {
+  display: block;
+  margin-top: 7px;
+  font-size: 13px;
+  color: #53647c;
+}
+.recipient-otp {
+  font-size: clamp(34px, 9vw, 50px);
+  letter-spacing: 0.18em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  padding: 18px 0;
+}
+.recipient-tracking footer {
+  font-size: 13px;
+  text-align: center;
+  padding-top: 8px;
+}
+.recipient-tracking .card {
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .recipient-tracking > header span {
+    display: none;
+  }
+  .recipient-tracking-content {
+    padding: 24px 14px 36px;
+    gap: 16px;
+  }
+  .recipient-tracking .card {
+    padding: 20px;
+  }
+  .recipient-tracking button {
+    width: 100%;
+  }
+}

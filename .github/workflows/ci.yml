@@ -53,6 +53,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         app: [api, webapp, mobileapp]
     defaults:
@@ -75,6 +76,9 @@ jobs:
         run: npm run build -- --max-workers 2
         env:
           CI: 'true'
+      - name: Generate API unit-test key
+        if: matrix.app == 'api'
+        run: node -e 'const {randomBytes}=require("node:crypto"); require("node:fs").appendFileSync(process.env.GITHUB_ENV, "DELIVERY_SECRET="+randomBytes(32).toString("hex")+"\n")'
       - run: npm test
         env:
           LOG_LEVEL: silent
@@ -90,6 +94,7 @@ jobs:
 
   database:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     services:
       mysql:
         image: mysql:8.4

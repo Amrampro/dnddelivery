@@ -1,0 +1,75 @@
+{
+  "name": "dnd-delivery-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4 <23 || >=24.22.1 <25 || >=26.12.1 <27"
+  },
+  "scripts": {
+    "ops:preflight": "node dist/jobs/preflight.js",
+    "confirmation:notifications": "node dist/jobs/confirmation.js",
+    "confirmation:cleanup": "node dist/jobs/proof-cleanup.js",
+    "collections:notifications": "node dist/jobs/collections.js",
+    "deliveries:notifications": "node dist/jobs/deliveries.js",
+    "orders:notifications": "node dist/jobs/orders.js",
+    "partners:notifications": "node dist/jobs/partners.js",
+    "subscriptions:expire": "node dist/jobs/subscriptions.js expire",
+    "subscriptions:reminders": "node dist/jobs/subscriptions.js reminders",
+    "subscriptions:notifications": "node dist/jobs/subscriptions.js notifications",
+    "dev": "node scripts/dev.mjs",
+    "build": "prisma generate && tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint .",
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "prisma generate && tsc --noEmit && tsc -p tsconfig.tests.json",
+    "db:validate": "prisma validate",
+    "db:generate": "prisma generate",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "tsx scripts/migrate-deploy.ts",
+    "db:migrate:status": "prisma migrate status",
+    "db:seed": "prisma db seed",
+    "test:db": "tsx scripts/test-database.ts",
+    "auth:bootstrap": "tsx scripts/bootstrap-super-admin.ts"
+  },
+  "dependencies": {
+    "@js-temporal/polyfill": "^0.5.1",
+    "@node-rs/argon2": "^2.2.2",
+    "@prisma/adapter-mariadb": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.1.0",
+    "jose": "^6.2.13",
+    "nodemailer": "^10.1.7",
+    "pdfkit": "^0.20.2",
+    "pino": "^10.0.0",
+    "pino-http": "^11.0.0",
+    "sharp": "^0.35.5",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pdfkit": "^0.17.7",
+    "eslint": "^10.13.0",
+    "prisma": "^7.10.1",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.72.0"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "^11.1.1"
+    },
+    "minimatch@>=7": "11.0.1"
+  }
+}

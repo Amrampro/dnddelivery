@@ -1,0 +1,1776 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum AccountStatus {
+  ACTIVE
+  DISABLED
+  LOCKED
+}
+
+enum OrganizationStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum RoleScope {
+  GLOBAL
+  COMPANY
+  AGENCY
+  SHOP
+}
+
+enum CollaborationStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REJECTED
+  ENDED
+}
+
+enum TokenPurpose {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
+enum AuthEventType {
+  LOGIN_SUCCESS
+  LOGIN_FAILURE
+  LOGOUT
+  TOKEN_REVOKED
+  PASSWORD_RESET
+  PERMISSIONS_CHANGED
+}
+
+enum StockMovementType {
+  DEPOSIT
+  ISSUE
+  RESERVE
+  RELEASE
+  ADJUSTMENT
+  RETURN
+  TRANSFER_OUT
+  TRANSFER_IN
+}
+
+enum TransferStatus {
+  DRAFT
+  IN_TRANSIT
+  RECEIVED
+  CANCELLED
+}
+
+enum OrderType {
+  ONE_OFF
+  FROM_STOCK
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  IN_DELIVERY
+  DELIVERED
+  FAILED
+  CANCELLED
+  RETURNED
+}
+
+enum DeliveryStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  DELIVERED
+  FAILED
+  CANCELLED
+}
+
+enum OtpStatus {
+  PENDING
+  VERIFIED
+  EXPIRED
+  LOCKED
+  REVOKED
+  CONSUMED
+}
+
+enum ProofMethod {
+  OTP
+  AUTHORIZED_EXCEPTION
+}
+
+enum CollectionStatus {
+  PENDING
+  DECLARED
+  VERIFIED
+  DISPUTED
+  VOIDED
+}
+
+enum PaymentMethod {
+  CASH
+  MTN_MOBILE_MONEY
+  ORANGE_MONEY
+  BANK_TRANSFER
+  OTHER
+}
+
+enum RemittanceStatus {
+  DECLARED
+  CONFIRMED
+  DISPUTED
+  CANCELLED
+}
+
+enum BillingPeriod {
+  MONTHLY
+}
+
+enum SubscriptionStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  SUSPENDED
+  CANCELLED
+}
+
+enum DeclarationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationChannel {
+  EMAIL
+  PUSH
+}
+
+enum NotificationStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum Visibility {
+  PRIVATE
+  COMPANY
+}
+
+model User {
+  id                            String              @id @default(uuid()) @db.Char(36)
+  email                         String              @unique @db.VarChar(254)
+  passwordHash                  String              @db.VarChar(255)
+  fullName                      String              @db.VarChar(160)
+  phone                         String?             @db.VarChar(32)
+  status                        AccountStatus       @default(ACTIVE)
+  emailVerifiedAt               DateTime?           @db.DateTime(3)
+  archivedAt                    DateTime?           @db.DateTime(3)
+  createdAt                     DateTime            @default(now()) @db.DateTime(3)
+  updatedAt                     DateTime            @updatedAt @db.DateTime(3)
+  globalRoleGrant_userRecords   GlobalRoleGrant[]   @relation("GlobalRoleGrant_user")
+  companyMembership_userRecords CompanyMembership[] @relation("CompanyMembership_user")
+  shopMembership_userRecords    ShopMembership[]    @relation("ShopMembership_user")
+  session_userRecords           Session[]           @relation("Session_user")
+  accountToken_userRecords      AccountToken[]      @relation("AccountToken_user")
+  authEvent_userRecords         AuthEvent[]         @relation("AuthEvent_user")
+  order_creatorRecords          Order[]             @relation("Order_creator")
+  stockMovement_actorRecords    StockMovement[]     @relation("StockMovement_actor")
+  orderEvent_actorRecords       OrderEvent[]        @relation("OrderEvent_actor")
+  deliveryEvent_actorRecords    DeliveryEvent[]     @relation("DeliveryEvent_actor")
+  fileAsset_uploaderRecords     FileAsset[]         @relation("FileAsset_uploader")
+  collectionEvent_actorRecords  CollectionEvent[]   @relation("CollectionEvent_actor")
+  remittanceEvent_actorRecords  RemittanceEvent[]   @relation("RemittanceEvent_actor")
+  userDevice_userRecords        UserDevice[]        @relation("UserDevice_user")
+  notification_recipientRecords Notification[]      @relation("Notification_recipient")
+  auditLog_actorRecords         AuditLog[]          @relation("AuditLog_actor")
+}
+
+model Role {
+  id                            String              @id @default(uuid()) @db.Char(36)
+  code                          String              @unique @db.VarChar(60)
+  name                          String              @db.VarChar(120)
+  scope                         RoleScope
+  createdAt                     DateTime            @default(now()) @db.DateTime(3)
+  updatedAt                     DateTime            @updatedAt @db.DateTime(3)
+  rolePermission_roleRecords    RolePermission[]    @relation("RolePermission_role")
+  globalRoleGrant_roleRecords   GlobalRoleGrant[]   @relation("GlobalRoleGrant_role")
+  companyMembership_roleRecords CompanyMembership[] @relation("CompanyMembership_role")
+  agencyMembership_roleRecords  AgencyMembership[]  @relation("AgencyMembership_role")
+  shopMembership_roleRecords    ShopMembership[]    @relation("ShopMembership_role")
+
+  @@unique([id, scope])
+}
+
+model Permission {
+  id                               String           @id @default(uuid()) @db.Char(36)
+  code                             String           @unique @db.VarChar(100)
+  description                      String           @db.VarChar(255)
+  createdAt                        DateTime         @default(now()) @db.DateTime(3)
+  updatedAt                        DateTime         @updatedAt @db.DateTime(3)
+  rolePermission_permissionRecords RolePermission[] @relation("RolePermission_permission")
+}
+
+model RolePermission {
+  id           String     @id @default(uuid()) @db.Char(36)
+  roleId       String     @db.Char(36)
+  permissionId String     @db.Char(36)
+  createdAt    DateTime   @default(now()) @db.DateTime(3)
+  updatedAt    DateTime   @updatedAt @db.DateTime(3)
+  role         Role       @relation("RolePermission_role", fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  permission   Permission @relation("RolePermission_permission", fields: [permissionId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([roleId, permissionId])
+}
+
+model GlobalRoleGrant {
+  id                                   String                @id @default(uuid()) @db.Char(36)
+  userId                               String                @unique @db.Char(36)
+  roleId                               String                @db.Char(36)
+  roleScope                            RoleScope             @default(GLOBAL)
+  active                               Boolean               @default(true)
+  createdAt                            DateTime              @default(now()) @db.DateTime(3)
+  updatedAt                            DateTime              @updatedAt @db.DateTime(3)
+  user                                 User                  @relation("GlobalRoleGrant_user", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  role                                 Role                  @relation("GlobalRoleGrant_role", fields: [roleId, roleScope], references: [id, scope], onDelete: Restrict, onUpdate: Restrict)
+  subscriptionPayment_validatorRecords SubscriptionPayment[] @relation("SubscriptionPayment_validator")
+  subscriptionEvent_actorRecords       SubscriptionEvent[]   @relation("SubscriptionEvent_actor")
+}
+
+model Company {
+  id                                 String                @id @default(uuid()) @db.Char(36)
+  reference                          String                @unique @db.VarChar(50)
+  name                               String                @db.VarChar(160)
+  email                              String                @db.VarChar(254)
+  phone                              String                @db.VarChar(32)
+  address                            String                @db.VarChar(500)
+  city                               String                @db.VarChar(120)
+  countryCode                        String                @db.Char(2)
+  tradeName                          String?               @db.VarChar(160)
+  registrationNumber                 String?               @db.VarChar(100)
+  description                        String?               @db.VarChar(2000)
+  logoKey                            String?               @db.VarChar(80)
+  version                            Int                   @default(1)
+  administrativeReason               String?               @db.VarChar(500)
+  statusChangedAt                    DateTime?             @db.DateTime(3)
+  statusChangedById                  String?               @db.Char(36)
+  primaryAdminUserId                 String?               @db.Char(36)
+  // Composite FK to CompanyMembership is enforced by SQL. Do not model it through id:
+  // optional composite relations sharing a generated primary key suppress Prisma's UUID default.
+  invitations                        CompanyInvitation[]
+  status                             OrganizationStatus    @default(INACTIVE)
+  archivedAt                         DateTime?             @db.DateTime(3)
+  createdAt                          DateTime              @default(now()) @db.DateTime(3)
+  updatedAt                          DateTime              @updatedAt @db.DateTime(3)
+  companyMembership_companyRecords   CompanyMembership[]   @relation("CompanyMembership_company")
+  agency_companyRecords              Agency[]              @relation("Agency_company")
+  agencyMembership_companyRecords    AgencyMembership[]    @relation("AgencyMembership_company")
+  companyShop_companyRecords         CompanyShop[]         @relation("CompanyShop_company")
+  stock_companyRecords               Stock[]               @relation("Stock_company")
+  transfer_companyRecords            Transfer[]            @relation("Transfer_company")
+  transferItem_companyRecords        TransferItem[]        @relation("TransferItem_company")
+  transferEvent_companyRecords       TransferEvent[]       @relation("TransferEvent_company")
+  recipient_companyRecords           Recipient[]           @relation("Recipient_company")
+  order_companyRecords               Order[]               @relation("Order_company")
+  orderItem_companyRecords           OrderItem[]           @relation("OrderItem_company")
+  stockReservation_companyRecords    StockReservation[]    @relation("StockReservation_company")
+  stockMovement_companyRecords       StockMovement[]       @relation("StockMovement_company")
+  orderEvent_companyRecords          OrderEvent[]          @relation("OrderEvent_company")
+  delivery_companyRecords            Delivery[]            @relation("Delivery_company")
+  deliveryAssignment_companyRecords  DeliveryAssignment[]  @relation("DeliveryAssignment_company")
+  deliveryEvent_companyRecords       DeliveryEvent[]       @relation("DeliveryEvent_company")
+  deliveryOtp_companyRecords         DeliveryOtp[]         @relation("DeliveryOtp_company")
+  deliveryProof_companyRecords       DeliveryProof[]       @relation("DeliveryProof_company")
+  fileAsset_companyRecords           FileAsset[]           @relation("FileAsset_company")
+  proofPhoto_companyRecords          ProofPhoto[]          @relation("ProofPhoto_company")
+  collection_companyRecords          Collection[]          @relation("Collection_company")
+  remittance_companyRecords          Remittance[]          @relation("Remittance_company")
+  remittanceItem_companyRecords      RemittanceItem[]      @relation("RemittanceItem_company")
+  collectionEvent_companyRecords     CollectionEvent[]     @relation("CollectionEvent_company")
+  remittanceEvent_companyRecords     RemittanceEvent[]     @relation("RemittanceEvent_company")
+  subscription_companyRecords        Subscription[]        @relation("Subscription_company")
+  subscriptionPayment_companyRecords SubscriptionPayment[] @relation("SubscriptionPayment_company")
+  subscriptionPeriod_companyRecords  SubscriptionPeriod[]  @relation("SubscriptionPeriod_company")
+  subscriptionEvent_companyRecords   SubscriptionEvent[]   @relation("SubscriptionEvent_company")
+  notification_companyRecords        Notification[]        @relation("Notification_company")
+  auditLog_companyRecords            AuditLog[]            @relation("AuditLog_company")
+
+  @@index([createdAt, id])
+  @@index([status, createdAt])
+}
+
+model CompanyMembership {
+  organizationRole String @default("employee") @db.VarChar(30)
+  employmentStatus String @default("ACTIVE") @db.VarChar(12)
+  version Int @default(1)
+  driverProfile DriverProfile?
+  @@index([companyId,organizationRole,employmentStatus],map:"CompanyMembership_organization_idx")
+  id                                  String                @id @default(uuid()) @db.Char(36)
+  companyId                           String                @db.Char(36)
+  userId                              String                @db.Char(36)
+  roleId                              String                @db.Char(36)
+  roleScope                           RoleScope             @default(COMPANY)
+  active                              Boolean               @default(true)
+  createdAt                           DateTime              @default(now()) @db.DateTime(3)
+  updatedAt                           DateTime              @updatedAt @db.DateTime(3)
+  company                             Company               @relation("CompanyMembership_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  user                                User                  @relation("CompanyMembership_user", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  role                                Role                  @relation("CompanyMembership_role", fields: [roleId, roleScope], references: [id, scope], onDelete: Restrict, onUpdate: Restrict)
+  agencyMembership_membershipRecords  AgencyMembership[]    @relation("AgencyMembership_membership")
+  transfer_initiatorRecords           Transfer[]            @relation("Transfer_initiator")
+  transfer_carrierRecords             Transfer[]            @relation("Transfer_carrier")
+  transferEvent_actorRecords          TransferEvent[]       @relation("TransferEvent_actor")
+  deliveryAssignment_assignerRecords  DeliveryAssignment[]  @relation("DeliveryAssignment_assigner")
+  deliveryOtp_courierRecords          DeliveryOtp[]         @relation("DeliveryOtp_courier")
+  deliveryProof_courierRecords        DeliveryProof[]       @relation("DeliveryProof_courier")
+  deliveryProof_authorizerRecords     DeliveryProof[]       @relation("DeliveryProof_authorizer")
+  collection_verifierRecords          Collection[]          @relation("Collection_verifier")
+  remittance_confirmerRecords          Remittance[]          @relation("Remittance_confirmer")
+  subscriptionPayment_declarerRecords SubscriptionPayment[] @relation("SubscriptionPayment_declarer")
+
+  @@unique([companyId, userId])
+  @@unique([companyId, id])
+}
+
+model CompanyInvitation {
+  kind String @default("ADMIN") @db.VarChar(10)
+  staffRole String? @db.VarChar(30)
+  agencyIds Json?
+  @@index([companyId,kind,createdAt,id],map:"CompanyInvitation_kind_created_idx")
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  email String @db.VarChar(254)
+  fullName String @db.VarChar(160)
+  tokenHash String @unique @db.Char(64)
+  expiresAt DateTime @db.DateTime(3)
+  acceptedAt DateTime? @db.DateTime(3)
+  revokedAt DateTime? @db.DateTime(3)
+  isPrimary Boolean @default(false)
+  deliveryStatus String @default("PENDING") @db.VarChar(10)
+  lastSentAt DateTime? @db.DateTime(3)
+  createdById String @db.Char(36)
+  version Int @default(1)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  updatedAt DateTime @updatedAt @db.DateTime(3)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  @@index([companyId, email, acceptedAt, revokedAt])
+  @@index([email, expiresAt])
+  @@index([createdAt, id])
+}
+
+model Agency {
+  countryCode String? @db.Char(2)
+  locationNotes String? @db.VarChar(1000)
+  // Composite FK to the agency affiliation is maintained in the SQL migration.
+  primaryManagerUserId String? @db.Char(36)
+  @@index([companyId,name,id],map:"Agency_company_name_idx")
+  version Int @default(1)
+  id                             String             @id @default(uuid()) @db.Char(36)
+  companyId                      String             @db.Char(36)
+  reference                      String             @db.VarChar(50)
+  name                           String             @db.VarChar(160)
+  address                        String             @db.VarChar(500)
+  city                           String             @db.VarChar(120)
+  zone                           String?            @db.VarChar(120)
+  email                          String?            @db.VarChar(254)
+  phone                          String             @db.VarChar(32)
+  status                         OrganizationStatus @default(ACTIVE)
+  archivedAt                     DateTime?          @db.DateTime(3)
+  createdAt                      DateTime           @default(now()) @db.DateTime(3)
+  updatedAt                      DateTime           @updatedAt @db.DateTime(3)
+  company                        Company            @relation("Agency_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  agencyMembership_agencyRecords AgencyMembership[] @relation("AgencyMembership_agency")
+  stock_agencyRecords            Stock[]            @relation("Stock_agency")
+  transfer_originRecords         Transfer[]         @relation("Transfer_origin")
+  transfer_destinationRecords    Transfer[]         @relation("Transfer_destination")
+  order_agencyRecords            Order[]            @relation("Order_agency")
+  delivery_agencyRecords         Delivery[]         @relation("Delivery_agency")
+  auditLog_agencyRecords         AuditLog[]         @relation("AuditLog_agency")
+
+  @@unique([companyId, reference])
+  @@unique([companyId, id])
+  @@index([companyId, status])
+}
+
+model AgencyMembership {
+  id                                String               @id @default(uuid()) @db.Char(36)
+  companyId                         String               @db.Char(36)
+  agencyId                          String               @db.Char(36)
+  userId                            String               @db.Char(36)
+  roleId                            String               @db.Char(36)
+  roleScope                         RoleScope            @default(AGENCY)
+  active                            Boolean              @default(true)
+  createdAt                         DateTime             @default(now()) @db.DateTime(3)
+  updatedAt                         DateTime             @updatedAt @db.DateTime(3)
+  company                           Company              @relation("AgencyMembership_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  membership                        CompanyMembership    @relation("AgencyMembership_membership", fields: [companyId, userId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  agency                            Agency               @relation("AgencyMembership_agency", fields: [companyId, agencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  role                              Role                 @relation("AgencyMembership_role", fields: [roleId, roleScope], references: [id, scope], onDelete: Restrict, onUpdate: Restrict)
+  delivery_courierRecords           Delivery[]           @relation("Delivery_courier")
+  deliveryAssignment_courierRecords DeliveryAssignment[] @relation("DeliveryAssignment_courier")
+  collection_courierRecords         Collection[]         @relation("Collection_courier")
+  remittance_courierRecords         Remittance[]         @relation("Remittance_courier")
+
+  @@unique([companyId, agencyId, userId])
+  @@unique([companyId, id])
+}
+
+model DriverProfile {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  userId String @db.Char(36)
+  employeeNumber String? @db.VarChar(50)
+  status String @default("ACTIVE") @db.VarChar(12)
+  availability String @default("UNAVAILABLE") @db.VarChar(12)
+  availabilityChangedAt DateTime @default(now()) @db.DateTime(3)
+  transport String? @db.VarChar(12)
+  notes String? @db.VarChar(2000)
+  version Int @default(1)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  updatedAt DateTime @updatedAt @db.DateTime(3)
+  membership CompanyMembership @relation(fields:[companyId,userId],references:[companyId,userId],onDelete:Restrict,onUpdate:Restrict)
+  @@unique([companyId,userId])
+  @@unique([companyId,employeeNumber])
+  @@index([companyId,status,availability])
+}
+
+model Shop {
+  legalName String? @db.VarChar(160)
+  description String? @db.VarChar(2000)
+  countryCode String? @db.Char(2)
+  city String? @db.VarChar(120)
+  district String? @db.VarChar(120)
+  logoKey String? @db.VarChar(80)
+  registrationKey String? @unique @db.VarChar(254)
+  version Int @default(1)
+  termsAcceptedAt DateTime? @db.DateTime(3)
+  termsVersion String? @db.VarChar(40)
+  @@index([name,id])
+  id                         String             @id @default(uuid()) @db.Char(36)
+  reference                  String             @unique @db.VarChar(50)
+  name                       String             @db.VarChar(160)
+  email                      String             @db.VarChar(254)
+  phone                      String             @db.VarChar(32)
+  address                    String             @db.VarChar(500)
+  status                     OrganizationStatus @default(ACTIVE)
+  archivedAt                 DateTime?          @db.DateTime(3)
+  createdAt                  DateTime           @default(now()) @db.DateTime(3)
+  updatedAt                  DateTime           @updatedAt @db.DateTime(3)
+  shopMembership_shopRecords ShopMembership[]   @relation("ShopMembership_shop")
+  companyShop_shopRecords    CompanyShop[]      @relation("CompanyShop_shop")
+  product_shopRecords        Product[]          @relation("Product_shop")
+}
+
+model ShopMembership {
+  version Int @default(1)
+  affiliationStatus String @default("ACTIVE") @db.VarChar(12)
+  id        String    @id @default(uuid()) @db.Char(36)
+  shopId    String    @db.Char(36)
+  userId    String    @db.Char(36)
+  roleId    String    @db.Char(36)
+  roleScope RoleScope @default(SHOP)
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.DateTime(3)
+  updatedAt DateTime  @updatedAt @db.DateTime(3)
+  shop      Shop      @relation("ShopMembership_shop", fields: [shopId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  user      User      @relation("ShopMembership_user", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  role      Role      @relation("ShopMembership_role", fields: [roleId, roleScope], references: [id, scope], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([shopId, userId])
+}
+
+model CompanyShop {
+  origin String @default("COMPANY") @db.VarChar(12)
+  version Int @default(1)
+  requestedAt DateTime @default(now()) @db.DateTime(3)
+  acceptedAt DateTime? @db.DateTime(3)
+  suspendedAt DateTime? @db.DateTime(3)
+  initiatorUserId String? @db.Char(36)
+  decisionUserId String? @db.Char(36)
+  reason String? @db.VarChar(500)
+  observations String? @db.VarChar(1000)
+  allowedAgencyIds Json?
+  @@index([companyId,status,createdAt])
+  id                                String              @id @default(uuid()) @db.Char(36)
+  companyId                         String              @db.Char(36)
+  shopId                            String              @db.Char(36)
+  status                            CollaborationStatus @default(PENDING)
+  startedAt                         DateTime?           @db.DateTime(3)
+  endedAt                           DateTime?           @db.DateTime(3)
+  createdAt                         DateTime            @default(now()) @db.DateTime(3)
+  updatedAt                         DateTime            @updatedAt @db.DateTime(3)
+  company                           Company             @relation("CompanyShop_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  shop                              Shop                @relation("CompanyShop_shop", fields: [shopId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  stock_collaborationRecords        Stock[]             @relation("Stock_collaboration")
+  transferItem_collaborationRecords TransferItem[]      @relation("TransferItem_collaboration")
+  order_collaborationRecords        Order[]             @relation("Order_collaboration")
+
+  @@unique([companyId, shopId])
+  @@unique([companyId, id])
+  @@index([shopId, status])
+}
+
+model Product {
+  category String? @db.VarChar(160)
+  imageKey String? @db.VarChar(80)
+  version Int @default(1)
+  id                          String         @id @default(uuid()) @db.Char(36)
+  shopId                      String         @db.Char(36)
+  sku                         String?        @db.VarChar(80)
+  name                        String         @db.VarChar(200)
+  description                 String?        @db.Text
+  unit                        String         @default("piece") @db.VarChar(30)
+  weightGrams                 Int?           @db.UnsignedInt
+  active                      Boolean        @default(true)
+  archivedAt                  DateTime?      @db.DateTime(3)
+  createdAt                   DateTime       @default(now()) @db.DateTime(3)
+  updatedAt                   DateTime       @updatedAt @db.DateTime(3)
+  shop                        Shop           @relation("Product_shop", fields: [shopId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  stock_productRecords        Stock[]        @relation("Stock_product")
+  transferItem_productRecords TransferItem[] @relation("TransferItem_product")
+  orderItem_productRecords    OrderItem[]    @relation("OrderItem_product")
+
+  @@unique([shopId, id])
+  @@unique([shopId, sku])
+}
+
+model Session {
+  clientType                String    @default("WEB") @db.VarChar(10)
+  deviceName                String    @default("Navigateur") @db.VarChar(120)
+  csrfHash                  String?   @db.Char(64)
+  activeContext             Json?
+  lastSeenAt                DateTime  @default(now()) @db.DateTime(3)
+  id                        String    @id @default(uuid()) @db.Char(36)
+  userId                    String    @db.Char(36)
+  refreshTokenHash          String    @unique @db.Char(64)
+  familyId                  String    @db.Char(36)
+  expiresAt                 DateTime  @db.DateTime(3)
+  revokedAt                 DateTime? @db.DateTime(3)
+  replacedById              String?   @unique @db.Char(36)
+  userAgent                 String?   @db.VarChar(255)
+  ipHash                    String?   @db.Char(64)
+  createdAt                 DateTime  @default(now()) @db.DateTime(3)
+  updatedAt                 DateTime  @updatedAt @db.DateTime(3)
+  user                      User      @relation("Session_user", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  replacedBy                Session?  @relation("Session_replacedBy", fields: [replacedById], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  session_replacedByRecords Session[] @relation("Session_replacedBy")
+
+  @@index([userId, expiresAt])
+  @@index([userId, revokedAt, expiresAt])
+  @@index([familyId])
+}
+
+model AccountToken {
+  id        String       @id @default(uuid()) @db.Char(36)
+  userId    String       @db.Char(36)
+  purpose   TokenPurpose
+  tokenHash String       @unique @db.Char(64)
+  expiresAt DateTime     @db.DateTime(3)
+  usedAt    DateTime?    @db.DateTime(3)
+  createdAt DateTime     @default(now()) @db.DateTime(3)
+  updatedAt DateTime     @updatedAt @db.DateTime(3)
+  user      User         @relation("AccountToken_user", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([userId, purpose, expiresAt])
+}
+
+model AuthEvent {
+  id        String        @id @default(uuid()) @db.Char(36)
+  userId    String?       @db.Char(36)
+  type      AuthEventType
+  ipHash    String?       @db.Char(64)
+  metadata  Json?
+  createdAt DateTime      @default(now()) @db.DateTime(3)
+  user      User?         @relation("AuthEvent_user", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([userId, createdAt])
+}
+
+model Stock {
+  @@index([companyId, agencyId, shopId], map: "Stock_report_agency_shop_idx")
+  id                            String             @id @default(uuid()) @db.Char(36)
+  companyId                     String             @db.Char(36)
+  shopId                        String             @db.Char(36)
+  agencyId                      String             @db.Char(36)
+  productId                     String             @db.Char(36)
+  physicalQuantity              Int                @default(0) @db.UnsignedInt
+  reservedQuantity              Int                @default(0) @db.UnsignedInt
+  alertThreshold                Int                @default(0) @db.UnsignedInt
+  version                       Int                @default(0) @db.UnsignedInt
+  createdAt                     DateTime           @default(now()) @db.DateTime(3)
+  updatedAt                     DateTime           @updatedAt @db.DateTime(3)
+  company                       Company            @relation("Stock_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  collaboration                 CompanyShop        @relation("Stock_collaboration", fields: [companyId, shopId], references: [companyId, shopId], onDelete: Restrict, onUpdate: Restrict)
+  agency                        Agency             @relation("Stock_agency", fields: [companyId, agencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  product                       Product            @relation("Stock_product", fields: [shopId, productId], references: [shopId, id], onDelete: Restrict, onUpdate: Restrict)
+  stockReservation_stockRecords StockReservation[] @relation("StockReservation_stock")
+  stockMovement_stockRecords    StockMovement[]    @relation("StockMovement_stock")
+
+  @@unique([companyId, agencyId, shopId, productId])
+  @@unique([companyId, id, shopId, productId])
+  @@unique([companyId, id])
+  @@index([companyId, shopId])
+}
+
+model Transfer {
+  version Int @default(1)
+  id                            String             @id @default(uuid()) @db.Char(36)
+  companyId                     String             @db.Char(36)
+  reference                     String             @db.VarChar(60)
+  originAgencyId                String             @db.Char(36)
+  destinationAgencyId           String             @db.Char(36)
+  initiatedById                 String             @db.Char(36)
+  carrierId                     String?            @db.Char(36)
+  status                        TransferStatus     @default(DRAFT)
+  departedAt                    DateTime?          @db.DateTime(3)
+  receivedAt                    DateTime?          @db.DateTime(3)
+  notes                         String?            @db.Text
+  createdAt                     DateTime           @default(now()) @db.DateTime(3)
+  updatedAt                     DateTime           @updatedAt @db.DateTime(3)
+  company                       Company            @relation("Transfer_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  origin                        Agency             @relation("Transfer_origin", fields: [companyId, originAgencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  destination                   Agency             @relation("Transfer_destination", fields: [companyId, destinationAgencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  initiator                     CompanyMembership  @relation("Transfer_initiator", fields: [companyId, initiatedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  carrier                       CompanyMembership? @relation("Transfer_carrier", fields: [companyId, carrierId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  transferItem_transferRecords  TransferItem[]     @relation("TransferItem_transfer")
+  transferEvent_transferRecords TransferEvent[]    @relation("TransferEvent_transfer")
+  stockMovement_transferRecords StockMovement[]    @relation("StockMovement_transfer")
+
+  @@unique([companyId, reference])
+  @@unique([companyId, id])
+  @@index([companyId, status])
+}
+
+model TransferItem {
+  @@unique([companyId,id,transferId,shopId,productId],map:"TransferItem_incident_context_key")
+  returnedQuantity Int @default(0) @db.UnsignedInt
+  receivedQuantity Int @default(0) @db.UnsignedInt
+  lostQuantity Int @default(0) @db.UnsignedInt
+  id            String      @id @default(uuid()) @db.Char(36)
+  companyId     String      @db.Char(36)
+  transferId    String      @db.Char(36)
+  shopId        String      @db.Char(36)
+  productId     String      @db.Char(36)
+  quantity      Int         @db.UnsignedInt
+  createdAt     DateTime    @default(now()) @db.DateTime(3)
+  updatedAt     DateTime    @updatedAt @db.DateTime(3)
+  company       Company     @relation("TransferItem_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  transfer      Transfer    @relation("TransferItem_transfer", fields: [companyId, transferId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  collaboration CompanyShop @relation("TransferItem_collaboration", fields: [companyId, shopId], references: [companyId, shopId], onDelete: Restrict, onUpdate: Restrict)
+  product       Product     @relation("TransferItem_product", fields: [shopId, productId], references: [shopId, id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, transferId, shopId, productId])
+  @@unique([companyId, id])
+}
+
+model TransferEvent {
+  id         String            @id @default(uuid()) @db.Char(36)
+  companyId  String            @db.Char(36)
+  transferId String            @db.Char(36)
+  actorId    String            @db.Char(36)
+  status     TransferStatus
+  notes      String?           @db.Text
+  createdAt  DateTime          @default(now()) @db.DateTime(3)
+  company    Company           @relation("TransferEvent_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  transfer   Transfer          @relation("TransferEvent_transfer", fields: [companyId, transferId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor      CompanyMembership @relation("TransferEvent_actor", fields: [companyId, actorId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([companyId, transferId, createdAt])
+}
+
+model Recipient {
+  shopId                 String? @db.Char(36)
+  country                String @default("") @db.VarChar(120)
+  details                Json?
+  version                Int @default(1)
+  @@index([companyId, shopId, name])
+  id                     String    @id @default(uuid()) @db.Char(36)
+  companyId              String    @db.Char(36)
+  name                   String    @db.VarChar(160)
+  email                  String    @db.VarChar(254)
+  phone                  String    @db.VarChar(32)
+  address                String    @db.VarChar(500)
+  city                   String    @db.VarChar(120)
+  latitude               Decimal?  @db.Decimal(10, 7)
+  longitude              Decimal?  @db.Decimal(10, 7)
+  archivedAt             DateTime? @db.DateTime(3)
+  createdAt              DateTime  @default(now()) @db.DateTime(3)
+  updatedAt              DateTime  @updatedAt @db.DateTime(3)
+  company                Company   @relation("Recipient_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  order_recipientRecords Order[]   @relation("Order_recipient")
+
+  @@unique([companyId, id])
+  @@index([companyId, email])
+}
+
+model Order {
+  trackingVersion Int @default(1) @db.UnsignedInt
+  isDraft                 Boolean @default(false)
+  version                 Int @default(1)
+  submittedAt             DateTime? @db.DateTime(3)
+  clientKey               String? @db.VarChar(100)
+  requestHash             String? @db.Char(64)
+  recipientCountry        String @default("") @db.VarChar(120)
+  recipientDetails        Json?
+  pickup                  Json?
+  parcelDescription       String? @db.VarChar(2000)
+  collectionRequired      Boolean @default(false)
+  financialNotes          String? @db.VarChar(1000)
+  cancellationReason      String? @db.VarChar(1000)
+  cancelledAt             DateTime? @db.DateTime(3)
+  @@unique([companyId, createdById, clientKey])
+  @@index([companyId, shopId, isDraft, createdAt])
+  id                      String       @id @default(uuid()) @db.Char(36)
+  companyId               String       @db.Char(36)
+  publicNumber            String       @unique @db.VarChar(80)
+  shopId                  String       @db.Char(36)
+  agencyId                String       @db.Char(36)
+  recipientId             String?      @db.Char(36)
+  createdById             String       @db.Char(36)
+  type                    OrderType
+  status                  OrderStatus  @default(PENDING)
+  recipientName           String       @db.VarChar(160)
+  recipientEmail          String       @db.VarChar(254)
+  recipientPhone          String       @db.VarChar(32)
+  recipientAddress        String       @db.VarChar(500)
+  recipientCity           String       @db.VarChar(120)
+  recipientLatitude       Decimal?     @db.Decimal(10, 7)
+  recipientLongitude      Decimal?     @db.Decimal(10, 7)
+  amountToCollect         Decimal      @db.Decimal(19, 4)
+  currency                String       @db.Char(3)
+  notes                   String?      @db.Text
+  archivedAt              DateTime?    @db.DateTime(3)
+  createdAt               DateTime     @default(now()) @db.DateTime(3)
+  updatedAt               DateTime     @updatedAt @db.DateTime(3)
+  company                 Company      @relation("Order_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  collaboration           CompanyShop  @relation("Order_collaboration", fields: [companyId, shopId], references: [companyId, shopId], onDelete: Restrict, onUpdate: Restrict)
+  agency                  Agency       @relation("Order_agency", fields: [companyId, agencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  recipient               Recipient?   @relation("Order_recipient", fields: [companyId, recipientId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  creator                 User         @relation("Order_creator", fields: [createdById], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  orderItem_orderRecords  OrderItem[]  @relation("OrderItem_order")
+  orderEvent_orderRecords OrderEvent[] @relation("OrderEvent_order")
+  delivery_orderRecords   Delivery[]   @relation("Delivery_order")
+
+  @@unique([companyId, id, shopId])
+  @@unique([companyId, id])
+  @@index([companyId, agencyId, status, createdAt])
+  @@index([companyId, shopId, createdAt])
+}
+
+model OrderItem {
+  active                            Boolean @default(true)
+  description                       String? @db.VarChar(1000)
+  instructions                      String? @db.VarChar(1000)
+  declaredValue                     Decimal? @db.Decimal(19,4)
+  id                                String             @id @default(uuid()) @db.Char(36)
+  companyId                         String             @db.Char(36)
+  orderId                           String             @db.Char(36)
+  shopId                            String             @db.Char(36)
+  productId                         String?            @db.Char(36)
+  sku                               String?            @db.VarChar(80)
+  name                              String             @db.VarChar(200)
+  quantity                          Int                @db.UnsignedInt
+  createdAt                         DateTime           @default(now()) @db.DateTime(3)
+  updatedAt                         DateTime           @updatedAt @db.DateTime(3)
+  company                           Company            @relation("OrderItem_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  order                             Order              @relation("OrderItem_order", fields: [companyId, orderId, shopId], references: [companyId, id, shopId], onDelete: Restrict, onUpdate: Restrict)
+  product                           Product?           @relation("OrderItem_product", fields: [shopId, productId], references: [shopId, id], onDelete: Restrict, onUpdate: Restrict)
+  stockReservation_orderItemRecords StockReservation[] @relation("StockReservation_orderItem")
+
+  @@unique([companyId, id, shopId, productId])
+  @@unique([companyId, id])
+}
+
+model StockReservation {
+  reference String? @db.VarChar(60)
+  status String @default("ACTIVE") @db.VarChar(12)
+  version Int @default(1)
+  notes String? @db.VarChar(1000)
+  @@unique([companyId,reference])
+  id                               String          @id @default(uuid()) @db.Char(36)
+  companyId                        String          @db.Char(36)
+  stockId                          String          @db.Char(36)
+  orderItemId                      String?         @db.Char(36)
+  shopId                           String          @db.Char(36)
+  productId                        String          @db.Char(36)
+  quantity                         Int             @db.UnsignedInt
+  releasedAt                       DateTime?       @db.DateTime(3)
+  consumedAt                       DateTime?       @db.DateTime(3)
+  idempotencyKey                   String          @db.VarChar(100)
+  createdAt                        DateTime        @default(now()) @db.DateTime(3)
+  updatedAt                        DateTime        @updatedAt @db.DateTime(3)
+  company                          Company         @relation("StockReservation_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  stock                            Stock           @relation("StockReservation_stock", fields: [companyId, stockId, shopId, productId], references: [companyId, id, shopId, productId], onDelete: Restrict, onUpdate: Restrict)
+  orderItem                        OrderItem?      @relation("StockReservation_orderItem", fields: [companyId, orderItemId, shopId, productId], references: [companyId, id, shopId, productId], onDelete: Restrict, onUpdate: Restrict)
+  stockMovement_reservationRecords StockMovement[] @relation("StockMovement_reservation")
+
+  @@unique([companyId, idempotencyKey])
+  @@unique([companyId, orderItemId, stockId])
+  @@unique([companyId, id])
+  @@unique([companyId, id, stockId])
+}
+
+model StockMovement {
+  id            String            @id @default(uuid()) @db.Char(36)
+  companyId     String            @db.Char(36)
+  stockId       String            @db.Char(36)
+  actorId       String            @db.Char(36)
+  type          StockMovementType
+  physicalDelta Int
+  reservedDelta Int
+  physicalAfter Int               @db.UnsignedInt
+  reservedAfter Int               @db.UnsignedInt
+  reservationId String?           @db.Char(36)
+  transferId    String?           @db.Char(36)
+  operationKey  String            @db.VarChar(120)
+  notes         String?           @db.Text
+  createdAt     DateTime          @default(now()) @db.DateTime(3)
+  company       Company           @relation("StockMovement_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  stock         Stock             @relation("StockMovement_stock", fields: [companyId, stockId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor         User              @relation("StockMovement_actor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  reservation   StockReservation? @relation("StockMovement_reservation", fields: [companyId, reservationId, stockId], references: [companyId, id, stockId], onDelete: Restrict, onUpdate: Restrict)
+  transfer      Transfer?         @relation("StockMovement_transfer", fields: [companyId, transferId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, operationKey])
+  @@unique([companyId, id])
+  @@index([companyId, stockId, createdAt])
+}
+
+model OrderEvent {
+  action    String @default("LEGACY") @db.VarChar(60)
+  previousStatus OrderStatus?
+  metadata Json?
+  id        String      @id @default(uuid()) @db.Char(36)
+  companyId String      @db.Char(36)
+  orderId   String      @db.Char(36)
+  actorId   String      @db.Char(36)
+  status    OrderStatus
+  notes     String?     @db.Text
+  createdAt DateTime    @default(now()) @db.DateTime(3)
+  company   Company     @relation("OrderEvent_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  order     Order       @relation("OrderEvent_order", fields: [companyId, orderId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor     User        @relation("OrderEvent_actor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([companyId, orderId, createdAt])
+}
+
+model Delivery {
+  @@index([companyId, agencyId, createdAt], map: "Delivery_report_created_idx")
+  @@index([companyId, agencyId, closedAt], map: "Delivery_report_closed_idx")
+  @@index([companyId, courierId, closedAt], map: "Delivery_report_courier_closed_idx")
+  version Int @default(1)
+  parcelReference String? @unique @db.VarChar(80)
+  phase String? @db.VarChar(40)
+  custodyType String? @db.VarChar(16)
+  custodyAgencyId String? @db.Char(36)
+  custodyUserId String? @db.Char(36)
+  stockIssuedAt DateTime? @db.DateTime(3)
+  legs ParcelLeg[]
+  handovers ParcelHandover[]
+  attempts DeliveryAttempt[]
+  incidents DeliveryIncident[]
+  parcelReturn DeliveryReturn?
+  id                                 String               @id @default(uuid()) @db.Char(36)
+  companyId                          String               @db.Char(36)
+  orderId                            String               @db.Char(36)
+  agencyId                           String               @db.Char(36)
+  courierId                          String?              @db.Char(36)
+  status                             DeliveryStatus       @default(PENDING)
+  assignedAt                         DateTime?            @db.DateTime(3)
+  pickedUpAt                         DateTime?            @db.DateTime(3)
+  closedAt                           DateTime?            @db.DateTime(3)
+  failureReason                      String?              @db.VarChar(500)
+  notes                              String?              @db.Text
+  createdAt                          DateTime             @default(now()) @db.DateTime(3)
+  updatedAt                          DateTime             @updatedAt @db.DateTime(3)
+  company                            Company              @relation("Delivery_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  order                              Order                @relation("Delivery_order", fields: [companyId, orderId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  agency                             Agency               @relation("Delivery_agency", fields: [companyId, agencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  courier                            AgencyMembership?    @relation("Delivery_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  deliveryAssignment_deliveryRecords DeliveryAssignment[] @relation("DeliveryAssignment_delivery")
+  deliveryEvent_deliveryRecords      DeliveryEvent[]      @relation("DeliveryEvent_delivery")
+  deliveryOtp_deliveryRecords        DeliveryOtp[]        @relation("DeliveryOtp_delivery")
+  deliveryProof_deliveryRecords      DeliveryProof[]      @relation("DeliveryProof_delivery")
+  collection_deliveryRecords         Collection[]         @relation("Collection_delivery")
+
+  @@unique([companyId, orderId])
+  @@unique([companyId, id, courierId])
+  @@unique([companyId, id])
+  @@index([companyId, agencyId, status])
+  @@index([companyId, courierId, status])
+}
+
+model DeliveryAssignment {
+  @@unique([companyId,id,deliveryId,courierId])
+  expectedAmountSnapshot Decimal? @db.Decimal(19,4)
+  currencySnapshot String? @db.Char(3)
+  collectionRequiredSnapshot Boolean?
+  activeSlot Int? @db.UnsignedTinyInt
+  purpose String @default("FINAL") @db.VarChar(16)
+  @@unique([companyId,deliveryId,activeSlot])
+  id           String            @id @default(uuid()) @db.Char(36)
+  companyId    String            @db.Char(36)
+  deliveryId   String            @db.Char(36)
+  agencyId     String            @db.Char(36)
+  courierId    String            @db.Char(36)
+  assignedById String            @db.Char(36)
+  endedAt      DateTime?         @db.DateTime(3)
+  reason       String?           @db.VarChar(500)
+  createdAt    DateTime          @default(now()) @db.DateTime(3)
+  company      Company           @relation("DeliveryAssignment_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  delivery     Delivery          @relation("DeliveryAssignment_delivery", fields: [companyId, deliveryId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  courier      AgencyMembership  @relation("DeliveryAssignment_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  assigner     CompanyMembership @relation("DeliveryAssignment_assigner", fields: [companyId, assignedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([companyId, deliveryId, createdAt])
+}
+
+model DeliveryEvent {
+  sequence Int? @db.UnsignedInt
+  @@unique([companyId,deliveryId,sequence])
+  action String @default("LEGACY") @db.VarChar(60)
+  previousStatus DeliveryStatus?
+  fromPhase String? @db.VarChar(40)
+  toPhase String? @db.VarChar(40)
+  agencyId String? @db.Char(36)
+  fromCustody Json?
+  toCustody Json?
+  metadata Json?
+  operationKey String? @db.VarChar(100)
+  requestHash String? @db.Char(64)
+  @@unique([companyId,operationKey])
+  id         String         @id @default(uuid()) @db.Char(36)
+  companyId  String         @db.Char(36)
+  deliveryId String         @db.Char(36)
+  actorId    String         @db.Char(36)
+  status     DeliveryStatus
+  reason     String?        @db.VarChar(500)
+  notes      String?        @db.Text
+  createdAt  DateTime       @default(now()) @db.DateTime(3)
+  company    Company        @relation("DeliveryEvent_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  delivery   Delivery       @relation("DeliveryEvent_delivery", fields: [companyId, deliveryId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor      User           @relation("DeliveryEvent_actor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([companyId, deliveryId, createdAt])
+}
+
+model DeliveryOtp {
+  assignmentId String? @db.Char(36)
+  activeSlot Int? @db.UnsignedTinyInt
+  sealedCode String? @db.Text
+  verifiedById String? @db.Char(36)
+  validationExpiresAt DateTime? @db.DateTime(3)
+  consumedAt DateTime? @db.DateTime(3)
+  invalidatedAt DateTime? @db.DateTime(3)
+  @@unique([companyId, deliveryId, activeSlot])
+  id                       String            @id @default(uuid()) @db.Char(36)
+  companyId                String            @db.Char(36)
+  deliveryId               String            @db.Char(36)
+  courierId                String            @db.Char(36)
+  codeHash                 String            @db.VarChar(255)
+  expiresAt                DateTime          @db.DateTime(3)
+  attempts                 Int               @default(0) @db.UnsignedInt
+  maxAttempts              Int               @default(5) @db.UnsignedInt
+  status                   OtpStatus         @default(PENDING)
+  verifiedAt               DateTime?         @db.DateTime(3)
+  createdAt                DateTime          @default(now()) @db.DateTime(3)
+  updatedAt                DateTime          @updatedAt @db.DateTime(3)
+  company                  Company           @relation("DeliveryOtp_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  delivery                 Delivery          @relation("DeliveryOtp_delivery", fields: [companyId, deliveryId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  courier                  CompanyMembership @relation("DeliveryOtp_courier", fields: [companyId, courierId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  deliveryProof_otpRecords DeliveryProof[]   @relation("DeliveryProof_otp")
+
+  @@unique([companyId, id, deliveryId, courierId])
+  @@unique([companyId, id])
+  @@index([companyId, deliveryId, status])
+}
+
+model DeliveryProof {
+  operationKey String? @db.VarChar(100)
+  requestHash String? @db.Char(64)
+  exceptionId String? @db.Char(36)
+  assignmentId String? @db.Char(36)
+  confirmedById String? @db.Char(36)
+  @@unique([companyId, operationKey])
+  id                      String             @id @default(uuid()) @db.Char(36)
+  companyId               String             @db.Char(36)
+  deliveryId              String             @db.Char(36)
+  courierId               String             @db.Char(36)
+  otpId                   String?            @unique @db.Char(36)
+  method                  ProofMethod
+  exceptionAuthorizedById String?            @db.Char(36)
+  exceptionReason         String?            @db.VarChar(500)
+  createdAt               DateTime           @default(now()) @db.DateTime(3)
+  company                 Company            @relation("DeliveryProof_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  delivery                Delivery           @relation("DeliveryProof_delivery", fields: [companyId, deliveryId, courierId], references: [companyId, id, courierId], onDelete: Restrict, onUpdate: Restrict)
+  courier                 CompanyMembership  @relation("DeliveryProof_courier", fields: [companyId, courierId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  otp                     DeliveryOtp?       @relation("DeliveryProof_otp", fields: [companyId, otpId, deliveryId, courierId], references: [companyId, id, deliveryId, courierId], onDelete: Restrict, onUpdate: Restrict)
+  authorizer              CompanyMembership? @relation("DeliveryProof_authorizer", fields: [companyId, exceptionAuthorizedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  proofPhoto_proofRecords ProofPhoto[]       @relation("ProofPhoto_proof")
+
+  @@unique([companyId, deliveryId])
+  @@unique([companyId, id])
+}
+
+model FileAsset {
+  id                     String       @id @default(uuid()) @db.Char(36)
+  companyId              String       @db.Char(36)
+  storageKey             String       @unique @db.VarChar(255)
+  mimeType               String       @db.VarChar(100)
+  sizeBytes              BigInt       @db.UnsignedBigInt
+  originalName           String       @db.VarChar(255)
+  checksumSha256         String       @db.Char(64)
+  uploadedById           String       @db.Char(36)
+  visibility             Visibility   @default(PRIVATE)
+  archivedAt             DateTime?    @db.DateTime(3)
+  createdAt              DateTime     @default(now()) @db.DateTime(3)
+  updatedAt              DateTime     @updatedAt @db.DateTime(3)
+  company                Company      @relation("FileAsset_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  uploader               User         @relation("FileAsset_uploader", fields: [uploadedById], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  proofPhoto_fileRecords ProofPhoto[] @relation("ProofPhoto_file")
+
+  @@unique([companyId, id])
+}
+
+model ProofPhoto {
+  id        String        @id @default(uuid()) @db.Char(36)
+  companyId String        @db.Char(36)
+  proofId   String        @db.Char(36)
+  fileId    String        @db.Char(36)
+  createdAt DateTime      @default(now()) @db.DateTime(3)
+  company   Company       @relation("ProofPhoto_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  proof     DeliveryProof @relation("ProofPhoto_proof", fields: [companyId, proofId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  file      FileAsset     @relation("ProofPhoto_file", fields: [companyId, fileId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, proofId, fileId])
+  @@unique([companyId, id])
+}
+
+model Collection {
+  @@index([companyId, agencyId, createdAt], map: "Collection_report_created_idx")
+  // Legacy rows retain the original singleton guard; traced declarations use NULL.
+  legacySlot Int? @default(1) @db.UnsignedTinyInt
+  version Int @default(1) @db.UnsignedInt
+  reference String? @db.VarChar(60)
+  operationKey String? @db.VarChar(100)
+  requestHash String? @db.Char(64)
+  id                                String             @id @default(uuid()) @db.Char(36)
+  companyId                         String             @db.Char(36)
+  deliveryId                        String             @db.Char(36)
+  agencyId                          String             @db.Char(36)
+  courierId                         String             @db.Char(36)
+  expectedAmount                    Decimal            @db.Decimal(19, 4)
+  declaredAmount                    Decimal?           @db.Decimal(19, 4)
+  currency                          String             @db.Char(3)
+  method                            PaymentMethod?
+  status                            CollectionStatus   @default(PENDING)
+  declaredAt                        DateTime?          @db.DateTime(3)
+  verifiedById                      String?            @db.Char(36)
+  verifiedAt                        DateTime?          @db.DateTime(3)
+  notes                             String?            @db.Text
+  createdAt                         DateTime           @default(now()) @db.DateTime(3)
+  updatedAt                         DateTime           @updatedAt @db.DateTime(3)
+  company                           Company            @relation("Collection_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  delivery                          Delivery           @relation("Collection_delivery", fields: [companyId, deliveryId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  courier                           AgencyMembership   @relation("Collection_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  verifier                          CompanyMembership? @relation("Collection_verifier", fields: [companyId, verifiedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  remittanceItem_collectionRecords  RemittanceItem[]   @relation("RemittanceItem_collection")
+  collectionEvent_collectionRecords CollectionEvent[]  @relation("CollectionEvent_collection")
+
+  @@unique([companyId, deliveryId, legacySlot])
+  @@unique([companyId, operationKey])
+  @@unique([companyId, reference])
+  @@unique([companyId, id, courierId, agencyId, currency])
+  @@unique([companyId, id])
+  @@index([companyId, courierId, status])
+}
+
+model Remittance {
+  version Int @default(1) @db.UnsignedInt
+  operationKey String? @db.VarChar(100)
+  requestHash String? @db.Char(64)
+  decision String? @db.VarChar(24)
+  decisionReason String? @db.VarChar(1000)
+  id                                String            @id @default(uuid()) @db.Char(36)
+  companyId                         String            @db.Char(36)
+  reference                         String            @db.VarChar(60)
+  agencyId                          String            @db.Char(36)
+  courierId                         String            @db.Char(36)
+  declaredAmount                    Decimal           @db.Decimal(19, 4)
+  confirmedAmount                   Decimal?          @db.Decimal(19, 4)
+  currency                          String            @db.Char(3)
+  status                            RemittanceStatus  @default(DECLARED)
+  declaredAt                        DateTime          @default(now()) @db.DateTime(3)
+  confirmedById                     String?           @db.Char(36)
+  confirmedAt                       DateTime?         @db.DateTime(3)
+  notes                             String?           @db.Text
+  createdAt                         DateTime          @default(now()) @db.DateTime(3)
+  updatedAt                         DateTime          @updatedAt @db.DateTime(3)
+  company                           Company           @relation("Remittance_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  courier                           AgencyMembership  @relation("Remittance_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  confirmer                         CompanyMembership? @relation("Remittance_confirmer", fields: [companyId, confirmedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  remittanceItem_remittanceRecords  RemittanceItem[]  @relation("RemittanceItem_remittance")
+  remittanceEvent_remittanceRecords RemittanceEvent[] @relation("RemittanceEvent_remittance")
+
+  @@unique([companyId, reference])
+  @@unique([companyId, operationKey])
+  @@unique([companyId, id, courierId, agencyId, currency])
+  @@unique([companyId, id])
+}
+
+model RemittanceItem {
+  legacySlot Int? @default(1) @db.UnsignedTinyInt
+  amount Decimal? @db.Decimal(19,4)
+  confirmedAmount Decimal? @db.Decimal(19,4)
+  id           String     @id @default(uuid()) @db.Char(36)
+  companyId    String     @db.Char(36)
+  remittanceId String     @db.Char(36)
+  collectionId String     @db.Char(36)
+  courierId    String     @db.Char(36)
+  agencyId     String     @db.Char(36)
+  currency     String     @db.Char(3)
+  createdAt    DateTime   @default(now()) @db.DateTime(3)
+  company      Company    @relation("RemittanceItem_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  remittance   Remittance @relation("RemittanceItem_remittance", fields: [companyId, remittanceId, courierId, agencyId, currency], references: [companyId, id, courierId, agencyId, currency], onDelete: Restrict, onUpdate: Restrict)
+  collection   Collection @relation("RemittanceItem_collection", fields: [companyId, collectionId, courierId, agencyId, currency], references: [companyId, id, courierId, agencyId, currency], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, collectionId, legacySlot])
+  @@unique([companyId, remittanceId, collectionId])
+  @@unique([companyId, id])
+}
+
+model CollectionEvent {
+  id           String           @id @default(uuid()) @db.Char(36)
+  companyId    String           @db.Char(36)
+  collectionId String           @db.Char(36)
+  actorId      String           @db.Char(36)
+  status       CollectionStatus
+  notes        String?          @db.Text
+  createdAt    DateTime         @default(now()) @db.DateTime(3)
+  company      Company          @relation("CollectionEvent_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  collection   Collection       @relation("CollectionEvent_collection", fields: [companyId, collectionId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor        User             @relation("CollectionEvent_actor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([companyId, collectionId, createdAt])
+}
+
+model RemittanceEvent {
+  id           String           @id @default(uuid()) @db.Char(36)
+  companyId    String           @db.Char(36)
+  remittanceId String           @db.Char(36)
+  actorId      String           @db.Char(36)
+  status       RemittanceStatus
+  notes        String?          @db.Text
+  createdAt    DateTime         @default(now()) @db.DateTime(3)
+  company      Company          @relation("RemittanceEvent_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  remittance   Remittance       @relation("RemittanceEvent_remittance", fields: [companyId, remittanceId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor        User             @relation("RemittanceEvent_actor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([companyId, remittanceId, createdAt])
+}
+
+model SubscriptionPlan {
+  id                            String              @id @default(uuid()) @db.Char(36)
+  code                          String              @unique @db.VarChar(50)
+  name                          String              @db.VarChar(120)
+  referenceSlot                 Int?                @unique @db.UnsignedTinyInt
+  active                        Boolean             @default(true)
+  period                        BillingPeriod       @default(MONTHLY)
+  createdAt                     DateTime            @default(now()) @db.DateTime(3)
+  updatedAt                     DateTime            @updatedAt @db.DateTime(3)
+  subscriptionPrice_planRecords SubscriptionPrice[] @relation("SubscriptionPrice_plan")
+  subscription_planRecords      Subscription[]      @relation("Subscription_plan")
+}
+
+model SubscriptionPrice {
+  id                              String               @id @default(uuid()) @db.Char(36)
+  planId                          String               @db.Char(36)
+  amount                          Decimal              @db.Decimal(19, 4)
+  currency                        String               @db.Char(3)
+  effectiveFrom                   DateTime             @db.DateTime(3)
+  effectiveUntil                  DateTime?            @db.DateTime(3)
+  createdAt                       DateTime             @default(now()) @db.DateTime(3)
+  updatedAt                       DateTime             @updatedAt @db.DateTime(3)
+  plan                            SubscriptionPlan     @relation("SubscriptionPrice_plan", fields: [planId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  subscriptionPeriod_priceRecords SubscriptionPeriod[] @relation("SubscriptionPeriod_price")
+
+  @@unique([planId, effectiveFrom])
+  @@unique([id, planId, currency])
+}
+
+model Subscription {
+  lastActivatedAt DateTime? @db.DateTime(3)
+  id                                      String                @id @default(uuid()) @db.Char(36)
+  companyId                               String                @db.Char(36)
+  planId                                  String                @db.Char(36)
+  status                                  SubscriptionStatus    @default(PENDING)
+  startedAt                               DateTime?             @db.DateTime(3)
+  expiresAt                               DateTime?             @db.DateTime(3)
+  suspendedAt                             DateTime?             @db.DateTime(3)
+  createdAt                               DateTime              @default(now()) @db.DateTime(3)
+  updatedAt                               DateTime              @updatedAt @db.DateTime(3)
+  company                                 Company               @relation("Subscription_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  plan                                    SubscriptionPlan      @relation("Subscription_plan", fields: [planId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  subscriptionPayment_subscriptionRecords SubscriptionPayment[] @relation("SubscriptionPayment_subscription")
+  subscriptionPeriod_subscriptionRecords  SubscriptionPeriod[]  @relation("SubscriptionPeriod_subscription")
+  subscriptionEvent_subscriptionRecords   SubscriptionEvent[]   @relation("SubscriptionEvent_subscription")
+
+  @@unique([companyId])
+  @@unique([companyId, id])
+  @@unique([companyId, id, planId])
+}
+
+model SubscriptionPayment {
+  @@index([status, validatedAt, companyId], map: "SubscriptionPayment_report_validated_idx")
+  paidAt DateTime? @db.DateTime(3)
+  rejectionReason String? @db.VarChar(500)
+  idempotencyKey String? @db.Char(36)
+  duplicateKey String? @unique @db.Char(64)
+  id                                String               @id @default(uuid()) @db.Char(36)
+  companyId                         String               @db.Char(36)
+  subscriptionId                    String               @db.Char(36)
+  declaredById                      String               @db.Char(36)
+  amount                            Decimal              @db.Decimal(19, 4)
+  currency                          String               @db.Char(3)
+  method                            PaymentMethod
+  externalReference                 String?              @db.VarChar(120)
+  status                            DeclarationStatus    @default(PENDING)
+  validatedById                     String?              @db.Char(36)
+  validatedAt                       DateTime?            @db.DateTime(3)
+  notes                             String?              @db.Text
+  createdAt                         DateTime             @default(now()) @db.DateTime(3)
+  updatedAt                         DateTime             @updatedAt @db.DateTime(3)
+  company                           Company              @relation("SubscriptionPayment_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  subscription                      Subscription         @relation("SubscriptionPayment_subscription", fields: [companyId, subscriptionId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  declarer                          CompanyMembership    @relation("SubscriptionPayment_declarer", fields: [companyId, declaredById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  validator                         GlobalRoleGrant?     @relation("SubscriptionPayment_validator", fields: [validatedById], references: [userId], onDelete: Restrict, onUpdate: Restrict)
+  subscriptionPeriod_paymentRecords SubscriptionPeriod[] @relation("SubscriptionPeriod_payment")
+
+  @@unique([companyId, idempotencyKey])
+  @@index([status, createdAt])
+  @@unique([companyId, id, subscriptionId])
+  @@unique([companyId, id])
+  @@unique([companyId, id, subscriptionId, currency])
+  @@index([companyId, status])
+}
+
+model SubscriptionPeriod {
+  planId         String               @db.Char(36)
+  id             String               @id @default(uuid()) @db.Char(36)
+  companyId      String               @db.Char(36)
+  subscriptionId String               @db.Char(36)
+  priceId        String               @db.Char(36)
+  paymentId      String?              @unique @db.Char(36)
+  amountApplied  Decimal              @db.Decimal(19, 4)
+  currency       String               @db.Char(3)
+  startsAt       DateTime             @db.DateTime(3)
+  endsAt         DateTime             @db.DateTime(3)
+  createdAt      DateTime             @default(now()) @db.DateTime(3)
+  company        Company              @relation("SubscriptionPeriod_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  subscription   Subscription         @relation("SubscriptionPeriod_subscription", fields: [companyId, subscriptionId, planId], references: [companyId, id, planId], onDelete: Restrict, onUpdate: Restrict)
+  price          SubscriptionPrice    @relation("SubscriptionPeriod_price", fields: [priceId, planId, currency], references: [id, planId, currency], onDelete: Restrict, onUpdate: Restrict)
+  payment        SubscriptionPayment? @relation("SubscriptionPeriod_payment", fields: [companyId, paymentId, subscriptionId, currency], references: [companyId, id, subscriptionId, currency], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, subscriptionId, startsAt])
+  @@unique([companyId, id])
+}
+
+model SubscriptionEvent {
+  id             String             @id @default(uuid()) @db.Char(36)
+  companyId      String             @db.Char(36)
+  subscriptionId String             @db.Char(36)
+  actorId        String?            @db.Char(36)
+  status         SubscriptionStatus
+  reason         String?            @db.VarChar(500)
+  createdAt      DateTime           @default(now()) @db.DateTime(3)
+  company        Company            @relation("SubscriptionEvent_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  subscription   Subscription       @relation("SubscriptionEvent_subscription", fields: [companyId, subscriptionId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor          GlobalRoleGrant?   @relation("SubscriptionEvent_actor", fields: [actorId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([companyId, subscriptionId, createdAt])
+}
+
+model UserDevice {
+  sessionFamilyId String? @db.Char(36)
+  @@index([userId,sessionFamilyId])
+  id        String    @id @default(uuid()) @db.Char(36)
+  userId    String    @db.Char(36)
+  pushToken String    @unique @db.VarChar(255)
+  platform  String    @db.VarChar(20)
+  revokedAt DateTime? @db.DateTime(3)
+  createdAt DateTime  @default(now()) @db.DateTime(3)
+  updatedAt DateTime  @updatedAt @db.DateTime(3)
+  user      User      @relation("UserDevice_user", fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+}
+
+model Notification {
+  deliveryState String? @db.VarChar(24)
+  providerAcceptedAt DateTime? @db.DateTime(3)
+  providerMessageId String? @db.VarChar(190)
+  id               String              @id @default(uuid()) @db.Char(36)
+  companyId        String              @db.Char(36)
+  recipientUserId  String?             @db.Char(36)
+  channel          NotificationChannel
+  recipientAddress String              @db.VarChar(255)
+  sourceEvent      String              @db.VarChar(100)
+  sourceId         String              @db.VarChar(100)
+  template         String              @db.VarChar(100)
+  payload          Json
+  status           NotificationStatus  @default(PENDING)
+  attempts         Int                 @default(0) @db.UnsignedInt
+  maxAttempts      Int                 @default(5) @db.UnsignedInt
+  availableAt      DateTime            @db.DateTime(3)
+  lockedAt         DateTime?           @db.DateTime(3)
+  lockedBy         String?             @db.VarChar(100)
+  sentAt           DateTime?           @db.DateTime(3)
+  lastError        String?             @db.VarChar(500)
+  dedupeKey        String              @unique @db.VarChar(190)
+  createdAt        DateTime            @default(now()) @db.DateTime(3)
+  updatedAt        DateTime            @updatedAt @db.DateTime(3)
+  company          Company             @relation("Notification_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  recipient        User?               @relation("Notification_recipient", fields: [recipientUserId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([companyId, id])
+  @@index([status, availableAt])
+  @@index([companyId, recipientUserId, createdAt])
+}
+
+model AuditLog {
+  @@index([companyId, agencyId, createdAt], map: "AuditLog_report_agency_created_idx")
+  id         String   @id @default(uuid()) @db.Char(36)
+  companyId  String?  @db.Char(36)
+  agencyId   String?  @db.Char(36)
+  actorId    String?  @db.Char(36)
+  action     String   @db.VarChar(100)
+  entityType String   @db.VarChar(80)
+  entityId   String   @db.VarChar(100)
+  requestId  String?  @db.VarChar(100)
+  metadata   Json?
+  createdAt  DateTime @default(now()) @db.DateTime(3)
+  company    Company? @relation("AuditLog_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  agency     Agency?  @relation("AuditLog_agency", fields: [companyId, agencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
+  actor      User?    @relation("AuditLog_actor", fields: [actorId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@index([companyId, createdAt])
+  @@index([companyId, entityType, entityId])
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+}
+
+model ShopInvitation {
+ id String @id @default(uuid()) @db.Char(36)
+ kind String @db.VarChar(20)
+ shopId String? @db.Char(36)
+ companyId String? @db.Char(36)
+ email String @db.VarChar(254)
+ fullName String @db.VarChar(160)
+ role String? @db.VarChar(30)
+ tokenHash String @unique @db.Char(64)
+ payload Json
+ senderId String? @db.Char(36)
+ expiresAt DateTime @db.DateTime(3)
+ acceptedAt DateTime? @db.DateTime(3)
+ revokedAt DateTime? @db.DateTime(3)
+ deliveryStatus String @default("PENDING") @db.VarChar(12)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ updatedAt DateTime @updatedAt @db.DateTime(3)
+ @@index([shopId,createdAt])
+ @@index([companyId,createdAt])
+ @@index([email,kind,expiresAt])
+}
+
+model StockDeposit {
+  @@unique([companyId,id,shopId],map:"StockDeposit_context_key")
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ agencyId String @db.Char(36)
+ shopId String @db.Char(36)
+ reference String @db.VarChar(60)
+ status String @default("DRAFT") @db.VarChar(12)
+ version Int @default(1)
+ actorId String @db.Char(36)
+ confirmedById String? @db.Char(36)
+ confirmedAt DateTime? @db.DateTime(3)
+ cancelledAt DateTime? @db.DateTime(3)
+ notes String? @db.VarChar(1000)
+ items StockDepositItem[]
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ updatedAt DateTime @updatedAt @db.DateTime(3)
+ @@unique([companyId,reference])
+ @@unique([companyId,id])
+ @@index([companyId,agencyId,createdAt])
+}
+model StockDepositItem {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ depositId String @db.Char(36)
+ shopId String @db.Char(36)
+ productId String @db.Char(36)
+ quantity Int @db.UnsignedInt
+ deposit StockDeposit @relation(fields:[companyId,depositId],references:[companyId,id],onDelete:Restrict,onUpdate:Restrict)
+ @@unique([companyId,depositId,productId])
+}
+model StockWithdrawal {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ agencyId String @db.Char(36)
+ shopId String @db.Char(36)
+ stockId String @db.Char(36)
+ reference String @db.VarChar(60)
+ quantity Int @db.UnsignedInt
+ kind String @db.VarChar(12)
+ reason String @db.VarChar(500)
+ recipient String? @db.VarChar(160)
+ actorId String @db.Char(36)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ @@unique([companyId,reference])
+ @@index([companyId,agencyId,createdAt])
+}
+model TransferIncident {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ transferId String @db.Char(36)
+ itemId String @db.Char(36)
+ shopId String @db.Char(36)
+ productId String @db.Char(36)
+ quantity Int @db.UnsignedInt
+ kind String @db.VarChar(12)
+ description String @db.VarChar(1000)
+ status String @default("OPEN") @db.VarChar(12)
+ actorId String @db.Char(36)
+ resolvedById String? @db.Char(36)
+ resolution String? @db.VarChar(30)
+ reason String? @db.VarChar(500)
+ resolvedAt DateTime? @db.DateTime(3)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ updatedAt DateTime @updatedAt @db.DateTime(3)
+ @@index([companyId,transferId,createdAt])
+}
+model InventorySession {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ agencyId String @db.Char(36)
+ shopId String? @db.Char(36)
+ reference String @db.VarChar(60)
+ status String @default("DRAFT") @db.VarChar(12)
+ version Int @default(1)
+ actorId String @db.Char(36)
+ submittedById String? @db.Char(36)
+ submittedAt DateTime? @db.DateTime(3)
+ decidedById String? @db.Char(36)
+ decidedAt DateTime? @db.DateTime(3)
+ reason String? @db.VarChar(500)
+ notes String? @db.VarChar(1000)
+ items InventoryItem[]
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ updatedAt DateTime @updatedAt @db.DateTime(3)
+ @@unique([companyId,reference])
+ @@unique([companyId,id])
+ @@index([companyId,agencyId,createdAt])
+}
+model InventoryItem {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ inventoryId String @db.Char(36)
+ stockId String @db.Char(36)
+ shopId String @db.Char(36)
+ productId String @db.Char(36)
+ expectedPhysical Int @db.UnsignedInt
+ expectedReserved Int @db.UnsignedInt
+ stockVersion Int @db.UnsignedInt
+ countedQuantity Int? @db.UnsignedInt
+ reason String? @db.VarChar(500)
+ inventory InventorySession @relation(fields:[companyId,inventoryId],references:[companyId,id],onDelete:Restrict,onUpdate:Restrict)
+ @@unique([companyId,inventoryId,stockId])
+}
+
+model ParcelLeg {
+ receivedAgencyId String? @db.Char(36)
+ returnedToOrigin Boolean @default(false)
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ deliveryId String @db.Char(36)
+ originAgencyId String @db.Char(36)
+ destinationAgencyId String @db.Char(36)
+ transporterId String @db.Char(36)
+ createdById String @db.Char(36)
+ receivedById String? @db.Char(36)
+ status String @default("DRAFT") @db.VarChar(16)
+ activeSlot Int? @db.UnsignedTinyInt
+ version Int @default(1)
+ isReturn Boolean @default(false)
+ dispatchedAt DateTime? @db.DateTime(3)
+ receivedAt DateTime? @db.DateTime(3)
+ condition String? @db.VarChar(12)
+ notes String? @db.VarChar(1000)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ updatedAt DateTime @updatedAt @db.DateTime(3)
+ delivery Delivery @relation(fields:[companyId,deliveryId],references:[companyId,id],onDelete:Restrict,onUpdate:Restrict)
+ @@unique([companyId,id])
+ @@unique([companyId,deliveryId,activeSlot])
+ @@index([companyId,destinationAgencyId,status,createdAt])
+}
+model ParcelHandover {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ deliveryId String @db.Char(36)
+ agencyId String @db.Char(36)
+ fromCourierId String @db.Char(36)
+ targetCourierId String @db.Char(36)
+ createdById String @db.Char(36)
+ confirmedById String? @db.Char(36)
+ reason String @db.VarChar(500)
+ status String @default("PENDING") @db.VarChar(12)
+ activeSlot Int? @db.UnsignedTinyInt
+ condition String? @db.VarChar(12)
+ version Int @default(1)
+ confirmedAt DateTime? @db.DateTime(3)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ delivery Delivery @relation(fields:[companyId,deliveryId],references:[companyId,id],onDelete:Restrict,onUpdate:Restrict)
+ @@unique([companyId,id])
+ @@unique([companyId,deliveryId,activeSlot])
+ @@index([companyId,targetCourierId,status])
+}
+model DeliveryAttempt {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ deliveryId String @db.Char(36)
+ courierId String @db.Char(36)
+ result String @db.VarChar(30)
+ reason String? @db.VarChar(20)
+ notes String? @db.VarChar(1000)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ delivery Delivery @relation(fields:[companyId,deliveryId],references:[companyId,id],onDelete:Restrict,onUpdate:Restrict)
+ @@unique([companyId,id])
+ @@index([companyId,deliveryId,createdAt])
+}
+model DeliveryIncident {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ deliveryId String @db.Char(36)
+ agencyId String @db.Char(36)
+ actorId String @db.Char(36)
+ kind String @db.VarChar(20)
+ description String @db.VarChar(1000)
+ blocking Boolean @default(false)
+ status String @default("OPEN") @db.VarChar(12)
+ version Int @default(1)
+ decision String? @db.VarChar(16)
+ resolutionReason String? @db.VarChar(500)
+ resolvedById String? @db.Char(36)
+ resolvedAt DateTime? @db.DateTime(3)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ delivery Delivery @relation(fields:[companyId,deliveryId],references:[companyId,id],onDelete:Restrict,onUpdate:Restrict)
+ @@unique([companyId,id])
+ @@index([companyId,agencyId,status,createdAt])
+}
+model DeliveryReturn {
+ id String @id @default(uuid()) @db.Char(36)
+ companyId String @db.Char(36)
+ deliveryId String @db.Char(36)
+ agencyId String @db.Char(36)
+ actorId String @db.Char(36)
+ receivedById String? @db.Char(36)
+ reason String @db.VarChar(500)
+ status String @default("REQUESTED") @db.VarChar(16)
+ condition String? @db.VarChar(12)
+ receivedAt DateTime? @db.DateTime(3)
+ reintegratedAt DateTime? @db.DateTime(3)
+ returnedToShopAt DateTime? @db.DateTime(3)
+ notes String? @db.VarChar(1000)
+ createdAt DateTime @default(now()) @db.DateTime(3)
+ delivery Delivery @relation(fields:[companyId,deliveryId],references:[companyId,id],onDelete:Restrict,onUpdate:Restrict)
+ @@unique([companyId,id])
+ @@unique([companyId,deliveryId])
+ @@index([companyId,agencyId,status,createdAt])
+}
+
+// All monetary changes are documentary and require explicit, traceable decisions.
+model FinancialCorrection {
+  exceptional Boolean @default(false)
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  agencyId String @db.Char(36)
+  courierId String? @db.Char(36)
+  deliveryId String @db.Char(36)
+  collectionId String? @db.Char(36)
+  remittanceItemId String? @db.Char(36)
+  kind String @db.VarChar(20)
+  status DeclarationStatus @default(PENDING)
+  version Int @default(1) @db.UnsignedInt
+  fromAmount Decimal @db.Decimal(19,4)
+  toAmount Decimal @db.Decimal(19,4)
+  currency String @db.Char(3)
+  reason String @db.VarChar(1000)
+  externalReference String? @db.VarChar(160)
+  requestedById String @db.Char(36)
+  decidedById String? @db.Char(36)
+  decisionReason String? @db.VarChar(1000)
+  decidedAt DateTime? @db.DateTime(3)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([companyId,id])
+  @@index([companyId,agencyId,status,createdAt])
+  @@index([companyId,collectionId,status])
+  @@index([companyId,remittanceItemId,status])
+  @@index([companyId,deliveryId,kind,status])
+}
+
+model FinancialDiscrepancy {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  reference String @db.VarChar(60)
+  agencyId String @db.Char(36)
+  courierId String @db.Char(36)
+  deliveryId String? @db.Char(36)
+  collectionId String? @db.Char(36)
+  remittanceId String? @db.Char(36)
+  kind String @db.VarChar(32)
+  amount Decimal @db.Decimal(19,4)
+  currency String @db.Char(3)
+  description String @db.VarChar(1000)
+  status String @default("OPEN") @db.VarChar(16)
+  version Int @default(1) @db.UnsignedInt
+  createdById String @db.Char(36)
+  resolvedById String? @db.Char(36)
+  resolution String? @db.VarChar(1000)
+  resolvedAt DateTime? @db.DateTime(3)
+  sourceKey String? @db.VarChar(160)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([companyId,id])
+  @@unique([companyId,reference])
+  @@unique([companyId,sourceKey])
+  @@index([companyId,agencyId,status,createdAt])
+  @@index([companyId,courierId,status])
+}
+
+model TrackingAccess {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  orderId String @db.Char(36)
+  version Int @db.UnsignedInt
+  kind String @db.VarChar(12)
+  tokenHash String @unique @db.Char(64)
+  sealedToken String? @db.Text
+  expiresAt DateTime @db.DateTime(3)
+  revokedAt DateTime? @db.DateTime(3)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([companyId,id])
+  @@index([companyId,orderId,kind,expiresAt])
+}
+
+model TrackingThrottle {
+  key String @id @db.Char(64)
+  count Int @default(0) @db.UnsignedInt
+  resetsAt DateTime @db.DateTime(3)
+}
+
+model OtpAttempt {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  deliveryId String @db.Char(36)
+  otpId String? @db.Char(36)
+  actorId String @db.Char(36)
+  outcome String @db.VarChar(32)
+  operationKey String @db.VarChar(100)
+  requestHash String @db.Char(64)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([companyId,operationKey])
+  @@index([companyId,deliveryId,createdAt])
+}
+
+model OtpException {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  deliveryId String @db.Char(36)
+  agencyId String @db.Char(36)
+  assignmentId String @db.Char(36)
+  courierId String @db.Char(36)
+  requestedById String @db.Char(36)
+  reason String @db.VarChar(1000)
+  status String @default("PENDING") @db.VarChar(16)
+  version Int @default(1) @db.UnsignedInt
+  decidedById String? @db.Char(36)
+  decisionReason String? @db.VarChar(1000)
+  decidedAt DateTime? @db.DateTime(3)
+  expiresAt DateTime @db.DateTime(3)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([companyId,id])
+  @@index([companyId,deliveryId,status])
+}
+
+model DeliveryEvidence {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  deliveryId String @db.Char(36)
+  agencyId String @db.Char(36)
+  courierId String @db.Char(36)
+  assignmentId String @db.Char(36)
+  fileId String @unique @db.Char(36)
+  kind String @db.VarChar(16)
+  status String @default("READY") @db.VarChar(16)
+  proofId String? @db.Char(36)
+  operationKey String @db.VarChar(100)
+  requestHash String @db.Char(64)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([companyId,id])
+  @@unique([companyId,operationKey])
+  @@index([companyId,deliveryId,status])
+}
+
+model NotificationAttempt {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  notificationId String @db.Char(36)
+  attempt Int @db.UnsignedInt
+  outcome String @db.VarChar(24)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([notificationId,attempt])
+  @@index([companyId,createdAt])
+}
+
+model FinancialEvent {
+  id String @id @default(uuid()) @db.Char(36)
+  companyId String @db.Char(36)
+  agencyId String @db.Char(36)
+  courierId String? @db.Char(36)
+  actorId String @db.Char(36)
+  orderId String? @db.Char(36)
+  collectionId String? @db.Char(36)
+  remittanceId String? @db.Char(36)
+  correctionId String? @db.Char(36)
+  discrepancyId String? @db.Char(36)
+  action String @db.VarChar(50)
+  entityId String @db.Char(36)
+  previousStatus String? @db.VarChar(24)
+  status String? @db.VarChar(24)
+  amount Decimal @db.Decimal(19,4)
+  currency String @db.Char(3)
+  reason String? @db.VarChar(1000)
+  metadata Json?
+  operationKey String? @db.VarChar(100)
+  requestHash String? @db.Char(64)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@unique([companyId,id])
+  @@unique([companyId,operationKey])
+  @@index([companyId,agencyId,createdAt,id])
+  @@index([companyId,courierId,createdAt])
+  @@index([companyId,orderId,createdAt])
+}
+

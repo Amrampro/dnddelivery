@@ -22,7 +22,10 @@ const result = spawnSync('mariadb-dump', [
 ], { env: { ...process.env, MYSQL_PWD: decodeURIComponent(url.password) }, stdio: 'pipe' });
 if (result.status !== 0) {
   rmSync(file, { force: true });
-  throw new Error('Database backup failed; migration blocked. Check mariadb-dump and database permissions.');
+  // Only emit error codes: dump output can contain database identifiers.
+  const databaseCode = result.stderr?.toString().match(/(?:ERROR|Got error:)\s*(\d+)/i)?.[1];
+  const reason = result.error?.code || (databaseCode ? `database error ${databaseCode}` : `exit ${result.status}`);
+  throw new Error(`Database backup failed (${reason}); migration blocked. Check mariadb-dump and database permissions.`);
 }
 chmodSync(file, 0o600);
 console.log('Private database backup completed.');

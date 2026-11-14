@@ -1,4 +1,7 @@
 import 'dotenv/config';
+import process from 'node:process';
+import console from 'node:console';
+import { URL } from 'node:url';
 import { mkdirSync, chmodSync, rmSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { resolve, join } from 'node:path';

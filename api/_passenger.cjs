@@ -1,7 +1,11 @@
 // Passenger loads CommonJS; the application itself uses ES modules.
-const process = require('node:process');
-const console = require('node:console');
-import('./dist/server.js').catch(() => {
-  console.error('DND Delivery failed to start. Check the private application logs.');
-  process.exit(1);
-});
+async function main() {
+  const { default: process } = await import('node:process');
+  try {
+    await import('./dist/server.js');
+  } catch {
+    process.stderr.write('DND Delivery failed to start. Check the private application logs.\n');
+    process.exit(1);
+  }
+}
+main();

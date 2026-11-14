@@ -12,7 +12,7 @@ function key() {
   if (!secret || secret.length < 32)
     throw stockError(
       "PROOF_CONFIGURATION_REQUIRED",
-      "Le service de confirmation doit �tre configur�.",
+      "Le service de confirmation doit être configuré.",
       503,
     );
   return createHmac("sha256", secret)

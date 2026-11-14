@@ -18,7 +18,7 @@ export const errors: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof AccessDenied) {
     res
       .status(403)
-      .json({ error: { code: "ACCESS_DENIED", message: "Acc�s refus�." } });
+      .json({ error: { code: "ACCESS_DENIED", message: "Accès refusé." } });
     return;
   }
   if (err instanceof ZodError) {
@@ -27,7 +27,7 @@ export const errors: ErrorRequestHandler = (err, _req, res, _next) => {
       .json({
         error: {
           code: "INVALID_REQUEST",
-          message: err.issues[0]?.message ?? "Requ�te invalide.",
+          message: err.issues[0]?.message ?? "Requête invalide.",
         },
       });
     return;
@@ -51,7 +51,7 @@ export const errors: ErrorRequestHandler = (err, _req, res, _next) => {
         message:
           status === 500
             ? "Le service est temporairement indisponible."
-            : "Requ�te invalide.",
+            : "Requête invalide.",
       },
     });
 };

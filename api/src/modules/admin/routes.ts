@@ -34,7 +34,7 @@ export function createAdminRouter(
   router.use((_req, res, next) => {
     if (res.locals.workspace.scope !== "GLOBAL")
       return next(
-        new AuthError(403, "GLOBAL_REQUIRED", "Un acc�s global est requis."),
+        new AuthError(403, "GLOBAL_REQUIRED", "Un accès global est requis."),
       );
     next();
   });

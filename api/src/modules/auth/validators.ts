@@ -5,8 +5,8 @@ export const email = z
   .transform((v) => v.trim().toLowerCase());
 export const password = z
   .string()
-  .min(12, "Utilisez au moins 12 caract�res.")
-  .max(128, "Utilisez au maximum 128 caract�res.");
+  .min(12, "Utilisez au moins 12 caractères.")
+  .max(128, "Utilisez au maximum 128 caractères.");
 export const loginSchema = z
   .object({
     email: z.string().trim().pipe(email),

@@ -22,7 +22,7 @@ export async function registerDevice(
         userId: device.userId, familyId: device.sessionFamilyId,
         revokedAt: null, expiresAt: { gt: new Date() },
       } }))
-      throw stockError("DEVICE_IN_USE", "Cet appareil poss�de encore une autre session active. D�connectez cette session avant de l'enregistrer.", 409);
+      throw stockError("DEVICE_IN_USE", "Cet appareil possède encore une autre session active. Déconnectez cette session avant de l’enregistrer.", 409);
     const data = { userId: p.user.id, platform: input.platform,
       sessionFamilyId: session.familyId, revokedAt: null };
     const row = await tx.userDevice.upsert({ where: { pushToken: input.token },

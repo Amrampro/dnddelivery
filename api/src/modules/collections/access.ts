@@ -68,7 +68,7 @@ export async function permission(
   if (auth.kind === "shop" || !auth.permissions.includes(required))
     throw stockError(
       "PERMISSION_DENIED",
-      "Cette op�ration financi�re n'est pas autoris�e.",
+      "Cette opération financière n’est pas autorisée.",
       403,
     );
   return auth;
@@ -77,7 +77,7 @@ export const agencyAllowed = (c: Context, id: string) => {
   if (c.scope === "SHOP" || (c.scope === "AGENCY" && c.agencyId !== id))
     throw stockError(
       "AGENCY_DENIED",
-      "Cette op�ration appartient � une autre agence.",
+      "Cette opération appartient à une autre agence.",
       403,
     );
 };
@@ -88,7 +88,7 @@ export function filters(c: Context, q: Query, kind: Kind) {
     (kind === "driver" && q.courierId && q.courierId !== c.actorId) ||
     (kind === "shop" && q.shopId && q.shopId !== c.shopId)
   )
-    throw stockError("SCOPE_DENIED", "Filtre hors de votre p�rim�tre.", 403);
+    throw stockError("SCOPE_DENIED", "Filtre hors de votre périmètre.", 403);
   return {
     companyId: c.companyId ?? q.companyId,
     ...(c.scope === "AGENCY"

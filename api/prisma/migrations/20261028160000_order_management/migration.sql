@@ -17,7 +17,7 @@ BEGIN
  END IF;
 END;
 INSERT IGNORE INTO Permission(id,code,description) VALUES
-(UUID(),'orders.create','Cr�er une commande'),(UUID(),'orders.edit','Modifier une commande pr�alable'),(UUID(),'orders.cancel','Annuler une commande pr�alable'),(UUID(),'shop.orders.read','Lire les commandes de sa boutique'),(UUID(),'shop.orders.create','Cr�er pour sa boutique'),(UUID(),'shop.orders.edit','Modifier pour sa boutique'),(UUID(),'shop.orders.cancel','Annuler pour sa boutique');
+(UUID(),'orders.create','Créer une commande'),(UUID(),'orders.edit','Modifier une commande préalable'),(UUID(),'orders.cancel','Annuler une commande préalable'),(UUID(),'shop.orders.read','Lire les commandes de sa boutique'),(UUID(),'shop.orders.create','Créer pour sa boutique'),(UUID(),'shop.orders.edit','Modifier pour sa boutique'),(UUID(),'shop.orders.cancel','Annuler pour sa boutique');
 INSERT IGNORE INTO RolePermission(roleId,permissionId)
 SELECT r.id,p.id FROM Role r JOIN Permission p ON
 (r.code IN ('company_admin','agency_manager') AND p.code IN ('orders.read','orders.create','orders.edit','orders.cancel')) OR

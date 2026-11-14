@@ -36,7 +36,7 @@ export class OrganizationService {
         e.code === "P2002"
       )
         throw conflict(
-          "Cette r�f�rence, ce matricule ou cette invitation existe d�j�.",
+          "Cette référence, ce matricule ou cette invitation existe déjà.",
           "DUPLICATE",
         );
       throw e;
@@ -160,7 +160,7 @@ export class OrganizationService {
         const blockers = await agencyBlockers(tx, c.companyId, id);
         if (Object.values(blockers).some(Boolean))
           throw conflict(
-            `Une action corrective est requise : ${blockers.deliveries} livraison(s), ${blockers.orders} commande(s), ${blockers.stock} stock(s), ${blockers.transfers} transfert(s), ${blockers.financial} situation(s) financi�re(s).`,
+            `Une action corrective est requise : ${blockers.deliveries} livraison(s), ${blockers.orders} commande(s), ${blockers.stock} stock(s), ${blockers.transfers} transfert(s), ${blockers.financial} situation(s) financière(s).`,
             "AGENCY_OPERATIONS_PENDING",
           );
       }
@@ -245,7 +245,7 @@ export class OrganizationService {
         });
         if (!m)
           throw conflict(
-            "Choisissez un responsable actif affect� � cette agence.",
+            "Choisissez un responsable actif affecté à cette agence.",
           );
       }
       const a = await tx.agency.update({
@@ -264,7 +264,7 @@ export class OrganizationService {
     });
   }
   async validateAgencies(tx: Tx, companyId: string, ids: string[]) {
-    if (new Set(ids).size !== ids.length) throw conflict("Agence r�p�t�e.");
+    if (new Set(ids).size !== ids.length) throw conflict("Agence répétée.");
     if (
       (await tx.agency.count({
         where: {
@@ -276,7 +276,7 @@ export class OrganizationService {
       })) !== ids.length
     )
       throw conflict(
-        "Chaque agence doit �tre active et appartenir � cette entreprise.",
+        "Chaque agence doit être active et appartenir à cette entreprise.",
         "AGENCY_ASSIGNMENT_DENIED",
       );
   }
@@ -291,9 +291,9 @@ export class OrganizationService {
     await this.validateAgencies(tx, c.companyId, ids);
     const user = await tx.user.findUnique({ where: { id: userId } });
     if (!user || (active && (user.status !== "ACTIVE" || user.archivedAt)))
-      throw conflict("Ce compte ne peut pas �tre activ� dans l'entreprise.");
+      throw conflict("Ce compte ne peut pas être activé dans l’entreprise.");
     if (role !== "employee" && !ids.length)
-      throw conflict("S�lectionnez une agence.");
+      throw conflict("Sélectionnez une agence.");
     const companyRole = await tx.role.findUnique({
         where: { code: "company_member" },
       }),
@@ -301,7 +301,7 @@ export class OrganizationService {
         where: { code: agencyRole(role) },
       });
     if (companyRole?.scope !== "COMPANY" || localRole?.scope !== "AGENCY")
-      throw conflict("Initialisez les r�les de r�f�rence.");
+      throw conflict("Initialisez les rôles de référence.");
     const old = await tx.companyMembership.findUnique({
       where: { companyId_userId: { companyId: c.companyId, userId } },
       include: { role: true },
@@ -314,7 +314,7 @@ export class OrganizationService {
     );
     if (old?.role.code === "company_admin")
       throw conflict(
-        "Les administrateurs sont g�r�s depuis le module global.",
+        "Les administrateurs sont gérés depuis le module global.",
         "ADMIN_PROTECTED",
       );
     const protectedAgencies = await tx.agency.findMany({
@@ -475,7 +475,7 @@ export class OrganizationService {
       checkVersion(m.version, input.version);
       if (m.role.code === "company_admin")
         throw conflict(
-          "Le retrait d'un administrateur passe par le module global.",
+          "Le retrait d’un administrateur passe par le module global.",
           "ADMIN_PROTECTED",
         );
       await withdrawAgencyLinks(tx, c.companyId, userId, c.actorId);
@@ -494,7 +494,7 @@ export class OrganizationService {
     });
     return {
       message:
-        "Affiliation retir�e. Le compte et ses autres entreprises sont conserv�s.",
+        "Affiliation retirée. Le compte et ses autres entreprises sont conservés.",
     };
   }
   async updateDriver(
@@ -563,7 +563,7 @@ export class OrganizationService {
         throw new AuthError(
           403,
           "DRIVER_SUSPENDED",
-          "Votre profil livreur n'est pas actif.",
+          "Votre profil livreur n’est pas actif.",
         );
       checkVersion(d.version, input.version);
       const assigned = await tx.agencyMembership.findFirst({
@@ -581,7 +581,7 @@ export class OrganizationService {
         throw new AuthError(
           403,
           "DRIVER_UNASSIGNED",
-          "Aucune agence active autoris�e.",
+          "Aucune agence active autorisée.",
         );
       const result = await tx.driverProfile.update({
         where: { id: d.id },
@@ -616,7 +616,7 @@ export class OrganizationService {
         },
       });
       if (duplicate)
-        throw conflict("Renvoyez ou r�voquez l'invitation existante.");
+        throw conflict("Renvoyez ou révoquez l’invitation existante.");
       const existing = await tx.user.findUnique({
         where: { email: input.email },
       });
@@ -628,7 +628,7 @@ export class OrganizationService {
         });
         if (member?.active)
           throw conflict(
-            "Ce compte est d�j� affili�. Modifiez ses affectations.",
+            "Ce compte est déjà affilié. Modifiez ses affectations.",
           );
       }
       const raw = opaqueToken(),
@@ -684,7 +684,7 @@ export class OrganizationService {
         );
       checkVersion(i.version, version);
       if (i.acceptedAt || i.revokedAt)
-        throw conflict("Invitation d�j� cl�tur�e.");
+        throw conflict("Invitation déjà clôturée.");
       let raw: string | undefined;
       if (action === "resend") {
         raw = opaqueToken();
@@ -766,7 +766,7 @@ export class OrganizationService {
         throw new AuthError(
           400,
           "INVITATION_INVALID",
-          "Invitation expir�e, remplac�e ou cl�tur�e.",
+          "Invitation expirée, remplacée ou clôturée.",
         );
       const senderGlobal = await tx.globalRoleGrant.findUnique({
         where: { userId: i.createdById },
@@ -811,7 +811,7 @@ export class OrganizationService {
           throw new AuthError(
             409,
             "NEW_ACCOUNT_REQUIRED",
-            "Cette invitation n�cessite la cr�ation du compte destinataire.",
+            "Cette invitation nécessite la création du compte destinataire.",
           );
         user = await tx.user.create({
           data: {
@@ -836,7 +836,7 @@ export class OrganizationService {
       );
       return {
         message:
-          "Affiliation activ�e. Connectez-vous ou actualisez vos organisations pour s�lectionner cet acc�s.",
+          "Affiliation activée. Connectez-vous ou actualisez vos organisations pour sélectionner cet accès.",
       };
     });
   }

@@ -54,7 +54,7 @@ export async function persistLogo(
     throw new AuthError(
       400,
       "LOGO_INVALID",
-      "Cette image est illisible, trop grande ou d'un type non autoris�.",
+      "Cette image est illisible, trop grande ou d’un type non autorisé.",
     );
   }
   const key = `${randomUUID()}.webp`;
@@ -97,7 +97,7 @@ export async function getLogo(service: Pick<AdminService, "db">, id: string) {
     select: { logoKey: true },
   });
   if (!company?.logoKey || !/^[a-f0-9-]{36}\.webp$/.test(company.logoKey))
-    throw new AuthError(404, "LOGO_NOT_FOUND", "Aucun logo associ�.");
+    throw new AuthError(404, "LOGO_NOT_FOUND", "Aucun logo associé.");
   try {
     const bytes = await readPrivateImage(companyLogoDirectory(), company.logoKey);
     return { mime: "image/webp", image: bytes.toString("base64") };

@@ -12,5 +12,5 @@ export const unauthorized = () =>
   new AuthError(
     401,
     "UNAUTHENTICATED",
-    "Votre session a expir� ou n'est plus valide.",
+    "Votre session a expiré ou n’est plus valide.",
   );

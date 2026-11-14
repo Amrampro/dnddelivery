@@ -522,7 +522,7 @@ export class FinancialReads {
       names = new Map(users.map((u) => [u.id, u.fullName]));
     return events.map((e) => ({
       ...this.eventDto(e),
-      actorName: names.get(e.actorId) ?? "Compte conserv�",
+      actorName: names.get(e.actorId) ?? "Compte conservé",
     }));
   }
   async overview(c: Context, q: Query) {
@@ -684,7 +684,7 @@ export class FinancialReads {
         orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
       if (id && !rows.length)
-        throw stockError("DISCREPANCY_NOT_FOUND", "�cart introuvable.", 404);
+        throw stockError("DISCREPANCY_NOT_FOUND", "Écart introuvable.", 404);
       return {
         ...paginate(
           rows.map((r) => ({

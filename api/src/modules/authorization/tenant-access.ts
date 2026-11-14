@@ -98,7 +98,7 @@ export async function authorizeTenant(
     throw new AuthError(
       403,
       "SUBSCRIPTION_REQUIRED",
-      "Abonnement expir� ou absent : les nouvelles op�rations sont bloqu�es. Consultez Mon abonnement ou changez d'entreprise.",
+      "Abonnement expiré ou absent : les nouvelles opérations sont bloquées. Consultez Mon abonnement ou changez d’entreprise.",
     );
   issuedContexts.add(context);
   return context;

@@ -63,7 +63,7 @@ export function createOrganizationRouter(
           ? s.locals.workspace.scope !== "GLOBAL"
           : !["COMPANY", "AGENCY"].includes(s.locals.workspace.scope)
       )
-        return n(new AuthError(403, "SCOPE_DENIED", "Contexte non autoris�."));
+        return n(new AuthError(403, "SCOPE_DENIED", "Contexte non autorisé."));
       n();
     },
   ];
@@ -123,7 +123,7 @@ export function createOrganizationRouter(
     ...access("employees.read"),
     (_q, s, n) =>
       s.locals.workspace.scope === "AGENCY"
-        ? n(new AuthError(403, "SCOPE_DENIED", "Acc�s entreprise requis."))
+        ? n(new AuthError(403, "SCOPE_DENIED", "Accès entreprise requis."))
         : n(),
     c.invitations,
   );

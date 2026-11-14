@@ -63,7 +63,7 @@ export class LocalProofStorage implements PrivateProofStorage {
     } catch {
       throw stockError(
         "PROOF_IMAGE_INVALID",
-        "Cette photo est illisible, trop grande ou d'un type interdit.",
+        "Cette photo est illisible, trop grande ou d’un type interdit.",
         400,
       );
     }
@@ -92,7 +92,7 @@ export class LocalProofStorage implements PrivateProofStorage {
     } catch {
       throw stockError(
         "PROOF_FILE_UNAVAILABLE",
-        "La photo n'est pas disponible. R�essayez l'envoi.",
+        "La photo n’est pas disponible. Réessayez l’envoi.",
         409,
       );
     }

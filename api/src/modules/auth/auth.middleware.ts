@@ -25,11 +25,11 @@ export function requireAuthentication(
       const authenticated = await service().authenticate(token, type);
       const expected = req.get("X-DND-Context");
       if (req.get("X-DND-User") !== undefined && req.get("X-DND-User") !== authenticated.user.id)
-        throw new AuthError(403, "SESSION_CHANGED", "Le compte connect� a chang� dans une autre fen�tre. Actualisez vos acc�s avant de poursuivre.");
+        throw new AuthError(403, "SESSION_CHANGED", "Le compte connecté a changé dans une autre fenêtre. Actualisez vos accès avant de poursuivre.");
       const selected = authenticated.session.activeContext;
       const actual = selected && typeof selected === "object" && "key" in selected ? selected.key : null;
       if (checkContext && expected !== undefined && expected !== actual)
-        throw new AuthError(403, "CONTEXT_CHANGED", "Votre environnement a chang� dans une autre fen�tre. Actualisez vos acc�s avant de poursuivre.");
+        throw new AuthError(403, "CONTEXT_CHANGED", "Votre environnement a changé dans une autre fenêtre. Actualisez vos accès avant de poursuivre.");
       res.locals.principal = authenticated;
       next();
     } catch (error) {
@@ -68,7 +68,7 @@ export function requireTrustedOrigin(
     }
     if (source && !origins.includes(source))
       return next(
-        new AuthError(403, "ORIGIN_REJECTED", "Origine de la requ�te refus�e."),
+        new AuthError(403, "ORIGIN_REJECTED", "Origine de la requête refusée."),
       );
     if (
       clientType(req) === "WEB" &&
@@ -78,7 +78,7 @@ export function requireTrustedOrigin(
         new AuthError(
           403,
           "ORIGIN_REJECTED",
-          "La v�rification de s�curit� a �chou�.",
+          "La vérification de sécurité a échoué.",
         ),
       );
     next();

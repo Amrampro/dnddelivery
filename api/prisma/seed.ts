@@ -43,7 +43,7 @@ const roles = [
       "audit.read",
     ],
   ],
-  ["company_member", "Employ� entreprise", "COMPANY", []],
+  ["company_member", "Employé entreprise", "COMPANY", []],
   [
     "agency_manager",
     "Responsable agence",
@@ -120,7 +120,7 @@ try {
         where: { code },
         create: {
           code,
-          name: code === "agency_employee" ? "Employ� d'agence" : code,
+          name: code === "agency_employee" ? "Employé d’agence" : code,
           scope: code.startsWith("shop_")
             ? "SHOP"
             : code.startsWith("company_")

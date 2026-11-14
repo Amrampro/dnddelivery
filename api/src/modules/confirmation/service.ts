@@ -26,7 +26,7 @@ export class ConfirmationService extends DeliveryService {
     if (auth.kind === "shop" || !auth.permissions.includes(required))
       throw stockError(
         "PERMISSION_DENIED",
-        "Action de confirmation non autoris�e.",
+        "Action de confirmation non autorisée.",
         403,
       );
     agencyAllowed(c, p.agencyId);
@@ -45,7 +45,7 @@ export class ConfirmationService extends DeliveryService {
       )
         throw stockError(
           "SUBSCRIPTION_REQUIRED",
-          "Seule une mission d�j� prise en charge avant l'expiration peut �tre r�gularis�e.",
+          "Seule une mission déjà prise en charge avant l’expiration peut être régularisée.",
           403,
         );
     }
@@ -56,7 +56,7 @@ export class ConfirmationService extends DeliveryService {
     if (!eligible(p))
       throw stockError(
         "CONFIRMATION_UNAVAILABLE",
-        "La remise ne peut �tre confirm�e � cette �tape.",
+        "La remise ne peut être confirmée à cette étape.",
       );
   }
   async command<T extends { operationKey: string; version: number }>(
@@ -86,7 +86,7 @@ export class ConfirmationService extends DeliveryService {
         if (replay.requestHash !== hash)
           throw stockError(
             "IDEMPOTENCY_MISMATCH",
-            "Cette op�ration a d�j� un autre contenu.",
+            "Cette opération a déjà un autre contenu.",
           );
         return;
       }
@@ -127,7 +127,7 @@ export class ConfirmationService extends DeliveryService {
     if (!a.permissions.includes(required))
       throw stockError(
         "PERMISSION_DENIED",
-        "Consultation des preuves non autoris�e.",
+        "Consultation des preuves non autorisée.",
         403,
       );
     const p = await this.find(tx, c, id, a.kind);
@@ -282,7 +282,7 @@ export class ConfirmationService extends DeliveryService {
         else if (!eligible(p))
           throw stockError(
             "OTP_UNAVAILABLE",
-            "La mission n'est plus �ligible.",
+            "La mission n’est plus éligible.",
           );
         await ensureOtp(tx, p, true, this.clock());
         return { data: {}, metadata: { reason: input.reason } };
@@ -314,7 +314,7 @@ export class ConfirmationService extends DeliveryService {
         if (replay.requestHash !== hash)
           throw stockError(
             "IDEMPOTENCY_MISMATCH",
-            "Cette tentative correspond � un autre contenu.",
+            "Cette tentative correspond à un autre contenu.",
           );
         return replay.outcome;
       }
@@ -408,10 +408,10 @@ export class ConfirmationService extends DeliveryService {
       throw stockError(
         outcome,
         outcome === "OTP_LOCKED"
-          ? "Trop d'essais. Le code est bloqu� temporairement."
+          ? "Trop d’essais. Le code est bloqué temporairement."
           : outcome === "OTP_INCORRECT"
-            ? "Code incorrect. V�rifiez les six chiffres aupr�s du destinataire."
-            : "Code expir�, d�j� utilis� ou indisponible. Demandez un renouvellement contr�l�.",
+            ? "Code incorrect. Vérifiez les six chiffres auprès du destinataire."
+            : "Code expiré, déjà utilisé ou indisponible. Demandez un renouvellement contrôlé.",
         outcome === "OTP_LOCKED" ? 429 : 409,
       );
     return this.confirmation(c, id);
@@ -438,7 +438,7 @@ export class ConfirmationService extends DeliveryService {
         )
           throw stockError(
             "EXCEPTION_PENDING",
-            "Une demande est d�j� en cours.",
+            "Une demande est déjà en cours.",
           );
         const e = await tx.otpException.create({
           data: {
@@ -514,7 +514,7 @@ export class ConfirmationService extends DeliveryService {
         if (!eligible(p))
           throw stockError(
             "CONFIRMATION_UNAVAILABLE",
-            "Cette mission n'est plus �ligible.",
+            "Cette mission n’est plus éligible.",
           );
         const assignment = await currentAssignment(tx, p),
           e = await tx.otpException.findFirst({
@@ -528,12 +528,12 @@ export class ConfirmationService extends DeliveryService {
         if (!e || e.status !== "PENDING" || e.expiresAt <= this.clock())
           throw stockError(
             "EXCEPTION_UNAVAILABLE",
-            "Cette demande n'est plus disponible.",
+            "Cette demande n’est plus disponible.",
           );
         if (e.requestedById === c.actorId || e.courierId === c.actorId)
           throw stockError(
             "SELF_APPROVAL_DENIED",
-            "Un responsable distinct doit d�cider.",
+            "Un responsable distinct doit décider.",
             403,
           );
         checkVersion(e.version, input.exceptionVersion);
@@ -551,7 +551,7 @@ export class ConfirmationService extends DeliveryService {
         )
           throw stockError(
             "EXTRA_EVIDENCE_REQUIRED",
-            "Deux photos suppl�mentaires distinctes sont requises pour l'exception.",
+            "Deux photos supplémentaires distinctes sont requises pour l’exception.",
           );
         if (input.approve) {
           const ready = await tx.deliveryEvidence.findMany({
@@ -576,7 +576,7 @@ export class ConfirmationService extends DeliveryService {
           if (new Set(hashes.map((f) => f.checksumSha256)).size < 2)
             throw stockError(
               "EXTRA_EVIDENCE_REQUIRED",
-              "Deux photographies diff�rentes sont requises avant l'approbation.",
+              "Deux photographies différentes sont requises avant l’approbation.",
             );
         }
         await tx.otpException.update({
@@ -634,14 +634,14 @@ export class ConfirmationService extends DeliveryService {
           if (prior.requestHash !== hash)
             throw stockError(
               "IDEMPOTENCY_MISMATCH",
-              "Cette r�f�rence d'envoi poss�de un autre contenu.",
+              "Cette référence d’envoi possède un autre contenu.",
             );
           return prior;
         }
         if (input.kind === "HANDOVER" ? !eligible(p) : p.phase !== "FAILED")
           throw stockError(
             "PROOF_PHASE_INVALID",
-            "Cette photo ne correspond pas � l'�tape de la mission.",
+            "Cette photo ne correspond pas à l’étape de la mission.",
           );
         const assignment = await currentAssignment(tx, p);
         if (
@@ -751,7 +751,7 @@ export class ConfirmationService extends DeliveryService {
         )
           throw stockError(
             "DELIVERY_ALREADY_COMPLETED",
-            "Cette remise est d�j� confirm�e.",
+            "Cette remise est déjà confirmée.",
           );
         if (
           await tx.deliveryIncident.count({
@@ -765,7 +765,7 @@ export class ConfirmationService extends DeliveryService {
         )
           throw stockError(
             "BLOCKING_INCIDENT",
-            "Un responsable doit d'abord r�soudre l'incident bloquant.",
+            "Un responsable doit d’abord résoudre l’incident bloquant.",
           );
         if (
           await tx.financialCorrection.count({
@@ -778,7 +778,7 @@ export class ConfirmationService extends DeliveryService {
         )
           throw stockError(
             "FINANCIAL_REVIEW_PENDING",
-            "Une r�gularisation financi�re est en attente. Faites-la examiner avant la cl�ture.",
+            "Une régularisation financière est en attente. Faites-la examiner avant la clôture.",
           );
         const rows = await tx.collection.findMany({
             where: { companyId: p.companyId, delivery: { orderId: p.orderId } },
@@ -809,7 +809,7 @@ export class ConfirmationService extends DeliveryService {
           )
             throw stockError(
               "COLLECTION_INCOMPLETE",
-              "L'encaissement est incomplet. Une d�rogation financi�re distincte et approuv�e est n�cessaire.",
+              "L’encaissement est incomplet. Une dérogation financière distincte et approuvée est nécessaire.",
             );
         }
         let exception: Awaited<ReturnType<typeof tx.otpException.findUnique>> =
@@ -842,7 +842,7 @@ export class ConfirmationService extends DeliveryService {
         if (!otp && !exception)
           throw stockError(
             "OTP_REQUIRED",
-            "Un code valid� ou une exception approuv�e est requis.",
+            "Un code validé ou une exception approuvée est requis.",
           );
         const evidence = await tx.deliveryEvidence.findMany({
           where: {
@@ -862,7 +862,7 @@ export class ConfirmationService extends DeliveryService {
           throw stockError(
             "PHOTO_REQUIRED",
             exception
-              ? "L'exception exige deux photos distinctes."
+              ? "L’exception exige deux photos distinctes."
               : "Une photo de remise valide est requise.",
           );
         const fileRows = await tx.fileAsset.findMany({
@@ -880,7 +880,7 @@ export class ConfirmationService extends DeliveryService {
         )
           throw stockError(
             "PHOTO_REQUIRED",
-            "Les preuves suppl�mentaires doivent �tre des photos distinctes disponibles.",
+            "Les preuves supplémentaires doivent être des photos distinctes disponibles.",
           );
         for (const f of fileRows) {
           const bytes = await this.files.read(f.storageKey);
@@ -890,7 +890,7 @@ export class ConfirmationService extends DeliveryService {
           )
             throw stockError(
               "PROOF_FILE_UNAVAILABLE",
-              "Une photo est indisponible ou alt�r�e.",
+              "Une photo est indisponible ou altérée.",
             );
         }
         const proof = await tx.deliveryProof.create({
@@ -1000,7 +1000,7 @@ export class ConfirmationService extends DeliveryService {
       if (!auth.permissions.includes(required))
         throw stockError(
           "PERMISSION_DENIED",
-          "Consultation des notifications non autoris�e.",
+          "Consultation des notifications non autorisée.",
           403,
         );
       const rows = await tx.notification.findMany({

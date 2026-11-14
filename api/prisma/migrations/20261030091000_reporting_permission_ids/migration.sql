@@ -4,8 +4,8 @@ UPDATE RolePermission rp JOIN Role r ON r.id=rp.roleId JOIN Permission p ON p.id
 SET rp.id=UUID(),rp.updatedAt=CURRENT_TIMESTAMP(3)
 WHERE rp.id='' AND r.code IN ('company_admin','agency_manager') AND p.code IN ('reports.read','audit.read');
 INSERT IGNORE INTO Permission(id,code,description,createdAt,updatedAt) VALUES
- (UUID(),'reports.read','Lire les rapports dans le p�rim�tre autoris�',CURRENT_TIMESTAMP(3),CURRENT_TIMESTAMP(3)),
- (UUID(),'audit.read','Lire le journal d'audit dans le p�rim�tre autoris�',CURRENT_TIMESTAMP(3),CURRENT_TIMESTAMP(3));
+ (UUID(),'reports.read','Lire les rapports dans le périmètre autorisé',CURRENT_TIMESTAMP(3),CURRENT_TIMESTAMP(3)),
+ (UUID(),'audit.read','Lire le journal d’audit dans le périmètre autorisé',CURRENT_TIMESTAMP(3),CURRENT_TIMESTAMP(3));
 INSERT IGNORE INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt)
 SELECT UUID(),r.id,p.id,CURRENT_TIMESTAMP(3),CURRENT_TIMESTAMP(3) FROM Role r CROSS JOIN Permission p
 WHERE r.code IN ('company_admin','agency_manager') AND p.code IN ('reports.read','audit.read');

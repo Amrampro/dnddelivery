@@ -61,13 +61,13 @@ export const staffInput = z
     agencyIds: z
       .array(id)
       .max(100)
-      .refine((a) => new Set(a).size === a.length, "Agence r�p�t�e.")
+      .refine((a) => new Set(a).size === a.length, "Agence répétée.")
       .default([]),
   })
   .strict()
   .refine(
     (v) => v.role === "employee" || v.agencyIds.length > 0,
-    "S�lectionnez au moins une agence.",
+    "Sélectionnez au moins une agence.",
   );
 export const inviteInput = z
   .object({
@@ -79,7 +79,7 @@ export const inviteInput = z
   .strict()
   .refine(
     (v) => v.role === "employee" || v.agencyIds.length > 0,
-    "S�lectionnez au moins une agence.",
+    "Sélectionnez au moins une agence.",
   );
 export const employeeInput = z
   .object({
@@ -91,7 +91,7 @@ export const employeeInput = z
   .strict()
   .refine(
     (v) => v.role === "employee" || v.agencyIds.length > 0,
-    "S�lectionnez au moins une agence.",
+    "Sélectionnez au moins une agence.",
   );
 export const removalInput = z.object({ version, reason: text(500) }).strict();
 export const driverInput = z

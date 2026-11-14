@@ -50,13 +50,13 @@ export async function recipientMessage(
       action = String(payload.event ?? row.sourceEvent),
       title =
         action === "ORDER_SUBMITTED"
-          ? "Votre commande est enregistr�e"
+          ? "Votre commande est enregistrée"
           : action === "TRACKING_ACCESS"
             ? "Votre lien personnel de suivi"
             : action === "ORDER_CANCELLED"
-              ? "Votre commande a �t� annul�e"
+              ? "Votre commande a été annulée"
               : (publicDeliveryEvents[action] ??
-                "Votre suivi a �t� mis � jour");
+                "Votre suivi a été mis à jour");
     let code: string | undefined;
     if (["FINAL_DISTRIBUTION", "OTP_RENEWED"].includes(action) && deliveryId) {
       const d = await tx.delivery.findUnique({ where: { id: deliveryId } });
@@ -80,12 +80,12 @@ export async function recipientMessage(
       }
     }
     const caution = code
-      ? `Votre code de remise : ${code}. Il expire dans trente minutes au maximum. Communiquez ce code uniquement lorsque le livreur vous pr�sente votre colis.`
+      ? `Votre code de remise : ${code}. Il expire dans trente minutes au maximum. Communiquez ce code uniquement lorsque le livreur vous présente votre colis.`
       : action === "COMPLETED"
-        ? "La remise a �t� confirm�e avec les preuves requises. Consultez votre suivi pour les d�tails."
-        : "Consultez le suivi pour conna�tre la situation actuelle. Le lien est personnel ; ne le partagez pas.";
-    const subject = title + " � DND Delivery",
-      text = `${title}\nCommande ${o.publicNumber}\n\n${caution}\n\nSuivre mon colis : ${link}\n\nDND Delivery - Plus proches de vos clients. Ce message ne confirme aucun paiement.`;
+        ? "La remise a été confirmée avec les preuves requises. Consultez votre suivi pour les détails."
+        : "Consultez le suivi pour connaître la situation actuelle. Le lien est personnel ; ne le partagez pas.";
+    const subject = title + " · DND Delivery",
+      text = `${title}\nCommande ${o.publicNumber}\n\n${caution}\n\nSuivre mon colis : ${link}\n\nDND Delivery — Plus proches de vos clients. Ce message ne confirme aucun paiement.`;
     const html = `<!doctype html><html lang="fr"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;background:#f4f7fb;color:#033173;font:16px Arial,sans-serif"><main style="max-width:560px;margin:24px auto;padding:28px;background:#fff;border-radius:16px"><p style="font-size:23px;font-weight:bold">DND Delivery</p><p style="color:#0BB058">Plus proches de vos clients.</p><h1 style="font-size:25px">${escape(title)}</h1><p style="overflow-wrap:anywhere">Commande ${escape(o.publicNumber)}</p><p style="line-height:1.6">${escape(caution)}</p><p style="margin:28px 0"><a style="display:inline-block;padding:14px 22px;background:#033173;color:#fff;border-radius:10px;text-decoration:none" href="${escape(link)}">Suivre mon colis</a></p><p style="font-size:13px;color:#53647c">Ce lien personnel ne permet ni de modifier une commande ni de confirmer un paiement.</p></main></body></html>`;
     return { subject, text, html };
   });

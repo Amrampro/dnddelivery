@@ -47,7 +47,7 @@ export class ProductService {
       )
         throw fail(
           "SKU_EXISTS",
-          "Cette r�f�rence SKU est d�j� utilis�e dans votre boutique.",
+          "Cette référence SKU est déjà utilisée dans votre boutique.",
           409,
         );
       throw e;
@@ -84,7 +84,7 @@ export class ProductService {
     } else
       throw fail(
         "CATALOG_FORBIDDEN",
-        "Seule une boutique autoris�e peut g�rer son catalogue.",
+        "Seule une boutique autorisée peut gérer son catalogue.",
       );
   }
   async scope(
@@ -129,7 +129,7 @@ export class ProductService {
   async list(c: ProductContext, q: z.infer<typeof v.query>) {
     await this.authorize(this.db, c);
     if (c.scope === "SHOP" && q.shopId && q.shopId !== c.shopId)
-      throw fail("CATALOG_FORBIDDEN", "Cette boutique n'est pas accessible.");
+      throw fail("CATALOG_FORBIDDEN", "Cette boutique n’est pas accessible.");
     const where: Prisma.ProductWhereInput = {
       AND: [
         await this.scope(this.db, c),
@@ -240,7 +240,7 @@ export class ProductService {
       if (old.version !== input.version)
         throw fail(
           "VERSION_CONFLICT",
-          "Ce produit a chang�. Rechargez sa fiche.",
+          "Ce produit a changé. Rechargez sa fiche.",
           409,
         );
       if (
@@ -254,7 +254,7 @@ export class ProductService {
       )
         throw fail(
           "PRODUCT_UNIT_LOCKED",
-          "L'unit� d'un produit ayant un historique ne peut pas �tre modifi�e. Cr�ez un autre produit pour une unit� diff�rente.",
+          "L’unité d’un produit ayant un historique ne peut pas être modifiée. Créez un autre produit pour une unité différente.",
           409,
         );
       const { version, ...data } = input;
@@ -298,7 +298,7 @@ export class ProductService {
       if (p.version !== n)
         throw fail(
           "VERSION_CONFLICT",
-          "Ce produit a chang�. Rechargez sa fiche.",
+          "Ce produit a changé. Rechargez sa fiche.",
           409,
         );
       await tx.product.update({

@@ -46,7 +46,7 @@ export class AdminService {
         throw new AuthError(
           409,
           "DUPLICATE",
-          "Cette r�f�rence ou cette adresse est d�j� utilis�e. Rechargez les donn�es et v�rifiez le compte existant.",
+          "Cette référence ou cette adresse est déjà utilisée. Rechargez les données et vérifiez le compte existant.",
         );
       throw e;
     }
@@ -63,13 +63,13 @@ export class AdminService {
       throw new AuthError(
         409,
         "COMPANY_ARCHIVED",
-        "Cette entreprise est archiv�e.",
+        "Cette entreprise est archivée.",
       );
     if (version !== undefined && company.version !== version)
       throw new AuthError(
         409,
         "VERSION_CONFLICT",
-        "Les donn�es ont chang�. Rechargez la fiche avant de r�essayer.",
+        "Les données ont changé. Rechargez la fiche avant de réessayer.",
       );
     return company;
   }
@@ -98,7 +98,7 @@ export class AdminService {
       throw new AuthError(
         503,
         "ROLE_NOT_CONFIGURED",
-        "Les r�les de r�f�rence doivent �tre initialis�s avant cette op�ration.",
+        "Les rôles de référence doivent être initialisés avant cette opération.",
       );
     return role;
   }
@@ -158,7 +158,7 @@ export class AdminService {
       throw new AuthError(
         409,
         "EXISTING_USER",
-        "Cette adresse poss�de d�j� un compte. Associez l'utilisateur existant.",
+        "Cette adresse possède déjà un compte. Associez l’utilisateur existant.",
       );
     const pending = await tx.companyInvitation.findFirst({
       where: { companyId, email, acceptedAt: null, revokedAt: null },
@@ -167,7 +167,7 @@ export class AdminService {
       throw new AuthError(
         409,
         "INVITATION_PENDING",
-        "Une invitation existe d�j�. Renvoyez-la ou r�voquez-la.",
+        "Une invitation existe déjà. Renvoyez-la ou révoquez-la.",
       );
     if (primary)
       await tx.companyInvitation.updateMany({
@@ -337,7 +337,7 @@ export class AdminService {
         throw new AuthError(
           409,
           "STATUS_UNCHANGED",
-          "Ce statut est d�j� appliqu�.",
+          "Ce statut est déjà appliqué.",
         );
       await tx.company.update({
         where: { id },
@@ -535,13 +535,13 @@ export class AdminService {
         throw new AuthError(
           409,
           "VERSION_CONFLICT",
-          "Cette invitation a chang�. Rechargez la fiche.",
+          "Cette invitation a changé. Rechargez la fiche.",
         );
       if (current.acceptedAt || current.revokedAt)
         throw new AuthError(
           409,
           "INVITATION_CLOSED",
-          "Cette invitation est d�j� cl�tur�e.",
+          "Cette invitation est déjà clôturée.",
         );
       let raw: string | undefined;
       if (action === "revoke") {
@@ -567,7 +567,7 @@ export class AdminService {
           throw new AuthError(
             409,
             "LAST_RESPONSIBLE",
-            "Associez un administrateur ou une invitation principale de remplacement avant cette r�vocation.",
+            "Associez un administrateur ou une invitation principale de remplacement avant cette révocation.",
           );
         await tx.companyInvitation.update({
           where: { id: invitationId },
@@ -578,7 +578,7 @@ export class AdminService {
           throw new AuthError(
             409,
             "EXISTING_USER",
-            "Un compte existe d�sormais pour cette adresse. Associez cet utilisateur et r�voquez l'invitation.",
+            "Un compte existe désormais pour cette adresse. Associez cet utilisateur et révoquez l’invitation.",
           );
         raw = opaqueToken();
         await tx.companyInvitation.update({
@@ -658,7 +658,7 @@ export class AdminService {
       throw new AuthError(
         400,
         "INVITATION_INVALID",
-        "Invitation expir�e, r�voqu�e ou indisponible. Contactez l'administrateur.",
+        "Invitation expirée, révoquée ou indisponible. Contactez l’administrateur.",
       );
   }
   async accept(raw: string, fullName: string, password: string) {
@@ -694,13 +694,13 @@ export class AdminService {
           throw new AuthError(
             400,
             "INVITATION_INVALID",
-            "Cette invitation a �t� remplac�e.",
+            "Cette invitation a été remplacée.",
           );
         if (await tx.user.findUnique({ where: { email: invitation!.email } }))
           throw new AuthError(
             409,
             "EXISTING_USER",
-            "Un compte existe d�j�. Votre administrateur doit associer ce compte existant.",
+            "Un compte existe déjà. Votre administrateur doit associer ce compte existant.",
           );
         const role = await this.role(tx),
           user = await tx.user.create({
@@ -741,7 +741,7 @@ export class AdminService {
         );
         return {
           message:
-            "Votre compte est activ�. Vous pouvez maintenant vous connecter.",
+            "Votre compte est activé. Vous pouvez maintenant vous connecter.",
         };
       });
     } catch (e) {
@@ -752,7 +752,7 @@ export class AdminService {
         throw new AuthError(
           409,
           "EXISTING_USER",
-          "Un compte existe d�j� pour cette adresse.",
+          "Un compte existe déjà pour cette adresse.",
         );
       throw e;
     }

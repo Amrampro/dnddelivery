@@ -7,8 +7,8 @@ CREATE INDEX AuditLog_report_agency_created_idx ON AuditLog(companyId,agencyId,c
 CREATE INDEX SubscriptionPayment_report_validated_idx ON SubscriptionPayment(status,validatedAt,companyId);
 CREATE INDEX Stock_report_agency_shop_idx ON Stock(companyId,agencyId,shopId);
 INSERT IGNORE INTO Permission(id,code,description) VALUES
-  (UUID(),'reports.read','Lire les rapports dans le p�rim�tre autoris�'),
-  (UUID(),'audit.read','Lire le journal d'audit dans le p�rim�tre autoris�');
+  (UUID(),'reports.read','Lire les rapports dans le périmètre autorisé'),
+  (UUID(),'audit.read','Lire le journal d’audit dans le périmètre autorisé');
 INSERT IGNORE INTO RolePermission(roleId,permissionId)
 SELECT r.id,p.id FROM Role r CROSS JOIN Permission p
 WHERE r.code IN ('company_admin','agency_manager') AND p.code IN ('reports.read','audit.read');

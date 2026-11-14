@@ -43,13 +43,13 @@ export class FinancialService extends FinancialCore {
             )
               throw stockError(
                 "EXCEPTION_AUTHORITY_REQUIRED",
-                "Apr�s enl�vement, un administrateur doit demander explicitement la correction exceptionnelle.",
+                "Après enlèvement, un administrateur doit demander explicitement la correction exceptionnelle.",
                 403,
               );
           } else if (!p.pickedUpAt)
             throw stockError(
               "MISSION_NOT_ENGAGED",
-              "Une exception documente une mission d�j� engag�e.",
+              "Une exception documente une mission déjà engagée.",
             );
           if (
             await tx.financialCorrection.count({
@@ -63,7 +63,7 @@ export class FinancialService extends FinancialCore {
           )
             throw stockError(
               "CORRECTION_PENDING",
-              "Une demande est d�j� en attente pour cette obligation.",
+              "Une demande est déjà en attente pour cette obligation.",
             );
           if (input.kind === "EXCEPTION") {
             const accounts = await ledger(
@@ -76,13 +76,13 @@ export class FinancialService extends FinancialCore {
             if (accounts.some((a) => a.legacy))
               throw stockError(
                 "LEGACY_REVIEW_REQUIRED",
-                "L'historique doit �tre rapproch� avant une d�rogation.",
+                "L’historique doit être rapproché avant une dérogation.",
               );
             const net = sum(accounts.map((a) => units(a.net)));
             if (!p.order.collectionRequired || net >= from)
               throw stockError(
                 "NO_PARTIAL_EXCEPTION_NEEDED",
-                "Aucun montant restant ne n�cessite cette d�rogation.",
+                "Aucun montant restant ne nécessite cette dérogation.",
               );
             targetAmount = amount(net);
           }
@@ -90,7 +90,7 @@ export class FinancialService extends FinancialCore {
           if (!a || a.legacy || a.blocked)
             throw stockError(
               "CORRECTION_PENDING",
-              "Cet encaissement poss�de une demande en attente ou un historique � rapprocher.",
+              "Cet encaissement possède une demande en attente ou un historique à rapprocher.",
             );
           if (input.kind === "REFUND" || input.kind === "AGENCY_REFUND") {
             from = 0n;
@@ -105,12 +105,12 @@ export class FinancialService extends FinancialCore {
             )
               throw stockError(
                 "REFUND_EXCEEDS_FUNDS",
-                "Le remboursement externe d�clar� ne peut d�passer les fonds encore d�tenus et non engag�s.",
+                "Le remboursement externe déclaré ne peut dépasser les fonds encore détenus et non engagés.",
               );
             if (!input.externalReference?.trim())
               throw stockError(
                 "REFUND_REFERENCE_REQUIRED",
-                "Indiquez la r�f�rence ou le constat de la restitution physique.",
+                "Indiquez la référence ou le constat de la restitution physique.",
                 400,
               );
           }
@@ -121,13 +121,13 @@ export class FinancialService extends FinancialCore {
           )
             throw stockError(
               "CORRECTION_BELOW_ACCOUNTED",
-              "La correction ne peut effacer des fonds d�j� re�us, rembours�s ou engag�s dans une remise.",
+              "La correction ne peut effacer des fonds déjà reçus, remboursés ou engagés dans une remise.",
             );
           if (input.kind === "RECEIPT") {
             if (units(input.amount) > units(a.available) + source.current)
               throw stockError(
                 "BALANCE_EXCEEDED",
-                "La r�ception corrig�e d�passerait les fonds tra�ables.",
+                "La réception corrigée dépasserait les fonds traçables.",
               );
             if (
               units(a.confirmed) - source.current + units(input.amount) <
@@ -135,7 +135,7 @@ export class FinancialService extends FinancialCore {
             )
               throw stockError(
                 "RECEIPT_BELOW_REFUNDED",
-                "La correction ne peut effacer des fonds d�j� rembours�s par l'agence.",
+                "La correction ne peut effacer des fonds déjà remboursés par l’agence.",
               );
           }
         }
@@ -212,7 +212,7 @@ export class FinancialService extends FinancialCore {
       if (input.kind === "AGENCY_REFUND" && auth.kind !== "operator")
         throw stockError(
           "AGENCY_REFUND_DENIED",
-          "Seul un responsable autoris� peut d�clarer un remboursement effectu� par l'agence.",
+          "Seul un responsable autorisé peut déclarer un remboursement effectué par l’agence.",
           403,
         );
       if (input.kind === "RECEIPT") {
@@ -224,7 +224,7 @@ export class FinancialService extends FinancialCore {
         )
           throw stockError(
             "CORRECTION_TARGET_INVALID",
-            "Choisissez une ligne de r�ception confirm�e.",
+            "Choisissez une ligne de réception confirmée.",
             400,
           );
         const item = await tx.remittanceItem.findFirst({
@@ -244,7 +244,7 @@ export class FinancialService extends FinancialCore {
         )
           throw stockError(
             "RECEIPT_NOT_CONFIRMED",
-            "Cette ligne ne poss�de pas de r�ception financi�re confirm�e.",
+            "Cette ligne ne possède pas de réception financière confirmée.",
           );
         collectionId = item.collectionId;
         itemId = item.id;
@@ -253,7 +253,7 @@ export class FinancialService extends FinancialCore {
         if (!input.collectionId || input.remittanceItemId || input.deliveryId)
           throw stockError(
             "CORRECTION_TARGET_INVALID",
-            "Choisissez l'encaissement d'origine.",
+            "Choisissez l’encaissement d’origine.",
             400,
           );
         collectionId = input.collectionId;
@@ -277,7 +277,7 @@ export class FinancialService extends FinancialCore {
       if (!deliveryId || auth.kind !== "operator")
         throw stockError(
           "CORRECTION_TARGET_INVALID",
-          "Choisissez une mission de votre p�rim�tre.",
+          "Choisissez une mission de votre périmètre.",
           403,
         );
       const d = await tx.delivery.findFirst({
@@ -360,13 +360,13 @@ export class FinancialService extends FinancialCore {
         if (row.requestedById === c.actorId || row.courierId === c.actorId)
           throw stockError(
             "SELF_APPROVAL_DENIED",
-            "La validation exige une autre personne autoris�e, distincte du livreur concern�.",
+            "La validation exige une autre personne autorisée, distincte du livreur concerné.",
             403,
           );
         if (row.status !== "PENDING")
           throw stockError(
             "CORRECTION_ALREADY_DECIDED",
-            "Cette demande a d�j� �t� trait�e.",
+            "Cette demande a déjà été traitée.",
           );
         const d = await tx.delivery.findUniqueOrThrow({
           where: { id: row.deliveryId },
@@ -400,7 +400,7 @@ export class FinancialService extends FinancialCore {
             if (d.pickedUpAt && !row.exceptional)
               throw stockError(
                 "EXCEPTION_REQUIRED",
-                "La prise en charge est intervenue depuis la demande ; une demande exceptionnelle est n�cessaire.",
+                "La prise en charge est intervenue depuis la demande ; une demande exceptionnelle est nécessaire.",
               );
             const newAmount = bounded(units(row.toAmount));
             await tx.order.update({
@@ -464,7 +464,7 @@ export class FinancialService extends FinancialCore {
             if (a.legacy)
               throw stockError(
                 "LEGACY_REVIEW_REQUIRED",
-                "L'historique ancien doit �tre rapproch�.",
+                "L’historique ancien doit être rapproché.",
               );
             if (row.kind === "COLLECTION") {
               checkVersionAmount(units(a.gross), units(row.fromAmount));
@@ -476,7 +476,7 @@ export class FinancialService extends FinancialCore {
               )
                 throw stockError(
                   "CORRECTION_BELOW_ACCOUNTED",
-                  "Cette correction effacerait des fonds d�j� justifi�s ou engag�s.",
+                  "Cette correction effacerait des fonds déjà justifiés ou engagés.",
                 );
             } else if (row.kind === "REFUND" || row.kind === "AGENCY_REFUND") {
               if (
@@ -487,7 +487,7 @@ export class FinancialService extends FinancialCore {
               )
                 throw stockError(
                   "REFUND_EXCEEDS_FUNDS",
-                  "Les fonds disponibles ont chang�.",
+                  "Les fonds disponibles ont changé.",
                 );
             } else if (row.kind === "RECEIPT") {
               const item = a.items.find((i) => i.id === row.remittanceItemId)!;
@@ -501,7 +501,7 @@ export class FinancialService extends FinancialCore {
               )
                 throw stockError(
                   "RECEIPT_BELOW_REFUNDED",
-                  "La correction ne peut effacer des fonds d�j� rembours�s par l'agence.",
+                  "La correction ne peut effacer des fonds déjà remboursés par l’agence.",
                 );
               if (
                 units(row.toAmount) >
@@ -509,7 +509,7 @@ export class FinancialService extends FinancialCore {
               )
                 throw stockError(
                   "BALANCE_EXCEEDED",
-                  "La r�ception corrig�e d�passerait les encaissements valides.",
+                  "La réception corrigée dépasserait les encaissements valides.",
                 );
             }
             await tx.collection.update({
@@ -522,7 +522,7 @@ export class FinancialService extends FinancialCore {
                 collectionId,
                 actorId: c.actorId,
                 status: source.status,
-                notes: `${row.kind} approuv� : ${row.reason}`,
+                notes: `${row.kind} approuvé : ${row.reason}`,
               },
             });
           }
@@ -556,7 +556,7 @@ export class FinancialService extends FinancialCore {
                 : units(row.fromAmount) - units(row.toAmount),
             ),
             currency: row.currency,
-            description: `${row.kind === "REFUND" || row.kind === "AGENCY_REFUND" ? "Remboursement externe" : row.kind === "RECEIPT" ? "Correction de r�ception de fonds" : "Correction financi�re"} approuv�(e) : ${row.reason}`,
+            description: `${row.kind === "REFUND" || row.kind === "AGENCY_REFUND" ? "Remboursement externe" : row.kind === "RECEIPT" ? "Correction de réception de fonds" : "Correction financière"} approuvé(e) : ${row.reason}`,
             sourceKey: `correction:${row.id}`,
           });
         return {
@@ -660,7 +660,7 @@ export class FinancialService extends FinancialCore {
           where: { id, companyId: c.companyId },
         });
         if (!d)
-          throw stockError("DISCREPANCY_NOT_FOUND", "�cart introuvable.", 404);
+          throw stockError("DISCREPANCY_NOT_FOUND", "Écart introuvable.", 404);
         agencyAllowed(c, d.agencyId);
         checkVersion(d.version, input.version);
         if (
@@ -670,7 +670,7 @@ export class FinancialService extends FinancialCore {
         )
           throw stockError(
             "DISCREPANCY_TRANSITION_DENIED",
-            "Cette transition d'�cart est indisponible.",
+            "Cette transition d’écart est indisponible.",
           );
         await tx.financialDiscrepancy.update({
           where: { id },
@@ -708,6 +708,6 @@ function checkVersionAmount(actual: bigint, expected: bigint) {
   if (actual !== expected)
     throw stockError(
       "FINANCIAL_VERSION_CONFLICT",
-      "Les montants ont chang� ; une nouvelle demande est n�cessaire.",
+      "Les montants ont changé ; une nouvelle demande est nécessaire.",
     );
 }

@@ -95,7 +95,7 @@ export class ConfirmationNotifications {
         ? Prisma.sql`('EMAIL','PUSH')`
         : Prisma.sql`('EMAIL')`;
     await this.db
-      .$executeRaw`UPDATE Notification SET status='FAILED',deliveryState='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Bail expir�' WHERE (${this.companyId ?? null} IS NULL OR companyId=${this.companyId ?? null}) AND LEFT(sourceEvent,13)='CONFIRMATION_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
+      .$executeRaw`UPDATE Notification SET status='FAILED',deliveryState='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Bail expiré' WHERE (${this.companyId ?? null} IS NULL OR companyId=${this.companyId ?? null}) AND LEFT(sourceEvent,13)='CONFIRMATION_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
     for (let i = 0; i < limit; i++) {
       const lock = randomUUID(),
         row = await this.stock.transaction(async (tx) => {
@@ -185,8 +185,8 @@ export class ConfirmationNotifications {
         else
           await adapter.send(
             row.recipientAddress,
-            "Livraison � consulter � DND Delivery",
-            `La commande ${String(payload.publicNumber)} comporte une mise � jour. Consultez votre espace autoris� pour examiner le suivi, les preuves ou les demandes d'exception.`,
+            "Livraison à consulter · DND Delivery",
+            `La commande ${String(payload.publicNumber)} comporte une mise à jour. Consultez votre espace autorisé pour examiner le suivi, les preuves ou les demandes d’exception.`,
             `${row.id}@confirmation.dnd`,
           );
         await finishNotification(
@@ -222,7 +222,7 @@ export class ConfirmationNotifications {
             ),
             lockedAt: null,
             lockedBy: null,
-            lastError: "Envoi indisponible ; reprise diff�r�e.",
+            lastError: "Envoi indisponible ; reprise différée.",
           },
           "FAILED",
         );
@@ -262,7 +262,7 @@ export function expoNotification(db: PrismaClient) {
         body: JSON.stringify({
           to: device.pushToken,
           title: "DND Delivery",
-          body: "Une mise � jour est disponible dans votre espace s�curis�.",
+          body: "Une mise à jour est disponible dans votre espace sécurisé.",
           data,
           sound: "default",
         }),

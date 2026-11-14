@@ -79,7 +79,7 @@ export function createPartnerRouter(
           new AuthError(
             403,
             "SCOPE_DENIED",
-            "S�lectionnez un espace autoris�.",
+            "Sélectionnez un espace autorisé.",
           ),
         );
       n();
@@ -89,7 +89,7 @@ export function createPartnerRouter(
     manage = company ? "partners.manage" : "shop.collaborations.manage";
   async function logo(key: string | null) {
     if (!key || !/^[a-f0-9-]{36}\.webp$/.test(key))
-      throw new AuthError(404, "LOGO_NOT_FOUND", "Aucun logo associ�.");
+      throw new AuthError(404, "LOGO_NOT_FOUND", "Aucun logo associé.");
     try {
       return {
         mime: "image/webp",

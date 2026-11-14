@@ -46,7 +46,7 @@ export function createAuthRouter(
       message: {
         error: {
           code: "RATE_LIMITED",
-          message: "Trop de tentatives. R�essayez plus tard.",
+          message: "Trop de tentatives. Réessayez plus tard.",
         },
       },
     });
@@ -66,7 +66,7 @@ export function createAuthRouter(
     message: {
       error: {
         code: "RATE_LIMITED",
-        message: "Trop de tentatives. R�essayez plus tard.",
+        message: "Trop de tentatives. Réessayez plus tard.",
       },
     },
   });
@@ -160,7 +160,7 @@ export function createAuthRouter(
       await delay(Math.max(0, 400 + randomInt(100) - (Date.now() - started)));
       res.status(202).json({
         message:
-          "Si un compte correspond, une demande de r�cup�ration a �t� prise en compte.",
+          "Si un compte correspond, une demande de récupération a été prise en compte.",
       });
     },
   );
@@ -168,7 +168,7 @@ export function createAuthRouter(
     const data = resetSchema.parse(req.body);
     await service().resetPassword(data.token, data.password);
     if (clientType(req) === "WEB") clear(res);
-    res.json({ message: "Mot de passe modifi�. Reconnectez-vous." });
+    res.json({ message: "Mot de passe modifié. Reconnectez-vous." });
   });
   router.get("/me", auth, async (_req, res) =>
     res.json(await service().profile(principal(res))),
@@ -223,7 +223,7 @@ export function createAuthRouter(
       );
       if (clientType(req) === "WEB") clear(res);
       res.json({
-        message: "Mot de passe modifi�. Toutes les sessions ont �t� r�voqu�es.",
+        message: "Mot de passe modifié. Toutes les sessions ont été révoquées.",
       });
     },
   );

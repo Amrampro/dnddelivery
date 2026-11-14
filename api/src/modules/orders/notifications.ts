@@ -27,7 +27,7 @@ export class OrderNotifications {
       cancelled = 0;
     const stale = new Date(this.clock().getTime() - 300000);
     await this.service.db
-      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Lease expir�e' WHERE (${this.companyId ?? null} IS NULL OR companyId=${this.companyId ?? null}) AND sourceEvent IN ('ORDER_SUBMITTED','ORDER_CANCELLED','TRACKING_ACCESS') AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
+      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Lease expirée' WHERE (${this.companyId ?? null} IS NULL OR companyId=${this.companyId ?? null}) AND sourceEvent IN ('ORDER_SUBMITTED','ORDER_CANCELLED','TRACKING_ACCESS') AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
     for (let i = 0; i < limit; i++) {
       const owner = randomUUID();
       const row = await this.service.transaction(async (tx) => {
@@ -122,7 +122,7 @@ export class OrderNotifications {
             ),
             lockedAt: null,
             lockedBy: null,
-            lastError: "�chec SMTP; reprise diff�r�e.",
+            lastError: "Échec SMTP; reprise différée.",
           },
           "FAILED",
         );

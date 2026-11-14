@@ -18,13 +18,13 @@ export const companyFields = z
       .toUpperCase()
       .regex(
         /^[A-Z0-9][A-Z0-9_-]{1,49}$/,
-        "R�f�rence : 2 � 50 lettres, chiffres, tirets ou underscores.",
+        "Référence : 2 à 50 lettres, chiffres, tirets ou underscores.",
       ),
     email,
     phone: text(32),
     countryCode: z
       .string()
-      .regex(/^[A-Z]{2}$/, "Code pays ISO � deux lettres requis."),
+      .regex(/^[A-Z]{2}$/, "Code pays ISO à deux lettres requis."),
     city: text(120),
     address: text(500),
     tradeName: optional(160),

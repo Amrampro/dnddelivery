@@ -42,7 +42,7 @@ export class OrganizationRepository {
   constructor(readonly db: PrismaClient) {}
   scope(c: OrganizationContext, q?: Query) {
     if (q?.agencyId && c.agencyId && q.agencyId !== c.agencyId)
-      throw new AuthError(403, "AGENCY_SCOPE", "Agence non autoris�e.");
+      throw new AuthError(403, "AGENCY_SCOPE", "Agence non autorisée.");
     return c.agencyId ?? q?.agencyId;
   }
   async profile(c: OrganizationContext) {

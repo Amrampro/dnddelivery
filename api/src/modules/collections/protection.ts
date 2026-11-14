@@ -55,6 +55,6 @@ export async function protectFinancialAffiliation(
   )
     throw stockError(
       "FINANCIAL_SETTLEMENT_REQUIRED",
-      "Des fonds ou corrections restent � r�gulariser dans les agences actuelles avant de retirer ces acc�s.",
+      "Des fonds ou corrections restent à régulariser dans les agences actuelles avant de retirer ces accès.",
     );
 }

@@ -12,7 +12,7 @@ export function getAuthService() {
     throw new AuthError(
       503,
       "DATABASE_UNAVAILABLE",
-      "La base de donn�es des comptes n'est pas configur�e.",
+      "La base de données des comptes n’est pas configurée.",
     );
   service = new AuthService(
     prismaAuthStore(getDatabase()),

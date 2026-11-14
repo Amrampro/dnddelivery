@@ -5,7 +5,7 @@ export const money = z
   .string()
   .regex(
     /^\d{1,15}(\.\d{1,4})?$/,
-    "Montant exact attendu, avec un point d�cimal et au plus quatre d�cimales.",
+    "Montant exact attendu, avec un point décimal et au plus quatre décimales.",
   );
 export const recipient = z
   .object({
@@ -20,7 +20,7 @@ export const recipient = z
           .string()
           .regex(
             /^\+[1-9]\d{6,14}$/,
-            "T�l�phone international attendu, par exemple +32470123456.",
+            "Téléphone international attendu, par exemple +32470123456.",
           ),
       ),
     country: text(120),
@@ -84,7 +84,7 @@ export const content = z
       c.addIssue({
         code: "custom",
         path: ["amountToCollect"],
-        message: "Montant positif si encaissement requis, z�ro sinon.",
+        message: "Montant positif si encaissement requis, zéro sinon.",
       });
     if (x.type === "ONE_OFF" && !x.pickup)
       c.addIssue({

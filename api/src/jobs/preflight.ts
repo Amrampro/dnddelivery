@@ -16,7 +16,7 @@ try {
   if (!env.CORS_ORIGINS.includes(auth.webUrl) ||
       env.CORS_ORIGINS.some(origin => new URL(origin).protocol !== "https:"))
     throw Error();
-  step = "cl� de confirmation ind�pendante";
+  step = "clé de confirmation indépendante";
   digest("preflight");
   if (process.env.DELIVERY_SECRET === auth.secret) throw Error();
   step = "configuration SMTP";
@@ -28,12 +28,12 @@ try {
     await checkPrivateDirectory(directory);
     await access(directory, constants.R_OK | constants.W_OK);
   }
-  step = "connexion MySQL et tables de r�f�rence";
+  step = "connexion MySQL et tables de référence";
   const role = await getDatabase().role.findUnique({ where: { code: "super_admin" } });
   if (role?.scope !== "GLOBAL") throw Error();
-  console.log("Pr�contr�le API r�ussi.");
+  console.log("Précontrôle API réussi.");
 } catch {
-  console.error(`Pr�contr�le API �chou� (${step}).`);
+  console.error(`Précontrôle API échoué (${step}).`);
   process.exitCode = 1;
 } finally {
   await disconnectDatabase();

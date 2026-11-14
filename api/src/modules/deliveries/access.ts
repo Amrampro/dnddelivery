@@ -128,7 +128,7 @@ export function agencyAllowed(c: Context, id: string) {
   if (c.scope === "SHOP" || (c.scope === "AGENCY" && c.agencyId !== id))
     throw stockError(
       "AGENCY_DENIED",
-      "Cette action rel�ve d'une autre agence.",
+      "Cette action relève d’une autre agence.",
       403,
     );
 }
@@ -136,7 +136,7 @@ export function expectPhase(p: { phase: string | null }, allowed: string[]) {
   if (!p.phase || !allowed.includes(p.phase))
     throw stockError(
       "DELIVERY_TRANSITION_DENIED",
-      "Cette action n'est pas disponible � cette �tape.",
+      "Cette action n’est pas disponible à cette étape.",
     );
 }
 export async function permission(
@@ -150,14 +150,14 @@ export async function permission(
   if (value.kind === "shop" || !value.permissions.includes(required))
     throw stockError(
       "PERMISSION_DENIED",
-      "Cette op�ration n'est pas autoris�e.",
+      "Cette opération n’est pas autorisée.",
       403,
     );
   if (!(await authorizationStore(tx).subscriptionValid(c.companyId!))) {
     if (!safe || !deliveryId)
       throw stockError(
         "SUBSCRIPTION_REQUIRED",
-        "Abonnement expir� : nouvelle op�ration bloqu�e.",
+        "Abonnement expiré : nouvelle opération bloquée.",
         403,
       );
     await assertSafeClosure(tx, selection(c), deliveryId, "DELIVERY_CLOSE");

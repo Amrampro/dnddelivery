@@ -6,5 +6,5 @@ export function assertSecureNode(version = process.versions.node) {
   const floor = floors[major!];
   if (!floor || !Number.isInteger(minor) || !Number.isInteger(patch) ||
     minor! < floor[0] || (minor === floor[0] && patch! < floor[1]))
-    throw new Error(`Node.js ${version} non autoris� : utilisez 22.23.4+, 24.22.1+ ou 26.12.1+ dans leur branche majeure respective.`);
+    throw new Error(`Node.js ${version} non autorisé : utilisez 22.23.4+, 24.22.1+ ou 26.12.1+ dans leur branche majeure respective.`);
 }

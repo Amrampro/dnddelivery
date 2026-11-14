@@ -76,7 +76,7 @@ export const companyInvite = z
   .strict()
   .refine(
     (v) => !!v.shopReference !== !!v.email,
-    "Indiquez une r�f�rence de boutique ou une adresse �lectronique.",
+    "Indiquez une référence de boutique ou une adresse électronique.",
   );
 export const request = z
   .object({

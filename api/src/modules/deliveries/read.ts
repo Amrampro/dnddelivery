@@ -248,7 +248,7 @@ export class DeliveryReads {
       incidents: p.incidents.map((i) => ({
         id: i.id,
         kind: i.kind,
-        description: shop ? "Incident logistique signal�." : i.description,
+        description: shop ? "Incident logistique signalé." : i.description,
         status: i.status,
         blocking: i.blocking,
         decision: i.decision,
@@ -298,7 +298,7 @@ export class DeliveryReads {
         (auth.kind === "driver" && q.courierId && q.courierId !== c.actorId) ||
         (c.scope === "AGENCY" && q.agencyId && q.agencyId !== c.agencyId)
       )
-        throw stockError("SCOPE_DENIED", "Filtre non autoris�.", 403);
+        throw stockError("SCOPE_DENIED", "Filtre non autorisé.", 403);
       const where: Prisma.DeliveryWhereInput = {
         ...scope(c, auth.kind, q.history === "true"),
         ...(q.companyId ? { companyId: q.companyId } : {}),
@@ -449,7 +449,7 @@ export class DeliveryReads {
       if (auth.kind !== "operator")
         throw stockError(
           "PERMISSION_DENIED",
-          "Dispatching r�serv� aux op�rateurs.",
+          "Dispatching réservé aux opérateurs.",
           403,
         );
       const where: Prisma.OrderWhereInput = {
@@ -500,7 +500,7 @@ export class DeliveryReads {
       if (auth.kind !== "operator")
         throw stockError(
           "PERMISSION_DENIED",
-          "Op�ration r�serv�e au dispatching.",
+          "Opération réservée au dispatching.",
           403,
         );
       agencyAllowed(c, agencyId);
@@ -514,7 +514,7 @@ export class DeliveryReads {
           },
         }))
       )
-        throw stockError("AGENCY_DENIED", "Agence non autoris�e.", 403);
+        throw stockError("AGENCY_DENIED", "Agence non autorisée.", 403);
       const members = await tx.agencyMembership.findMany({
         where: {
           companyId: c.companyId,

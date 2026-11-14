@@ -19,7 +19,7 @@ export class PartnerNotifications {
       cancelled = 0;
     const stale = new Date(this.service.clock().getTime() - 5 * 60000);
     await this.service.db
-      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Lease expir�e apr�s la derni�re tentative' WHERE LEFT(sourceEvent,8)='PARTNER_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
+      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Lease expirée après la dernière tentative' WHERE LEFT(sourceEvent,8)='PARTNER_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
     for (let i = 0; i < limit; i++) {
       const owner = randomUUID();
       const row = await this.service.transaction(async (tx) => {
@@ -70,24 +70,24 @@ export class PartnerNotifications {
               status: "CANCELLED",
               lockedAt: null,
               lockedBy: null,
-              lastError: "Destinataire non autoris�",
+              lastError: "Destinataire non autorisé",
             },
           });
           cancelled++;
           continue;
         }
         const labels: Record<string, string> = {
-          REQUESTED: "Une demande de collaboration a �t� re�ue.",
-          ACCEPTED: "La collaboration a �t� accept�e.",
-          REJECTED: "La collaboration a �t� refus�e.",
-          SUSPENDED: "La collaboration a �t� suspendue.",
-          ENDED: "La collaboration est termin�e.",
-          REQUEST: "Une nouvelle autorisation de collaboration est demand�e.",
+          REQUESTED: "Une demande de collaboration a été reçue.",
+          ACCEPTED: "La collaboration a été acceptée.",
+          REJECTED: "La collaboration a été refusée.",
+          SUSPENDED: "La collaboration a été suspendue.",
+          ENDED: "La collaboration est terminée.",
+          REQUEST: "Une nouvelle autorisation de collaboration est demandée.",
         };
         await mailer.send(
           row.recipientAddress,
           "Collaboration DND Delivery",
-          `${labels[String(payload.event)] ?? "Votre collaboration a chang�."}\nBoutique : ${String(payload.shopName)}\nEntreprise : ${String(payload.companyName)}\nConsultez votre espace DND Delivery pour les d�tails.`,
+          `${labels[String(payload.event)] ?? "Votre collaboration a changé."}\nBoutique : ${String(payload.shopName)}\nEntreprise : ${String(payload.companyName)}\nConsultez votre espace DND Delivery pour les détails.`,
           `${row.id}@partners.dnd`,
         );
         await this.service.db.notification.updateMany({
@@ -107,7 +107,7 @@ export class PartnerNotifications {
           data: {
             status: "FAILED",
             lastError:
-              "�chec SMTP; v�rifier la configuration et relancer le worker.",
+              "Échec SMTP; vérifier la configuration et relancer le worker.",
             availableAt: new Date(
               this.service.clock().getTime() +
                 Math.min(1440, 5 * 2 ** (row.attempts - 1)) * 60000,

@@ -51,7 +51,7 @@ export const attempt = action
     if (v.result === "FAILED" && (!v.kind || !v.reason))
       c.addIssue({
         code: "custom",
-        message: "Un motif structur� et une explication sont requis.",
+        message: "Un motif structuré et une explication sont requis.",
       });
   });
 export const incident = action.extend({

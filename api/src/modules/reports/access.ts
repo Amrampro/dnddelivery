@@ -22,15 +22,15 @@ export async function reportAccess(tx: Prisma.TransactionClient, c: ReportContex
     permissions = [...(company?.active ? company.permissions : []), ...(agency?.active ? agency.permissions : [])];
   }
   const kinds = availableReports({ scope: c.scope, permissions });
-  if (!kinds.includes(kind)) throw stockError("REPORT_DENIED", "Rapport non autoris�.", 403);
+  if (!kinds.includes(kind)) throw stockError("REPORT_DENIED", "Rapport non autorisé.", 403);
   const self = permissions.some(p=>["deliveries.self.read","collections.self.read"].includes(p)) && !permissions.includes("reports.read") && !permissions.includes("financial.supervise.read") && c.scope !== "SHOP";
   if ((c.scope !== "GLOBAL" && c.companyId && q.companyId && c.companyId !== q.companyId) ||
     (c.scope === "AGENCY" && q.agencyId && q.agencyId !== c.agencyId) ||
     (c.scope === "SHOP" && q.shopId && q.shopId !== c.shopId) ||
-    (self && q.courierId && q.courierId !== c.actorId)) throw stockError("REPORT_SCOPE_DENIED", "Filtre hors de votre p�rim�tre.", 403);
+    (self && q.courierId && q.courierId !== c.actorId)) throw stockError("REPORT_SCOPE_DENIED", "Filtre hors de votre périmètre.", 403);
   const companyId = c.companyId ?? q.companyId, agencyId = c.scope === "AGENCY" ? c.agencyId : q.agencyId,
     shopId = c.scope === "SHOP" ? c.shopId : q.shopId, courierId = self ? c.actorId : q.courierId;
-  if (c.scope === "SHOP" && companyId && !await tx.companyShop.findUnique({ where: { companyId_shopId: { companyId, shopId: c.shopId! } } })) throw stockError("REPORT_SCOPE_DENIED", "Transporteur non associ�.", 403);
+  if (c.scope === "SHOP" && companyId && !await tx.companyShop.findUnique({ where: { companyId_shopId: { companyId, shopId: c.shopId! } } })) throw stockError("REPORT_SCOPE_DENIED", "Transporteur non associé.", 403);
   return { kinds, self, permissions, companyId, agencyId, shopId, courierId };
 }
 export type ReportAccess = Awaited<ReturnType<typeof reportAccess>>;

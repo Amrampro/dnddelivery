@@ -31,7 +31,7 @@ export async function assertActiveCollaboration(
     throw new AuthError(
       403,
       "COLLABORATION_INACTIVE",
-      "Cette collaboration ne permet pas de nouvelles op�rations. Les historiques sont conserv�s.",
+      "Cette collaboration ne permet pas de nouvelles opérations. Les historiques sont conservés.",
     );
   return p;
 }

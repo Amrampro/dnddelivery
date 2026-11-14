@@ -68,7 +68,7 @@ export class DeliveryCore extends DeliveryReads {
     if (!c.companyId || c.scope === "SHOP")
       throw stockError(
         "PERMISSION_DENIED",
-        "Cette op�ration est r�serv�e � l'�quipe logistique.",
+        "Cette opération est réservée à l’équipe logistique.",
         403,
       );
     await this.transaction(async (tx) => {
@@ -77,7 +77,7 @@ export class DeliveryCore extends DeliveryReads {
       if (!auth.permissions.includes(required))
         throw stockError(
           "PERMISSION_DENIED",
-          "Cette op�ration n'est pas autoris�e.",
+          "Cette opération n’est pas autorisée.",
           403,
         );
       let p: Mission;
@@ -92,7 +92,7 @@ export class DeliveryCore extends DeliveryReads {
           },
         });
         if (!handover || auth.kind !== "driver")
-          throw stockError("HANDOVER_DENIED", "Remise non autoris�e.", 403);
+          throw stockError("HANDOVER_DENIED", "Remise non autorisée.", 403);
         p = await tx.delivery.findUniqueOrThrow({
           where: { id },
           include: missionInclude,
@@ -116,7 +116,7 @@ export class DeliveryCore extends DeliveryReads {
         if (replay.requestHash !== requestHash)
           throw stockError(
             "IDEMPOTENCY_MISMATCH",
-            "Cette r�f�rence d'op�ration correspond � une autre action.",
+            "Cette référence d’opération correspond à une autre action.",
           );
         return;
       }
@@ -124,7 +124,7 @@ export class DeliveryCore extends DeliveryReads {
       if (!p.phase)
         throw stockError(
           "LEGACY_DELIVERY",
-          "Cette ancienne mission doit �tre examin�e avant son activation.",
+          "Cette ancienne mission doit être examinée avant son activation.",
         );
       if (options.agency !== false) agencyAllowed(c, p.agencyId);
       checkVersion(p.version, input.version);
@@ -361,7 +361,7 @@ export class DeliveryCore extends DeliveryReads {
     )
       throw stockError(
         "MISSION_NOT_ASSIGNED",
-        "Cette mission ne vous est pas attribu�e.",
+        "Cette mission ne vous est pas attribuée.",
         403,
       );
   }
@@ -376,7 +376,7 @@ export class DeliveryCore extends DeliveryReads {
     )
       throw stockError(
         "CUSTODY_PENDING",
-        "Terminez ou annulez la remise/l'�tape de transport en cours.",
+        "Terminez ou annulez la remise/l’étape de transport en cours.",
       );
   }
   async closeAssignment(tx: Tx, p: Mission) {
@@ -420,7 +420,7 @@ export class DeliveryCore extends DeliveryReads {
     )
       throw stockError(
         "STOCK_CUSTODY_INVALID",
-        "La remise doit �tre confirm�e dans l'agence d�tentrice du stock.",
+        "La remise doit être confirmée dans l’agence détentrice du stock.",
       );
     for (const item of p.order.orderItem_orderRecords) {
       const rows = await tx.stockReservation.findMany({
@@ -437,7 +437,7 @@ export class DeliveryCore extends DeliveryReads {
       )
         throw stockError(
           "RESERVATION_INVALID",
-          "Les articles ne disposent plus de leurs r�servations exactes.",
+          "Les articles ne disposent plus de leurs réservations exactes.",
         );
       for (const r of rows) {
         if (
@@ -447,7 +447,7 @@ export class DeliveryCore extends DeliveryReads {
         )
           throw stockError(
             "RESERVATION_INVALID",
-            "R�servation hors du p�rim�tre de la mission.",
+            "Réservation hors du périmètre de la mission.",
             403,
           );
         await this.stock.movement(
@@ -480,7 +480,7 @@ export class DeliveryCore extends DeliveryReads {
     if (!c.companyId || c.scope === "SHOP")
       throw stockError(
         "PERMISSION_DENIED",
-        "Cr�ation de mission non autoris�e.",
+        "Création de mission non autorisée.",
         403,
       );
     const id = await this.transaction(async (tx) => {
@@ -511,7 +511,7 @@ export class DeliveryCore extends DeliveryReads {
         if (replay.requestHash !== requestHash)
           throw stockError(
             "IDEMPOTENCY_MISMATCH",
-            "Op�ration diff�rente sous cette r�f�rence.",
+            "Opération différente sous cette référence.",
           );
         return replay.deliveryId;
       }
@@ -523,7 +523,7 @@ export class DeliveryCore extends DeliveryReads {
       )
         throw stockError(
           "ORDER_NOT_DISPATCHABLE",
-          "Cette commande ne peut pas cr�er une nouvelle mission.",
+          "Cette commande ne peut pas créer une nouvelle mission.",
         );
       await agencyWrite(tx, c, o.agencyId);
       await collaborationAgency(tx, o.companyId, o.shopId, [o.agencyId]);
@@ -577,12 +577,12 @@ export class DeliveryCore extends DeliveryReads {
         if (p.parcelReturn)
           throw stockError(
             "RETURN_IN_PROGRESS",
-            "Le retour doit �tre trait� avant toute nouvelle affectation.",
+            "Le retour doit être traité avant toute nouvelle affectation.",
           );
         if (reassign && !input.reason)
           throw stockError(
             "REASON_REQUIRED",
-            "Indiquez le motif de r�affectation.",
+            "Indiquez le motif de réaffectation.",
             400,
           );
         if (
@@ -592,7 +592,7 @@ export class DeliveryCore extends DeliveryReads {
         )
           throw stockError(
             "ASSIGNMENT_CONFLICT",
-            "Choisissez une nouvelle affectation coh�rente.",
+            "Choisissez une nouvelle affectation cohérente.",
           );
         await this.noPending(tx, p);
         await assertDriverAssignable(
@@ -608,7 +608,7 @@ export class DeliveryCore extends DeliveryReads {
           if (p.custodyUserId !== p.courierId)
             throw stockError(
               "CUSTODY_CONFLICT",
-              "Le d�tenteur doit confirmer sa remise avant r�affectation.",
+              "Le détenteur doit confirmer sa remise avant réaffectation.",
             );
           const h = await tx.parcelHandover.create({
             data: {
@@ -667,7 +667,7 @@ export class DeliveryCore extends DeliveryReads {
         )
           throw stockError(
             "HANDOVER_CONFLICT",
-            "Cette remise n'est plus disponible.",
+            "Cette remise n’est plus disponible.",
           );
         if (input.condition === "REFUSED") {
           await tx.parcelHandover.update({
@@ -714,7 +714,7 @@ export class DeliveryCore extends DeliveryReads {
             c,
             p,
             "DAMAGED",
-            "Colis endommag� lors de la remise de garde.",
+            "Colis endommagé lors de la remise de garde.",
             true,
           );
         return {
@@ -752,7 +752,7 @@ export class DeliveryCore extends DeliveryReads {
         if (p.custodyType !== "AGENCY")
           throw stockError(
             "CUSTODY_CONFLICT",
-            "Le colis doit �tre pr�sent en agence.",
+            "Le colis doit être présent en agence.",
           );
         await this.noPending(tx, p);
         await collaborationAgency(tx, p.companyId, p.order.shopId, [
@@ -785,7 +785,7 @@ export class DeliveryCore extends DeliveryReads {
         if (p.custodyType !== "SHOP" && p.custodyType !== "AGENCY")
           throw stockError(
             "CUSTODY_CONFLICT",
-            "Le colis a d�j� �t� pris en charge.",
+            "Le colis a déjà été pris en charge.",
           );
         await collaborationAgency(tx, p.companyId, p.order.shopId, [
           p.agencyId,
@@ -820,7 +820,7 @@ export class DeliveryCore extends DeliveryReads {
         if (!p.pickedUpAt || p.custodyUserId !== c.actorId)
           throw stockError(
             "PICKUP_REQUIRED",
-            "Confirmez d'abord la prise en charge physique.",
+            "Confirmez d’abord la prise en charge physique.",
           );
         await this.noPending(tx, p);
         const rules: Record<string, { from: string[]; phase: string }> = {
@@ -841,13 +841,13 @@ export class DeliveryCore extends DeliveryReads {
         if (!rule)
           throw stockError(
             "PROOF_REQUIRED",
-            "Utilisez le parcours de confirmation OTP et preuves pour cl�turer la remise.",
+            "Utilisez le parcours de confirmation OTP et preuves pour clôturer la remise.",
           );
         expectPhase(p, rule.from);
         if (input.event.startsWith("RETURN_") && !p.parcelReturn)
           throw stockError(
             "RETURN_REQUIRED",
-            "Une d�cision de retour est n�cessaire.",
+            "Une décision de retour est nécessaire.",
           );
         if (input.event === "RETURN_STARTED")
           await tx.deliveryReturn.update({
@@ -911,13 +911,13 @@ export class DeliveryCore extends DeliveryReads {
         if (p.custodyUserId !== c.actorId)
           throw stockError(
             "CUSTODY_CONFLICT",
-            "Vous ne d�tenez pas ce colis.",
+            "Vous ne détenez pas ce colis.",
             403,
           );
         if (input.result === "FAILED" && (!input.kind || !input.reason))
           throw stockError(
             "REASON_REQUIRED",
-            "Un motif d'�chec est obligatoire.",
+            "Un motif d’échec est obligatoire.",
             400,
           );
         const a = await tx.deliveryAttempt.create({

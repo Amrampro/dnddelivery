@@ -6,18 +6,18 @@ import {
 import { Prisma } from "../../generated/prisma/client.js";
 import type { DeliveryService } from "./service.js";
 const labels: Record<string, string> = {
-  ASSIGNED: "affectation enregistr�e",
-  REASSIGNED: "r�affectation enregistr�e",
-  HANDOVER_REQUESTED: "remise de garde � confirmer",
-  HANDOVER_ACCEPTED: "remise de garde confirm�e",
+  ASSIGNED: "affectation enregistrée",
+  REASSIGNED: "réaffectation enregistrée",
+  HANDOVER_REQUESTED: "remise de garde à confirmer",
+  HANDOVER_ACCEPTED: "remise de garde confirmée",
   PICKED_UP: "colis pris en charge",
-  TRANSFER_DISPATCHED: "d�part inter-agences enregistr�",
-  TRANSFER_RECEIVED: "r�ception inter-agences enregistr�e",
-  FINAL_DISTRIBUTION: "distribution finale commenc�e",
+  TRANSFER_DISPATCHED: "départ inter-agences enregistré",
+  TRANSFER_RECEIVED: "réception inter-agences enregistrée",
+  FINAL_DISTRIBUTION: "distribution finale commencée",
   ATTEMPT: "confirmation de remise en attente de preuve",
-  ATTEMPT_FAILED: "tentative de livraison �chou�e",
-  RETURN_STARTED: "retour engag�",
-  RETURN_RECEIVED: "retour r�ceptionn�",
+  ATTEMPT_FAILED: "tentative de livraison échouée",
+  RETURN_STARTED: "retour engagé",
+  RETURN_RECEIVED: "retour réceptionné",
 };
 export class DeliveryNotifications {
   constructor(
@@ -47,7 +47,7 @@ export class DeliveryNotifications {
       cancelled = 0;
     const stale = new Date(this.clock().getTime() - 300000);
     await this.service.db
-      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Bail expir�' WHERE (${this.companyId ?? null} IS NULL OR companyId=${this.companyId ?? null}) AND LEFT(sourceEvent,9)='DELIVERY_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
+      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Bail expiré' WHERE (${this.companyId ?? null} IS NULL OR companyId=${this.companyId ?? null}) AND LEFT(sourceEvent,9)='DELIVERY_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
     const channels = adapter.push
       ? Prisma.sql`('EMAIL','PUSH')`
       : Prisma.sql`('EMAIL')`;
@@ -126,14 +126,14 @@ export class DeliveryNotifications {
               status: "CANCELLED",
               lockedAt: null,
               lockedBy: null,
-              lastError: "Destinataire d�sormais non autoris�",
+              lastError: "Destinataire désormais non autorisé",
             },
             "CANCELLED",
           );
           cancelled++;
           continue;
         }
-        const body = `Commande ${String(payload.publicNumber)} : ${labels[String(payload.event)] ?? "�v�nement logistique enregistr�"}. Consultez votre espace autoris� pour l'�tat actuel.`;
+        const body = `Commande ${String(payload.publicNumber)} : ${labels[String(payload.event)] ?? "événement logistique enregistré"}. Consultez votre espace autorisé pour l’état actuel.`;
         const message = row.recipientUserId
           ? null
           : await recipientMessage(this.service.db, row, this.clock());
@@ -148,7 +148,7 @@ export class DeliveryNotifications {
         else
           await adapter.send(
             row.recipientAddress,
-            message?.subject ?? "Suivi op�rationnel � DND Delivery",
+            message?.subject ?? "Suivi opérationnel · DND Delivery",
             message?.text ?? body,
             `${row.id}@deliveries.dnd`,
             message?.html,
@@ -179,7 +179,7 @@ export class DeliveryNotifications {
             status: "FAILED",
             deliveryState:
               row.attempts < row.maxAttempts ? "RETRY_SCHEDULED" : "FAILED",
-            lastError: "Envoi indisponible ; reprise diff�r�e.",
+            lastError: "Envoi indisponible ; reprise différée.",
             availableAt: new Date(
               this.clock().getTime() +
                 Math.min(1440, 5 * 2 ** (row.attempts - 1)) * 60000,

@@ -3,21 +3,21 @@ import { Prisma } from "../../generated/prisma/client.js";
 import { authorizationStore } from "../../repositories/authorization.repository.js";
 import type { FinancialService } from "./service.js";
 const labels: Record<string, string> = {
-  COLLECTION_DECLARED: "Encaissement d�clar�",
-  COLLECTION_PARTIAL: "Encaissement partiel d�clar�",
-  COLLECTION_NONE: "Aucun montant re�u",
-  COLLECTION_EXCESS: "Exc�dent d'encaissement d�clar�",
-  REMITTANCE_DECLARED: "Remise physique d�clar�e, r�ception � confirmer",
-  REMITTANCE_CONFIRMED: "R�ception de fonds confirm�e",
-  REMITTANCE_DISPUTED: "R�ception avec �cart ou contestation",
-  REMITTANCE_REJECTED: "D�claration de remise rejet�e",
-  REMITTANCE_CORRECTION_REQUESTED: "Nouvelle d�claration de remise demand�e",
-  DISCREPANCY_OPENED: "�cart financier signal�",
-  DISCREPANCY_REPORTED: "�cart financier d�clar�",
-  DISCREPANCY_RESOLVED: "Suivi de l'�cart mis � jour",
-  CORRECTION_REQUESTED: "R�gularisation demand�e",
-  CORRECTION_APPROVED: "R�gularisation approuv�e",
-  CORRECTION_REJECTED: "R�gularisation refus�e",
+  COLLECTION_DECLARED: "Encaissement déclaré",
+  COLLECTION_PARTIAL: "Encaissement partiel déclaré",
+  COLLECTION_NONE: "Aucun montant reçu",
+  COLLECTION_EXCESS: "Excédent d’encaissement déclaré",
+  REMITTANCE_DECLARED: "Remise physique déclarée, réception à confirmer",
+  REMITTANCE_CONFIRMED: "Réception de fonds confirmée",
+  REMITTANCE_DISPUTED: "Réception avec écart ou contestation",
+  REMITTANCE_REJECTED: "Déclaration de remise rejetée",
+  REMITTANCE_CORRECTION_REQUESTED: "Nouvelle déclaration de remise demandée",
+  DISCREPANCY_OPENED: "Écart financier signalé",
+  DISCREPANCY_REPORTED: "Écart financier déclaré",
+  DISCREPANCY_RESOLVED: "Suivi de l’écart mis à jour",
+  CORRECTION_REQUESTED: "Régularisation demandée",
+  CORRECTION_APPROVED: "Régularisation approuvée",
+  CORRECTION_REJECTED: "Régularisation refusée",
 };
 export class FinancialNotifications {
   constructor(
@@ -53,7 +53,7 @@ export class FinancialNotifications {
         ? Prisma.sql`('EMAIL','PUSH')`
         : Prisma.sql`('EMAIL')`;
     await this.service.db
-      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Bail expir�' WHERE LEFT(sourceEvent,8)='FINANCE_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
+      .$executeRaw`UPDATE Notification SET status='FAILED',lockedAt=NULL,lockedBy=NULL,lastError='Bail expiré' WHERE LEFT(sourceEvent,8)='FINANCE_' AND status='PROCESSING' AND lockedAt<${stale} AND attempts>=maxAttempts`;
     for (let i = 0; i < limit; i++) {
       const owner = randomUUID(),
         row = await this.service.transaction(async (tx) => {
@@ -112,18 +112,18 @@ export class FinancialNotifications {
               status: "CANCELLED",
               lockedAt: null,
               lockedBy: null,
-              lastError: "Destinataire d�sormais non autoris�",
+              lastError: "Destinataire désormais non autorisé",
             },
           });
           cancelled++;
           continue;
         }
-        const body = `${labels[String(payload.event ?? payload.action)] ?? "Mise � jour financi�re documentaire"} : ${String(payload.amount)} ${String(payload.currency)}. Consultez votre espace autoris� pour distinguer les d�clarations, r�ceptions confirm�es et �carts. Aucun paiement n'est ex�cut� par DND Delivery.`;
+        const body = `${labels[String(payload.event ?? payload.action)] ?? "Mise à jour financière documentaire"} : ${String(payload.amount)} ${String(payload.currency)}. Consultez votre espace autorisé pour distinguer les déclarations, réceptions confirmées et écarts. Aucun paiement n’est exécuté par DND Delivery.`;
         if (row.channel === "PUSH")
           await adapter.push!(
             userId!,
             {
-              title: "DND Delivery � Suivi financier",
+              title: "DND Delivery · Suivi financier",
               body,
               entityId: String(payload.entityId),
               companyId: row.companyId ?? undefined,
@@ -133,7 +133,7 @@ export class FinancialNotifications {
         else
           await adapter.send(
             row.recipientAddress,
-            "DND Delivery � Op�ration financi�re",
+            "DND Delivery · Opération financière",
             body,
             `${row.id}@dnd-delivery.invalid`,
           );
@@ -159,7 +159,7 @@ export class FinancialNotifications {
             ),
             lockedAt: null,
             lockedBy: null,
-            lastError: "Envoi impossible ; nouvelle tentative diff�r�e",
+            lastError: "Envoi impossible ; nouvelle tentative différée",
           },
         });
         failed++;

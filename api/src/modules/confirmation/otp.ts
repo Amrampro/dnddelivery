@@ -61,7 +61,7 @@ export async function ensureOtp(
   )
     throw stockError(
       "OTP_UNAVAILABLE",
-      "Cette mission n'est plus autoris�e � recevoir un code.",
+      "Cette mission n’est plus autorisée à recevoir un code.",
       403,
     );
   const previous = await tx.deliveryOtp.findFirst({
@@ -74,7 +74,7 @@ export async function ensureOtp(
   )
     throw stockError(
       "OTP_LOCKED",
-      "Trop d'essais. Attendez quinze minutes avant un renouvellement.",
+      "Trop d’essais. Attendez quinze minutes avant un renouvellement.",
       429,
     );
   if (

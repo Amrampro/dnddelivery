@@ -35,7 +35,7 @@ export class DeliveryService extends DeliveryCore {
         if (!input.reason)
           throw stockError(
             "REASON_REQUIRED",
-            "Justifiez l'annulation de la proposition de remise.",
+            "Justifiez l’annulation de la proposition de remise.",
             400,
           );
         const h = await tx.parcelHandover.findFirst({
@@ -49,7 +49,7 @@ export class DeliveryService extends DeliveryCore {
         if (!h)
           throw stockError(
             "HANDOVER_NOT_PENDING",
-            "Aucune proposition de remise � annuler.",
+            "Aucune proposition de remise à annuler.",
           );
         await tx.parcelHandover.update({
           where: { id: h.id },
@@ -83,13 +83,13 @@ export class DeliveryService extends DeliveryCore {
         if (p.custodyType !== "COURIER" || !p.custodyUserId)
           throw stockError(
             "CUSTODY_CONFLICT",
-            "Aucun livreur d�tenteur � r�ceptionner.",
+            "Aucun livreur détenteur à réceptionner.",
           );
         if (input.condition === "REFUSED") {
           if (!input.reason)
             throw stockError(
               "REASON_REQUIRED",
-              "Pr�cisez le refus de r�ception.",
+              "Précisez le refus de réception.",
               400,
             );
           await this.openIncident(tx, c, p, "REFUSED", input.reason, true);
@@ -112,7 +112,7 @@ export class DeliveryService extends DeliveryCore {
             c,
             p,
             "DAMAGED",
-            input.reason ?? "Colis endommag� � la r�ception en agence.",
+            input.reason ?? "Colis endommagé à la réception en agence.",
             true,
           );
         return {
@@ -151,12 +151,12 @@ export class DeliveryService extends DeliveryCore {
         if (p.custodyType !== "AGENCY" || p.custodyAgencyId !== p.agencyId)
           throw stockError(
             "CUSTODY_CONFLICT",
-            "Le colis doit �tre physiquement en agence.",
+            "Le colis doit être physiquement en agence.",
           );
         if (input.destinationAgencyId === p.agencyId)
           throw stockError(
             "DESTINATION_INVALID",
-            "Choisissez une agence diff�rente.",
+            "Choisissez une agence différente.",
             400,
           );
         await this.noPending(tx, p);
@@ -165,7 +165,7 @@ export class DeliveryService extends DeliveryCore {
         if (isReturn && input.destinationAgencyId !== p.parcelReturn!.agencyId)
           throw stockError(
             "RETURN_DESTINATION_INVALID",
-            "Le trajet retour doit rejoindre l'agence de retour d�cid�e.",
+            "Le trajet retour doit rejoindre l’agence de retour décidée.",
           );
         await collaborationAgency(
           tx,
@@ -326,7 +326,7 @@ export class DeliveryService extends DeliveryCore {
         if (!input.reason)
           throw stockError(
             "REASON_REQUIRED",
-            "Indiquez le motif d'abandon du trajet.",
+            "Indiquez le motif d’abandon du trajet.",
             400,
           );
         const leg = await tx.parcelLeg.findFirst({
@@ -337,7 +337,7 @@ export class DeliveryService extends DeliveryCore {
         if (leg.status !== "DRAFT")
           throw stockError(
             "LEG_ALREADY_DISPATCHED",
-            "Un trajet d�j� parti doit �tre r�ceptionn�, pas annul�.",
+            "Un trajet déjà parti doit être réceptionné, pas annulé.",
           );
         await tx.parcelLeg.update({
           where: { id: leg.id },
@@ -380,7 +380,7 @@ export class DeliveryService extends DeliveryCore {
         if (input.returnToOrigin && (!input.reason || p.phase !== "FAILED"))
           throw stockError(
             "RETURN_LEG_REASON_REQUIRED",
-            "Le retour � l'origine doit suivre un incident et �tre justifi�.",
+            "Le retour à l’origine doit suivre un incident et être justifié.",
           );
         agencyAllowed(c, targetAgencyId);
         checkVersion(leg.version, input.legVersion ?? 0);
@@ -391,7 +391,7 @@ export class DeliveryService extends DeliveryCore {
         )
           throw stockError(
             "LEG_STATE_INVALID",
-            "Ce trajet n'est pas r�ceptionnable.",
+            "Ce trajet n’est pas réceptionnable.",
           );
         await agencyWrite(tx, c, targetAgencyId);
         if (input.condition === "REFUSED") {
@@ -436,7 +436,7 @@ export class DeliveryService extends DeliveryCore {
             c,
             { ...p, agencyId: targetAgencyId },
             "DAMAGED",
-            input.reason ?? "Colis endommag� � la r�ception inter-agences.",
+            input.reason ?? "Colis endommagé à la réception inter-agences.",
             true,
           );
         const blocked = input.condition === "DAMAGED" || blockers > 0;
@@ -506,7 +506,7 @@ export class DeliveryService extends DeliveryCore {
     if (p.order.type === "FROM_STOCK" && agencyId !== p.order.agencyId)
       throw stockError(
         "RETURN_AGENCY_INVALID",
-        "Le retour du stock doit �tre contr�l� dans son agence d'origine.",
+        "Le retour du stock doit être contrôlé dans son agence d’origine.",
       );
     await tx.deliveryReturn.create({
       data: {
@@ -543,12 +543,12 @@ export class DeliveryService extends DeliveryCore {
     if (p.order.type !== "FROM_STOCK" || !p.stockIssuedAt)
       throw stockError(
         "NO_STOCK_RETURN",
-        "Ce colis n'a pas de sortie de stock � r�int�grer.",
+        "Ce colis n’a pas de sortie de stock à réintégrer.",
       );
     if (agencyId !== p.order.agencyId)
       throw stockError(
         "RETURN_AGENCY_INVALID",
-        "L'agence de restitution du stock est incorrecte.",
+        "L’agence de restitution du stock est incorrecte.",
       );
     const rows = await tx.stockReservation.findMany({
       where: {
@@ -560,7 +560,7 @@ export class DeliveryService extends DeliveryCore {
     if (!rows.length)
       throw stockError(
         "RESERVATION_INVALID",
-        "La sortie de stock d'origine est introuvable.",
+        "La sortie de stock d’origine est introuvable.",
       );
     for (const r of rows) {
       const target = await this.stock.ensureBalance(
@@ -578,7 +578,7 @@ export class DeliveryService extends DeliveryCore {
         r.quantity,
         0,
         `delivery-return:${p.id}:${r.id}`,
-        `Retour contr�l� ${p.parcelReference}`,
+        `Retour contrôlé ${p.parcelReference}`,
         { reservationId: r.id },
       );
     }
@@ -599,7 +599,7 @@ export class DeliveryService extends DeliveryCore {
         if (!ret || !["REQUESTED", "IN_TRANSIT"].includes(ret.status))
           throw stockError(
             "RETURN_NOT_PENDING",
-            "Aucun retour � r�ceptionner.",
+            "Aucun retour à réceptionner.",
           );
         agencyAllowed(c, ret.agencyId);
         await agencyWrite(tx, c, ret.agencyId);
@@ -611,19 +611,19 @@ export class DeliveryService extends DeliveryCore {
         )
           throw stockError(
             "RETURN_NOT_ARRIVED",
-            "Le colis doit arriver physiquement avant r�ception.",
+            "Le colis doit arriver physiquement avant réception.",
           );
         if (input.condition === "REFUSED")
           throw stockError(
             "RECEIPT_REFUSED",
-            "Un retour refus� reste sous la garde actuelle ; d�clarez un incident.",
+            "Un retour refusé reste sous la garde actuelle ; déclarez un incident.",
           );
         await this.noPending(tx, p);
         if (input.restock) {
           if (input.condition !== "GOOD")
             throw stockError(
               "RETURN_DAMAGED",
-              "Un colis endommag� reste isol� et ne rejoint pas le disponible.",
+              "Un colis endommagé reste isolé et ne rejoint pas le disponible.",
             );
           await this.restock(tx, c, p, ret.agencyId);
         }
@@ -684,13 +684,13 @@ export class DeliveryService extends DeliveryCore {
         )
           throw stockError(
             "RETURN_NOT_RESTOCKABLE",
-            "Seul un retour re�u, contr�l� intact et non r�int�gr� peut revenir en stock.",
+            "Seul un retour reçu, contrôlé intact et non réintégré peut revenir en stock.",
           );
         agencyAllowed(c, ret.agencyId);
         if (!input.reason)
           throw stockError(
             "REASON_REQUIRED",
-            "Justifiez la r�int�gration.",
+            "Justifiez la réintégration.",
             400,
           );
         await this.restock(tx, c, p, ret.agencyId);
@@ -722,7 +722,7 @@ export class DeliveryService extends DeliveryCore {
         )
           throw stockError(
             "RETURN_NOT_RESTITUTABLE",
-            "Seul un colis retourn� non r�int�gr� peut �tre restitu� directement.",
+            "Seul un colis retourné non réintégré peut être restitué directement.",
           );
         if (!input.reason)
           throw stockError(
@@ -752,7 +752,7 @@ export class DeliveryService extends DeliveryCore {
     if (p.parcelReturn)
       throw stockError(
         "RETURN_IN_PROGRESS",
-        "Le retour emp�che une nouvelle tentative.",
+        "Le retour empêche une nouvelle tentative.",
       );
     await this.noPending(tx, p);
     if (
@@ -762,7 +762,7 @@ export class DeliveryService extends DeliveryCore {
     )
       throw stockError(
         "INCIDENT_OPEN",
-        "Traitez d'abord les incidents bloquants.",
+        "Traitez d’abord les incidents bloquants.",
       );
     if (
       p.custodyType !== "COURIER" &&
@@ -771,7 +771,7 @@ export class DeliveryService extends DeliveryCore {
     )
       throw stockError(
         "CUSTODY_CONFLICT",
-        "La garde doit �tre r�gularis�e avant reprise.",
+        "La garde doit être régularisée avant reprise.",
       );
     return {
       data: {
@@ -837,7 +837,7 @@ export class DeliveryService extends DeliveryCore {
         if (!input.reason)
           throw stockError(
             "REASON_REQUIRED",
-            "Expliquez la d�cision sur l'incident.",
+            "Expliquez la décision sur l’incident.",
             400,
           );
         const incident = await tx.deliveryIncident.findFirst({
@@ -847,7 +847,7 @@ export class DeliveryService extends DeliveryCore {
           throw stockError("INCIDENT_NOT_FOUND", "Incident introuvable.", 404);
         checkVersion(incident.version, input.incidentVersion);
         if (incident.status !== "OPEN")
-          throw stockError("INCIDENT_CLOSED", "Cet incident est d�j� trait�.");
+          throw stockError("INCIDENT_CLOSED", "Cet incident est déjà traité.");
         await tx.deliveryIncident.update({
           where: { id: incident.id },
           data: {
@@ -865,7 +865,7 @@ export class DeliveryService extends DeliveryCore {
           if (!input.agencyId)
             throw stockError(
               "AGENCY_REQUIRED",
-              "Choisissez l'agence de retour.",
+              "Choisissez l’agence de retour.",
               400,
             );
           change = await this.returnCore(
@@ -924,7 +924,7 @@ export class DeliveryService extends DeliveryCore {
           } else
             throw stockError(
               "CUSTODY_CONFLICT",
-              "R�ceptionnez le colis avant r�affectation.",
+              "Réceptionnez le colis avant réaffectation.",
             );
         }
         return {
@@ -950,7 +950,7 @@ export class DeliveryService extends DeliveryCore {
         if (!input.reason)
           throw stockError(
             "REASON_REQUIRED",
-            "Indiquez le motif d'annulation.",
+            "Indiquez le motif d’annulation.",
             400,
           );
         expectPhase(p, ["WAITING_COLLECTION", "AT_AGENCY", "PREPARED"]);

@@ -14,7 +14,7 @@ const schema = z.object({
   WEB_APP_URL: z.url().default("http://localhost:5173"),
 });
 const secureConfigurationMessage =
-  "La configuration s�curis�e de l'authentification doit �tre compl�t�e.";
+  "La configuration sécurisée de l’authentification doit être complétée.";
 
 export function checkAuthConfiguration(input: NodeJS.ProcessEnv) {
   const result = schema.safeParse(input);
@@ -22,7 +22,7 @@ export function checkAuthConfiguration(input: NodeJS.ProcessEnv) {
     return {
       valid: false as const,
       fields: result.error.issues.map(issue => String(issue.path[0])),
-      message: "L'authentification n'est pas configur�e sur le serveur.",
+      message: "L’authentification n’est pas configurée sur le serveur.",
     };
   }
   const settings = result.data;

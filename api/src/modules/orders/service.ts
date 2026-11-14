@@ -53,7 +53,7 @@ export class OrderService {
   ) {
     await access(tx, c, permission, true, x.companyId);
     if (c.scope === "SHOP" && x.shopId !== c.shopId)
-      throw stockError("SHOP_DENIED", "Boutique non autoris�e.", 403);
+      throw stockError("SHOP_DENIED", "Boutique non autorisée.", 403);
     await agencyWrite(tx, { ...c, companyId: x.companyId }, x.agencyId);
     await collaborationAgency(tx, x.companyId, x.shopId, [x.agencyId], active);
   }
@@ -78,7 +78,7 @@ export class OrderService {
         (c.scope === "SHOP" && q.shopId && q.shopId !== c.shopId) ||
         (c.scope === "AGENCY" && q.agencyId && q.agencyId !== c.agencyId)
       )
-        throw stockError("SCOPE_DENIED", "Filtre non autoris�.", 403);
+        throw stockError("SCOPE_DENIED", "Filtre non autorisé.", 403);
       const where: Prisma.OrderWhereInput = {
         ...scope(c),
         ...(q.companyId ? { companyId: q.companyId } : {}),
@@ -244,7 +244,7 @@ export class OrderService {
       if (i.productId && !product)
         throw stockError(
           "PRODUCT_DENIED",
-          "Produit inactif ou non autoris�.",
+          "Produit inactif ou non autorisé.",
           403,
         );
       const item = await tx.orderItem.create({
@@ -369,7 +369,7 @@ export class OrderService {
         if (old.requestHash !== fingerprint)
           throw stockError(
             "IDEMPOTENCY_MISMATCH",
-            "Cette validation correspond � un autre contenu.",
+            "Cette validation correspond à un autre contenu.",
           );
         return old.id;
       }
@@ -385,7 +385,7 @@ export class OrderService {
           },
         }))
       )
-        throw stockError("RECIPIENT_DENIED", "Destinataire non autoris�.", 403);
+        throw stockError("RECIPIENT_DENIED", "Destinataire non autorisé.", 403);
       if (x.saveRecipient && !recipientId)
         recipientId = (await this.saveRecipient(tx, x)).id;
       const p = await tx.order.create({
@@ -432,7 +432,7 @@ export class OrderService {
       )
         throw stockError(
           "ORDER_LOCKED",
-          "Cette commande ne peut plus �tre modifi�e.",
+          "Cette commande ne peut plus être modifiée.",
         );
       if (x.companyId !== p.companyId || x.shopId !== p.shopId)
         throw stockError(
@@ -453,11 +453,11 @@ export class OrderService {
           },
         }))
       )
-        throw stockError("RECIPIENT_DENIED", "Destinataire non autoris�.", 403);
+        throw stockError("RECIPIENT_DENIED", "Destinataire non autorisé.", 403);
       if (!p.isDraft && hash(p.recipientDetails) !== hash(x.recipient))
         throw stockError(
           "RECIPIENT_SNAPSHOT_IMMUTABLE",
-          "Les coordonn�es soumises sont conserv�es. Annulez et recr�ez la commande pour changer le destinataire.",
+          "Les coordonnées soumises sont conservées. Annulez et recréez la commande pour changer le destinataire.",
         );
       const previous = {
         agencyId: p.agencyId,
@@ -557,7 +557,7 @@ export class OrderService {
       }
       checkVersion(p.version, input.version);
       if (p.status !== "PENDING")
-        throw stockError("ORDER_LOCKED", "Brouillon abandonn�.");
+        throw stockError("ORDER_LOCKED", "Brouillon abandonné.");
       await this.target(tx, c, p, "create");
       const x = v.content.parse({
         companyId: p.companyId,
@@ -604,7 +604,7 @@ export class OrderService {
     if (!input.reason)
       throw stockError(
         "REASON_REQUIRED",
-        "Indiquez le motif d'annulation.",
+        "Indiquez le motif d’annulation.",
         400,
       );
     await this.transaction(async (tx) => {
@@ -620,7 +620,7 @@ export class OrderService {
       )
         throw stockError(
           "ORDER_LOCKED",
-          "Annulation pr�alable indisponible � ce stade.",
+          "Annulation préalable indisponible à ce stade.",
         );
       await this.target(tx, c, p, "cancel", false);
       await this.release(tx, c, p);
@@ -690,7 +690,7 @@ export class OrderService {
         (c.companyId && q.companyId && c.companyId !== q.companyId) ||
         (c.scope === "SHOP" && q.shopId && c.shopId !== q.shopId)
       )
-        throw stockError("SCOPE_DENIED", "R�pertoire non autoris�.", 403);
+        throw stockError("SCOPE_DENIED", "Répertoire non autorisé.", 403);
       const where: Prisma.RecipientWhereInput = {
         archivedAt: null,
         ...(id ? { id } : {}),

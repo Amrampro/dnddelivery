@@ -10,7 +10,7 @@ node_modules/
 # ENVIRONMENT VARIABLES
 # ======================================================
 
-# Par dǟ��faut, ignorer tous les fichiers .env
+# Par dÃƒÂ©faut, ignorer tous les fichiers .env
 .env
 .env.*
 
@@ -19,7 +19,7 @@ node_modules/
 !**/.env.example
 
 
-# API : garder les secrets privǟ��s
+# API : garder les secrets privÃƒÂ©s
 api/.env
 api/.env.*
 

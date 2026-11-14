@@ -20,7 +20,7 @@ INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'p
 INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='partners.read' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
 INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'partners.manage','partners.manage',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
 INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='partners.manage' WHERE r.code='company_admin' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
-INSERT INTO Role(id,code,name,scope,createdAt,updatedAt) VALUES(UUID(),'shop_owner','Propri�taire boutique','SHOP',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO Role(id,code,name,scope,createdAt,updatedAt) VALUES(UUID(),'shop_owner','Propriétaire boutique','SHOP',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
 INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'workspace.access','workspace.access',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
 INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='workspace.access' WHERE r.code='shop_owner' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
 INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.profile.read','shop.profile.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
@@ -56,7 +56,7 @@ INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'s
 INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.history.read' WHERE r.code='shop_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
 INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.notifications.read','shop.notifications.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
 INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='shop.notifications.read' WHERE r.code='shop_manager' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
-INSERT INTO Role(id,code,name,scope,createdAt,updatedAt) VALUES(UUID(),'shop_employee','Employ� boutique','SHOP',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
+INSERT INTO Role(id,code,name,scope,createdAt,updatedAt) VALUES(UUID(),'shop_employee','Employé boutique','SHOP',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
 INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'workspace.access','workspace.access',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);
 INSERT INTO RolePermission(id,roleId,permissionId,createdAt,updatedAt) SELECT UUID(),r.id,p.id,NOW(3),NOW(3) FROM Role r JOIN Permission p ON p.code='workspace.access' WHERE r.code='shop_employee' ON DUPLICATE KEY UPDATE roleId=VALUES(roleId);
 INSERT INTO Permission(id,code,description,createdAt,updatedAt) VALUES(UUID(),'shop.profile.read','shop.profile.read',NOW(3),NOW(3)) ON DUPLICATE KEY UPDATE code=VALUES(code);

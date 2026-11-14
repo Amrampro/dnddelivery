@@ -46,7 +46,7 @@ export class FinancialCore extends FinancialReads {
     if (c.scope === "SHOP" || !c.companyId)
       throw stockError(
         "PERMISSION_DENIED",
-        "Op�ration r�serv�e � l'�quipe autoris�e.",
+        "Opération réservée à l’équipe autorisée.",
         403,
       );
     return this.transaction(async (tx) => {
@@ -69,7 +69,7 @@ export class FinancialCore extends FinancialReads {
         if (replay.requestHash !== hash)
           throw stockError(
             "IDEMPOTENCY_MISMATCH",
-            "Cette cl� correspond � une autre op�ration.",
+            "Cette clé correspond à une autre opération.",
           );
         return replay.entityId;
       }
@@ -245,7 +245,7 @@ export class FinancialCore extends FinancialReads {
         if (auth.kind !== "driver")
           throw stockError(
             "DRIVER_REQUIRED",
-            "Seul le livreur peut d�clarer son encaissement.",
+            "Seul le livreur peut déclarer son encaissement.",
             403,
           );
         const p = await tx.delivery.findFirst({
@@ -285,7 +285,7 @@ export class FinancialCore extends FinancialReads {
         )
           throw stockError(
             "COLLECTION_PHASE_DENIED",
-            "L'encaissement se d�clare pendant la distribution finale de votre mission.",
+            "L’encaissement se déclare pendant la distribution finale de votre mission.",
           );
         if (!(await authorizationStore(tx).subscriptionValid(c.companyId!)))
           await assertSafeClosure(tx, selection(c), p.id, "COLLECTION_DECLARE");
@@ -295,7 +295,7 @@ export class FinancialCore extends FinancialReads {
         )
           throw stockError(
             "COLLECTION_NOT_REQUIRED",
-            "Aucun encaissement n'est pr�vu pour cette commande.",
+            "Aucun encaissement n’est prévu pour cette commande.",
           );
         await agencyWrite(tx, c, p.agencyId);
         const previous = await ledger(
@@ -308,7 +308,7 @@ export class FinancialCore extends FinancialReads {
         if (previous.some((r) => r.legacy))
           throw stockError(
             "LEGACY_REVIEW_REQUIRED",
-            "L'historique ancien doit �tre rapproch� avant une nouvelle d�claration.",
+            "L’historique ancien doit être rapproché avant une nouvelle déclaration.",
           );
         const received = units(input.amount),
           net = sum(previous.map((r) => units(r.net))),
@@ -317,12 +317,12 @@ export class FinancialCore extends FinancialReads {
         if (received === 0n && remaining === 0n)
           throw stockError(
             "COLLECTION_ALREADY_COVERED",
-            "Le montant attendu est d�j� couvert. Une nouvelle d�claration nulle est inutile.",
+            "Le montant attendu est déjà couvert. Une nouvelle déclaration nulle est inutile.",
           );
         if ((received === 0n || received > remaining) && !input.reason)
           throw stockError(
             "REASON_REQUIRED",
-            "Indiquez le motif d'un montant nul ou exc�dentaire.",
+            "Indiquez le motif d’un montant nul ou excédentaire.",
             400,
           );
         bounded(net + received);
@@ -378,8 +378,8 @@ export class FinancialCore extends FinancialReads {
             description:
               input.reason ??
               (kind === "PARTIAL"
-                ? "Encaissement partiel d�clar� ; d�cision du responsable attendue."
-                : "�cart d'encaissement d�clar�."),
+                ? "Encaissement partiel déclaré ; décision du responsable attendue."
+                : "Écart d’encaissement déclaré."),
             sourceKey: `collection:${row.id}:${kind}`,
           });
         }
@@ -425,7 +425,7 @@ export class FinancialCore extends FinancialReads {
         if (auth.kind !== "driver")
           throw stockError(
             "DRIVER_REQUIRED",
-            "Le livreur d�clare lui-m�me sa remise.",
+            "Le livreur déclare lui-même sa remise.",
             403,
           );
         agencyAllowed(c, input.agencyId);
@@ -452,7 +452,7 @@ export class FinancialCore extends FinancialReads {
           if (a.legacy || a.blocked)
             throw stockError(
               "COLLECTION_FROZEN",
-              "Une correction ou un historique � rapprocher bloque cet encaissement.",
+              "Une correction ou un historique à rapprocher bloque cet encaissement.",
             );
           if (
             units(item.amount) <= 0n ||
@@ -460,7 +460,7 @@ export class FinancialCore extends FinancialReads {
           )
             throw stockError(
               "BALANCE_EXCEEDED",
-              "Le montant d�passe les fonds encore disponibles pour cette remise.",
+              "Le montant dépasse les fonds encore disponibles pour cette remise.",
             );
         }
         const total = bounded(sum(input.items.map((i) => units(i.amount)))),
@@ -541,7 +541,7 @@ export class FinancialCore extends FinancialReads {
         if (!r.operationKey || r.status !== "DECLARED" || r.confirmedAt)
           throw stockError(
             "REMITTANCE_ALREADY_DECIDED",
-            "Cette remise a d�j� �t� trait�e ou doit �tre rapproch�e.",
+            "Cette remise a déjà été traitée ou doit être rapprochée.",
           );
         const receiving = ["CONFIRM", "DISPUTE"].includes(input.decision),
           items = r.remittanceItem_remittanceRecords;
@@ -553,7 +553,7 @@ export class FinancialCore extends FinancialReads {
         )
           throw stockError(
             "RECEIPT_ALLOCATION_REQUIRED",
-            "Pr�cisez le montant r�ellement re�u pour chaque ligne.",
+            "Précisez le montant réellement reçu pour chaque ligne.",
             400,
           );
         if (!receiving && input.items.length)
@@ -582,12 +582,12 @@ export class FinancialCore extends FinancialReads {
           if (value > units(a.available) + units(item.amount!))
             throw stockError(
               "BALANCE_EXCEEDED",
-              "Le montant constat� d�passe les fonds tra�ables disponibles, en tenant compte des autres remises.",
+              "Le montant constaté dépasse les fonds traçables disponibles, en tenant compte des autres remises.",
             );
           if (input.decision === "CONFIRM" && value !== units(item.amount!))
             throw stockError(
               "RECEIPT_MISMATCH",
-              "Utilisez la d�cision avec �cart si les montants diff�rent.",
+              "Utilisez la décision avec écart si les montants diffèrent.",
             );
           actual += value;
           await tx.remittanceItem.update({

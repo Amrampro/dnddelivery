@@ -55,7 +55,7 @@ export function createProductRouter(
       throw new AuthError(
         403,
         "CONTEXT_DENIED",
-        "S�lectionnez un environnement autoris�.",
+        "Sélectionnez un environnement autorisé.",
       );
     await auth().requirePermission(
       p,
@@ -69,7 +69,7 @@ export function createProductRouter(
       throw new AuthError(
         403,
         "CATALOG_FORBIDDEN",
-        "Le catalogue appartient � la boutique.",
+        "Le catalogue appartient à la boutique.",
       );
     return {
       actorId: p.user.id,
@@ -109,7 +109,7 @@ export function createProductRouter(
       z.uuid().parse(q.params.id),
     );
     if (!key || !/^[a-f0-9-]{36}\.webp$/.test(key))
-      throw new AuthError(404, "IMAGE_NOT_FOUND", "Aucune image associ�e.");
+      throw new AuthError(404, "IMAGE_NOT_FOUND", "Aucune image associée.");
     try {
       s.json({
         mime: "image/webp",

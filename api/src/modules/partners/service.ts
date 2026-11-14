@@ -57,7 +57,7 @@ const version = (current: number, input: number) => {
   if (current !== input)
     throw fail(
       "VERSION_CONFLICT",
-      "Ces informations ont chang�. Rechargez la page.",
+      "Ces informations ont changé. Rechargez la page.",
       409,
     );
 };
@@ -78,7 +78,7 @@ export class PartnerService {
       )
         throw fail(
           "PARTNER_DUPLICATE",
-          "Cette boutique, cette affiliation ou cette demande existe d�j�.",
+          "Cette boutique, cette affiliation ou cette demande existe déjà.",
           409,
         );
       throw e;
@@ -95,10 +95,10 @@ export class PartnerService {
         where: { id: c.actorId, status: "ACTIVE", archivedAt: null },
       }))
     )
-      throw fail("ACCESS_DENIED", "Acc�s refus�.");
+      throw fail("ACCESS_DENIED", "Accès refusé.");
     if (c.scope === "SHOP") {
       if (!c.shopId)
-        throw fail("SHOP_CONTEXT_REQUIRED", "S�lectionnez votre boutique.");
+        throw fail("SHOP_CONTEXT_REQUIRED", "Sélectionnez votre boutique.");
       if (write)
         await tx.$queryRaw`SELECT id FROM Shop WHERE id=${c.shopId} FOR UPDATE`;
       const m = await tx.shopMembership.findFirst({
@@ -131,7 +131,7 @@ export class PartnerService {
       if (!c.companyId)
         throw fail(
           "COMPANY_CONTEXT_REQUIRED",
-          "S�lectionnez votre entreprise.",
+          "Sélectionnez votre entreprise.",
         );
       if (write)
         await tx.$queryRaw`SELECT id FROM Company WHERE id=${c.companyId} FOR UPDATE`;
@@ -180,7 +180,7 @@ export class PartnerService {
     )
       throw fail(
         "SUBSCRIPTION_REQUIRED",
-        "Cette entreprise ne dispose pas d'un abonnement actif.",
+        "Cette entreprise ne dispose pas d’un abonnement actif.",
       );
   }
   audit(
@@ -317,7 +317,7 @@ export class PartnerService {
       )
         throw fail(
           "LAST_OWNER",
-          "La boutique doit conserver un propri�taire actif.",
+          "La boutique doit conserver un propriétaire actif.",
           409,
         );
       const role = await tx.role.findUniqueOrThrow({
@@ -352,7 +352,7 @@ export class PartnerService {
         },
       );
     });
-    return { message: "Affiliation mise � jour." };
+    return { message: "Affiliation mise à jour." };
   }
   async removeUser(
     c: PartnerContext,
@@ -469,7 +469,7 @@ export class PartnerService {
     }
     return {
       message:
-        "Si cette adresse peut inscrire une boutique, une demande de v�rification a �t� prise en compte.",
+        "Si cette adresse peut inscrire une boutique, une demande de vérification a été prise en compte.",
     };
   }
   async inviteUser(c: PartnerContext, input: z.infer<typeof v.invite>) {
@@ -484,7 +484,7 @@ export class PartnerService {
       )
         throw fail(
           "MEMBER_EXISTS",
-          "Cette personne est d�j� associ�e � la boutique.",
+          "Cette personne est déjà associée à la boutique.",
           409,
         );
       if (
@@ -501,7 +501,7 @@ export class PartnerService {
       )
         throw fail(
           "INVITATION_EXISTS",
-          "Une invitation est d�j� en attente.",
+          "Une invitation est déjà en attente.",
           409,
         );
       const p = await this.prepare(tx, {
@@ -518,7 +518,7 @@ export class PartnerService {
       return p;
     });
     const deliveryStatus = await this.sendInvitation(prepared.id, prepared.raw);
-    return { id: prepared.id, deliveryStatus, message: "Invitation pr�par�e." };
+    return { id: prepared.id, deliveryStatus, message: "Invitation préparée." };
   }
   async invitations(c: PartnerContext, q: z.infer<typeof v.query>) {
     await this.authorize(
@@ -594,7 +594,7 @@ export class PartnerService {
       if (!p || p.acceptedAt || p.revokedAt)
         throw fail(
           "INVITATION_UNAVAILABLE",
-          "Cette invitation n'est plus disponible.",
+          "Cette invitation n’est plus disponible.",
           409,
         );
       if (action === "resend") {
@@ -624,7 +624,7 @@ export class PartnerService {
     const deliveryStatus = raw ? await this.sendInvitation(id, raw) : undefined;
     return {
       message:
-        action === "resend" ? "Invitation renvoy�e." : "Invitation r�voqu�e.",
+        action === "resend" ? "Invitation renvoyée." : "Invitation révoquée.",
       deliveryStatus,
     };
   }
@@ -635,7 +635,7 @@ export class PartnerService {
     if (!p || p.revokedAt || p.acceptedAt || p.expiresAt <= this.clock())
       throw fail(
         "INVITATION_INVALID",
-        "Ce lien est expir� ou indisponible.",
+        "Ce lien est expiré ou indisponible.",
         410,
       );
     return {
@@ -662,7 +662,7 @@ export class PartnerService {
       if (!found)
         throw fail(
           "INVITATION_INVALID",
-          "Ce lien est expir� ou indisponible.",
+          "Ce lien est expiré ou indisponible.",
           410,
         );
       await tx.$queryRaw`SELECT id FROM ShopInvitation WHERE id=${found.id} FOR UPDATE`;
@@ -672,7 +672,7 @@ export class PartnerService {
       if (p.revokedAt || p.acceptedAt || p.expiresAt <= this.clock())
         throw fail(
           "INVITATION_INVALID",
-          "Ce lien est expir� ou indisponible.",
+          "Ce lien est expiré ou indisponible.",
           410,
         );
       let user = await tx.user.findUnique({ where: { email: p.email } });
@@ -710,7 +710,7 @@ export class PartnerService {
       let shopId = p.shopId;
       if (p.kind === "USER") {
         if (!p.senderId || !shopId)
-          throw fail("INVITATION_INVALID", "Invitation incompl�te.", 410);
+          throw fail("INVITATION_INVALID", "Invitation incomplète.", 410);
         await this.authorize(
           tx,
           { actorId: p.senderId, scope: "SHOP", shopId },
@@ -725,7 +725,7 @@ export class PartnerService {
           include: { role: true },
         });
         if (current?.active)
-          throw fail("MEMBER_EXISTS", "Cette personne est d�j� affili�e.", 409);
+          throw fail("MEMBER_EXISTS", "Cette personne est déjà affiliée.", 409);
         await tx.shopMembership.upsert({
           where: { shopId_userId: { shopId, userId: user.id } },
           create: { shopId, userId: user.id, roleId: role.id },
@@ -747,7 +747,7 @@ export class PartnerService {
         )
           throw fail(
             "SHOP_EXISTS",
-            "Une boutique utilise d�j� cette adresse. Connectez-vous � son espace.",
+            "Une boutique utilise déjà cette adresse. Connectez-vous à son espace.",
             409,
           );
         const payload = { ...(p.payload as Prisma.JsonObject) };
@@ -784,7 +784,7 @@ export class PartnerService {
         });
         if (p.kind === "PARTNER") {
           if (!p.senderId || !p.companyId)
-            throw fail("INVITATION_INVALID", "Invitation incompl�te.", 410);
+            throw fail("INVITATION_INVALID", "Invitation incomplète.", 410);
           await this.authorize(
             tx,
             { scope: "COMPANY", companyId: p.companyId, actorId: p.senderId },
@@ -852,7 +852,7 @@ export class PartnerService {
       return {
         shopId,
         message:
-          "Votre acc�s boutique est pr�t. Connectez-vous ou actualisez vos espaces.",
+          "Votre accès boutique est prêt. Connectez-vous ou actualisez vos espaces.",
       };
     });
   }
@@ -1114,7 +1114,7 @@ export class PartnerService {
         if (!shop)
           throw fail(
             "SHOP_NOT_FOUND",
-            "Boutique introuvable. Utilisez son adresse pour pr�parer une inscription.",
+            "Boutique introuvable. Utilisez son adresse pour préparer une inscription.",
             404,
           );
         shopId = shop.id;
@@ -1128,7 +1128,7 @@ export class PartnerService {
       if (existing)
         throw fail(
           "COLLABORATION_EXISTS",
-          "Cette collaboration existe d�j�. Consultez sa fiche pour demander une nouvelle autorisation.",
+          "Cette collaboration existe déjà. Consultez sa fiche pour demander une nouvelle autorisation.",
           409,
         );
       const ids = c.scope === "COMPANY" ? (companyInput.agencyIds ?? []) : [];
@@ -1143,7 +1143,7 @@ export class PartnerService {
           },
         }))
       )
-        throw fail("AGENCY_INVALID", "Agence non autoris�e.", 400);
+        throw fail("AGENCY_INVALID", "Agence non autorisée.", 400);
       const p = await tx.companyShop.create({
         data: {
           shopId: shopId!,
@@ -1185,7 +1185,7 @@ export class PartnerService {
       )
         throw fail(
           "SHOP_REFERENCE_REQUIRED",
-          "Utilisez la r�f�rence de la boutique existante pour demander son accord.",
+          "Utilisez la référence de la boutique existante pour demander son accord.",
           409,
         );
       if (
@@ -1202,7 +1202,7 @@ export class PartnerService {
       )
         throw fail(
           "INVITATION_EXISTS",
-          "Une invitation est d�j� en attente.",
+          "Une invitation est déjà en attente.",
           409,
         );
       const ids = input.agencyIds ?? [];
@@ -1217,7 +1217,7 @@ export class PartnerService {
           },
         }))
       )
-        throw fail("AGENCY_INVALID", "Agence non autoris�e.", 400);
+        throw fail("AGENCY_INVALID", "Agence non autorisée.", 400);
       const p = await this.prepare(tx, {
         kind: "PARTNER",
         companyId: c.companyId,
@@ -1247,7 +1247,7 @@ export class PartnerService {
       id: prepared.id,
       deliveryStatus,
       message:
-        "Invitation � inscrire la boutique pr�par�e. La collaboration n�cessitera ensuite son accord.",
+        "Invitation à inscrire la boutique préparée. La collaboration nécessitera ensuite son accord.",
     };
   }
   async action(
@@ -1272,7 +1272,7 @@ export class PartnerService {
         if (p.status !== "PENDING" || !receiver)
           throw fail(
             "TRANSITION_DENIED",
-            "Seul le destinataire peut d�cider de cette demande en attente.",
+            "Seul le destinataire peut décider de cette demande en attente.",
             409,
           );
       }
@@ -1282,13 +1282,13 @@ export class PartnerService {
       )
         throw fail(
           "TRANSITION_DENIED",
-          "Seule l'entreprise peut suspendre une collaboration active.",
+          "Seule l’entreprise peut suspendre une collaboration active.",
           409,
         );
       if (action === "terminate" && !["ACTIVE", "SUSPENDED"].includes(p.status))
         throw fail(
           "TRANSITION_DENIED",
-          "Cette collaboration ne peut pas �tre termin�e dans cet �tat.",
+          "Cette collaboration ne peut pas être terminée dans cet état.",
           409,
         );
       if (
@@ -1297,7 +1297,7 @@ export class PartnerService {
       )
         throw fail(
           "TRANSITION_DENIED",
-          "Une nouvelle autorisation n'est pas n�cessaire dans cet �tat.",
+          "Une nouvelle autorisation n’est pas nécessaire dans cet état.",
           409,
         );
       if (["reject", "suspend", "terminate"].includes(action) && !input.reason)
@@ -1384,7 +1384,7 @@ export class PartnerService {
     if (c.scope !== "COMPANY")
       throw fail(
         "SCOPE_DENIED",
-        "Seule l'entreprise peut d�finir les agences de stockage.",
+        "Seule l’entreprise peut définir les agences de stockage.",
       );
     await this.transaction(async (tx) => {
       await this.authorize(tx, c, "partners.manage", true);
@@ -1393,7 +1393,7 @@ export class PartnerService {
       if (!["PENDING", "ACTIVE"].includes(p.status))
         throw fail(
           "COLLABORATION_INACTIVE",
-          "D�finissez les agences sur une collaboration en attente ou active.",
+          "Définissez les agences sur une collaboration en attente ou active.",
           409,
         );
       const ids = [...new Set(input.agencyIds)];

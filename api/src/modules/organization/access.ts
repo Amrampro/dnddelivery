@@ -21,7 +21,7 @@ export const conflict = (message: string, code = "ORGANIZATION_CONFLICT") =>
 export function checkVersion(actual: number, expected: number) {
   if (actual !== expected)
     throw conflict(
-      "Les donn�es ont chang�. Rechargez avant de recommencer.",
+      "Les données ont changé. Rechargez avant de recommencer.",
       "VERSION_CONFLICT",
     );
 }
@@ -39,7 +39,7 @@ export async function authorizeOrganization(
     throw new AuthError(
       403,
       "SCOPE_DENIED",
-      "Choisissez un contexte entreprise autoris�.",
+      "Choisissez un contexte entreprise autorisé.",
     );
   await authorizeTenant(
     authorizationStore(tx),
@@ -172,7 +172,7 @@ export async function assertDriverAssignable(
     throw new AuthError(
       403,
       "DRIVER_UNAVAILABLE",
-      "Ce livreur n'est pas disponible dans cette agence.",
+      "Ce livreur n’est pas disponible dans cette agence.",
     );
   return profile;
 }

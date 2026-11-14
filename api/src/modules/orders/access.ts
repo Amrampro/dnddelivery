@@ -24,7 +24,7 @@ export async function access(
       "shop.orders." + permission,
     );
     if (c.companyId && companyId && c.companyId !== companyId)
-      throw stockError("COMPANY_DENIED", "Transporteur non autoris�.", 403);
+      throw stockError("COMPANY_DENIED", "Transporteur non autorisé.", 403);
     if (write && !companyId)
       throw stockError("CONTEXT_REQUIRED", "Choisissez le transporteur.", 403);
     if (write) {
@@ -35,7 +35,7 @@ export async function access(
       )
         throw stockError(
           "SUBSCRIPTION_REQUIRED",
-          "Entreprise inactive ou abonnement expir�.",
+          "Entreprise inactive ou abonnement expiré.",
           403,
         );
     }
@@ -45,7 +45,7 @@ export async function access(
       (c.scope === "AGENCY" && !c.agencyId) ||
       (companyId && companyId !== c.companyId)
     )
-      throw stockError("COMPANY_DENIED", "Contexte non autoris�.", 403);
+      throw stockError("COMPANY_DENIED", "Contexte non autorisé.", 403);
     if (write)
       await tx.$queryRaw`SELECT id FROM Company WHERE id=${c.companyId} FOR UPDATE`;
     await authorizeTenant(

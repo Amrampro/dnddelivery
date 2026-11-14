@@ -12,11 +12,11 @@ try {
   const configuredEngine = process.env.DATABASE_ENGINE ?? "mysql";
   supported = actualEngine !== undefined && actualEngine === configuredEngine;
   if (!supported) {
-    console.error("Migration refus�e. Utiliser MySQL 8.0.16+ (branche 8) ou MariaDB 10.11.19+ (branche 10.11), et d�finir DATABASE_ENGINE=mysql ou mariadb selon le serveur.");
+    console.error("Migration refusée. Utiliser MySQL 8.0.16+ (branche 8) ou MariaDB 10.11.19+ (branche 10.11), et définir DATABASE_ENGINE=mysql ou mariadb selon le serveur.");
     process.exitCode = 1;
   }
 } catch {
-  console.error("Migration interrompue avant toute �criture. V�rifiez DATABASE_URL et l'acc�s � MySQL.");
+  console.error("Migration interrompue avant toute écriture. Vérifiez DATABASE_URL et l’accès à MySQL.");
   process.exitCode = 1;
 } finally {
   await disconnectDatabase();

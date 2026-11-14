@@ -39,8 +39,8 @@ export function smtpMailer(
         await transport.sendMail({
           from: c.SMTP_FROM,
           to,
-          subject: "R�initialiser votre mot de passe DND Delivery",
-          text: `Vous avez demand� � r�initialiser votre mot de passe DND Delivery.\n\nDepuis le Web : ${links.web}\n\nSur un appareil mobile, ouvrez ce lien s�curis� dans votre navigateur : ${links.mobile}\n\nCe lien est personnel et temporaire. Si vous n'�tes pas � l'origine de cette demande, ignorez ce message.`,
+          subject: "Réinitialiser votre mot de passe DND Delivery",
+          text: `Vous avez demandé à réinitialiser votre mot de passe DND Delivery.\n\nDepuis le Web : ${links.web}\n\nSur un appareil mobile, ouvrez ce lien sécurisé dans votre navigateur : ${links.mobile}\n\nCe lien est personnel et temporaire. Si vous n’êtes pas à l’origine de cette demande, ignorez ce message.`,
         });
       } finally {
         transport.close();
@@ -73,7 +73,7 @@ export function invitationMailer(input: Record<string, unknown> = process.env) {
           from: c.SMTP_FROM,
           to,
           subject: "Invitation DND Delivery",
-          text: `Vous �tes invit� � rejoindre ${company} sur DND Delivery.\n\nAcceptez cette invitation depuis ce lien personnel et temporaire. Si vous poss�dez d�j� un compte, connectez-vous avec celui-ci; sinon d�finissez votre mot de passe :\n${link}\n\nAucun mot de passe ne vous sera envoy�. Si vous n'attendiez pas cette invitation, ignorez ce message.`,
+          text: `Vous êtes invité à rejoindre ${company} sur DND Delivery.\n\nAcceptez cette invitation depuis ce lien personnel et temporaire. Si vous possédez déjà un compte, connectez-vous avec celui-ci; sinon définissez votre mot de passe :\n${link}\n\nAucun mot de passe ne vous sera envoyé. Si vous n’attendiez pas cette invitation, ignorez ce message.`,
         });
       } finally {
         transport.close();

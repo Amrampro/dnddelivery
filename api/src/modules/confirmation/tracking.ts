@@ -10,31 +10,31 @@ import { ensureOtp } from "./otp.js";
 export const trackingUnavailable = () =>
   stockError(
     "TRACKING_UNAVAILABLE",
-    "Ce suivi est expir� ou inaccessible. Demandez un nouveau lien.",
+    "Ce suivi est expiré ou inaccessible. Demandez un nouveau lien.",
     404,
   );
 export const publicDeliveryEvents: Record<string, string> = {
-  CREATED: "Livraison pr�par�e",
-  ASSIGNED: "Colis affect�",
-  REASSIGNED: "Affectation mise � jour",
+  CREATED: "Livraison préparée",
+  ASSIGNED: "Colis affecté",
+  REASSIGNED: "Affectation mise à jour",
   PICKED_UP: "Colis pris en charge",
   TRANSFER_DISPATCHED: "Colis en transit",
-  TRANSFER_RECEIVED: "Arriv�e dans une agence",
+  TRANSFER_RECEIVED: "Arrivée dans une agence",
   DEPARTED: "Colis en transit",
-  ARRIVED_AGENCY: "Arriv�e dans une agence",
+  ARRIVED_AGENCY: "Arrivée dans une agence",
   FINAL_DISTRIBUTION: "En cours de distribution",
-  ARRIVED: "Livreur arriv� � destination",
-  ATTEMPT: "Remise en cours de v�rification",
-  ATTEMPT_FAILED: "Tentative de livraison �chou�e",
-  RETRY_SCHEDULED: "Nouvelle tentative programm�e",
-  RETRY: "Nouvelle tentative programm�e",
-  RETURN_REQUESTED: "Retour demand�",
+  ARRIVED: "Livreur arrivé à destination",
+  ATTEMPT: "Remise en cours de vérification",
+  ATTEMPT_FAILED: "Tentative de livraison échouée",
+  RETRY_SCHEDULED: "Nouvelle tentative programmée",
+  RETRY: "Nouvelle tentative programmée",
+  RETURN_REQUESTED: "Retour demandé",
   RETURN_STARTED: "Retour du colis en cours",
-  RETURN_RECEIVED: "Colis retourn� � l'agence",
-  RETURNED_TO_SHOP: "Colis retourn� � l'exp�diteur",
-  CANCELLED: "Livraison annul�e",
-  COMPLETED: "Livraison confirm�e",
-  INCIDENT_RESOLVED: "Incident examin�",
+  RETURN_RECEIVED: "Colis retourné à l’agence",
+  RETURNED_TO_SHOP: "Colis retourné à l’expéditeur",
+  CANCELLED: "Livraison annulée",
+  COMPLETED: "Livraison confirmée",
+  INCIDENT_RESOLVED: "Incident examiné",
 };
 export async function trackingLink(
   tx: Prisma.TransactionClient,
@@ -149,7 +149,7 @@ export class TrackingService {
     });
     return {
       message:
-        "Si ces informations correspondent � une commande, un lien personnel sera envoy� � l'adresse enregistr�e. Consultez votre messagerie.",
+        "Si ces informations correspondent à une commande, un lien personnel sera envoyé à l’adresse enregistrée. Consultez votre messagerie.",
     };
   }
   async verify(reference: string, raw: string, ip: string) {
@@ -289,10 +289,10 @@ export class TrackingService {
           d.status === "IN_PROGRESS",
         failure:
           d?.status === "FAILED"
-            ? ({ABSENT:"Le destinataire �tait absent.",UNREACHABLE:"Le destinataire n'a pas pu �tre joint.",ADDRESS_NOT_FOUND:"L'adresse de remise n'a pas pu �tre trouv�e.",REFUSED:"Le colis a �t� refus�.",OTP_UNAVAILABLE:"Le code de remise n'a pas pu �tre obtenu."} as Record<string,string>)[d.failureReason??""]??"La remise n'a pas pu aboutir. Contactez votre exp�diteur pour la suite."
+            ? ({ABSENT:"Le destinataire était absent.",UNREACHABLE:"Le destinataire n’a pas pu être joint.",ADDRESS_NOT_FOUND:"L’adresse de remise n’a pas pu être trouvée.",REFUSED:"Le colis a été refusé.",OTP_UNAVAILABLE:"Le code de remise n’a pas pu être obtenu."} as Record<string,string>)[d.failureReason??""]??"La remise n’a pas pu aboutir. Contactez votre expéditeur pour la suite."
             : null,
         events: [
-          { id: o.id, label: "Commande enregistr�e", createdAt: o.createdAt },
+          { id: o.id, label: "Commande enregistrée", createdAt: o.createdAt },
           ...events.map((e) => ({
             id: e.id,
             label: publicDeliveryEvents[e.action],
@@ -300,7 +300,7 @@ export class TrackingService {
           })),
           ...cancellations.map((e) => ({
             id: e.id,
-            label: "Commande annul�e",
+            label: "Commande annulée",
             createdAt: e.createdAt,
           })),
         ].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
@@ -323,19 +323,19 @@ export class TrackingService {
       if (!p || !eligible(p))
         throw stockError(
           "OTP_UNAVAILABLE",
-          "Le code n'est pas disponible � cette �tape.",
+          "Le code n’est pas disponible à cette étape.",
         );
       const otp = await ensureOtp(tx, p, false, this.clock());
       if (otp.status !== "PENDING")
         throw stockError(
           "OTP_ALREADY_VERIFIED",
-          "Le code a d�j� �t� valid�. La cl�ture reste soumise aux preuves requises.",
+          "Le code a déjà été validé. La clôture reste soumise aux preuves requises.",
         );
       return {
         code: unseal(otp.sealedCode!, "otp:" + otp.id),
         expiresAt: otp.expiresAt,
         instruction:
-          "Communiquez ce code uniquement lorsque le livreur vous pr�sente votre colis.",
+          "Communiquez ce code uniquement lorsque le livreur vous présente votre colis.",
       };
     });
   }

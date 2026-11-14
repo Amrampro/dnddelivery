@@ -3,7 +3,7 @@ export const money = z
   .string()
   .regex(
     /^\d{1,15}(\.\d{1,4})?$/,
-    "Montant exact attendu, avec un point et au plus quatre d�cimales.",
+    "Montant exact attendu, avec un point et au plus quatre décimales.",
   );
 export const remittanceStatus = z.enum([
   "DECLARED",
@@ -50,7 +50,7 @@ export const remittance = operation
   .strict()
   .refine(
     (x) => new Set(x.items.map((i) => i.collectionId)).size === x.items.length,
-    "S�lectionnez chaque encaissement une seule fois.",
+    "Sélectionnez chaque encaissement une seule fois.",
   );
 export const decision = action
   .extend({

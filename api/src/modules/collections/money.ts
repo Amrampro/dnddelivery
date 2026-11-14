@@ -4,7 +4,7 @@ export const zero = 0n;
 export function units(value: { toString(): string } | string): bigint {
   const text = value.toString();
   if (!/^-?\d{1,15}(\.\d{1,4})?$/.test(text))
-    throw stockError("MONEY_INVALID", "Montant d�cimal exact attendu.", 400);
+    throw stockError("MONEY_INVALID", "Montant décimal exact attendu.", 400);
   const negative = text.startsWith("-"),
     [whole, fraction = ""] = (negative ? text.slice(1) : text).split(".");
   return (
@@ -22,7 +22,7 @@ export function bounded(value: bigint) {
   if (value < 0n || value > 9999999999999999999n)
     throw stockError(
       "MONEY_RANGE",
-      "Montant hors des limites autoris�es.",
+      "Montant hors des limites autorisées.",
       400,
     );
   return amount(value);

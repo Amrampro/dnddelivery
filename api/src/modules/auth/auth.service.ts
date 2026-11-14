@@ -160,7 +160,7 @@ export class AuthService {
       throw new AuthError(
         403,
         "CSRF_REJECTED",
-        "La v�rification de s�curit� a �chou�. Rechargez la page.",
+        "La vérification de sécurité a échoué. Rechargez la page.",
       );
   }
   async refresh(raw: string, client: ClientType, csrf?: string) {
@@ -260,7 +260,7 @@ export class AuthService {
         throw new AuthError(
           403,
           "CONTEXT_DENIED",
-          "Cet environnement n'est pas accessible.",
+          "Cet environnement n’est pas accessible.",
         );
       await tx.setContext(p.session.id, key);
       await tx.event(p.user.id, "PERMISSIONS_CHANGED", {
@@ -281,7 +281,7 @@ export class AuthService {
       throw new AuthError(
         403,
         "CONTEXT_DENIED",
-        "Votre environnement ou vos autorisations ont chang�. S�lectionnez un acc�s valide.",
+        "Votre environnement ou vos autorisations ont changé. Sélectionnez un accès valide.",
       );
     if (value.scope === "GLOBAL")
       await authorizeGlobal(this.store.authorization(), p.user.id, permission);
@@ -358,7 +358,7 @@ export class AuthService {
       throw new AuthError(
         503,
         "MAIL_UNAVAILABLE",
-        "Le service de r�cup�ration par e-mail est indisponible. Contactez votre administrateur.",
+        "Le service de récupération par e-mail est indisponible. Contactez votre administrateur.",
       );
     const user = await this.store.findUserByEmail(email);
     if (!active(user)) return;
@@ -401,14 +401,14 @@ export class AuthService {
         throw new AuthError(
           400,
           "RESET_INVALID",
-          "Ce lien est invalide ou a expir�.",
+          "Ce lien est invalide ou a expiré.",
         );
       const user = await tx.lockUser(token.userId);
       if (!active(user))
         throw new AuthError(
           400,
           "RESET_INVALID",
-          "Ce lien est invalide ou a expir�.",
+          "Ce lien est invalide ou a expiré.",
         );
       await tx.setPassword(user.id, encoded);
       await tx.consumeResets(user.id, this.clock());

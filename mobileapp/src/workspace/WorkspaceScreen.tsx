@@ -18,7 +18,7 @@ import { OrganizationScreen } from "../organization/OrganizationScreen";
 import { organizationModuleIds } from "../../../shared/organization";
 import { icons } from "./icons";
 import { workspaceStyles as s } from "./styles";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, type ComponentRef } from "react";
 import {
   Image,
   Pressable,
@@ -70,7 +70,7 @@ export function WorkspaceScreen({
 }
 function Content({ moduleId }: { moduleId: string }) {
   const {mission} = useLocalSearchParams<{mission?:string}>();
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const auth = useAuth(),
     router = useRouter(),
     reduced = useReducedMotion(),
@@ -85,14 +85,13 @@ function Content({ moduleId }: { moduleId: string }) {
     [confirm, setConfirm] = useState(false),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
-  const request = `${key}:${moduleId}:${retry}:${JSON.stringify(auth.profile?.activeContext)}`,
-    initial = auth.profile?.activeContext,
-    permission = initial && mobileModuleAccess(initial, moduleId)?.permission;
+  const request = `${key}:${moduleId}:${retry}:${JSON.stringify(auth.profile?.activeContext)}`;
   useEffect(() => {
     let disposed = false;
     if (key)
       api<{ context: Workspace }>(
-        `/auth/workspace${permission ? `?permission=${encodeURIComponent(permission)}` : ""}`,
+        // Use fresh server rights below; dotted query values can be blocked by hosting firewalls.
+        "/auth/workspace",
       )
         .then((v) => {
           if (!disposed)
@@ -104,7 +103,7 @@ function Content({ moduleId }: { moduleId: string }) {
     return () => {
       disposed = true;
     };
-  }, [key, request, permission]);
+  }, [key, request]);
   if (!key) return <Redirect href="/organisations" />;
   if (result?.request === request && result.error)
     return (

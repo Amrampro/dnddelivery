@@ -98,6 +98,8 @@ export class AuthService {
       const current = await tx.lockUser(user.id);
       if (!active(current) || current.passwordHash !== encoded)
         throw unauthorized();
+      const choices = await tx.workspaces(user.id);
+      const initial = choices.length === 1 ? choices[0] : undefined;
       const value = await tx.createSession({
         id: randomUUID(),
         userId: user.id,
@@ -114,7 +116,7 @@ export class AuthService {
           meta.client === "WEB"
             ? tokenHash(csrfToken(this.settings.secret, familyId))
             : null,
-        activeContext: null,
+        activeContext: initial ? { key: initial.key } : null,
         userAgent: meta.userAgent,
         ipHash: meta.ipHash,
       });
@@ -237,6 +239,7 @@ export class AuthService {
     return {
       user: this.publicUser(p.user),
       organizations: choices,
+      unavailableOrganizations: await this.store.unavailableOrganizations(p.user.id),
       activeContext: choices.find((v) => v.key === key) ?? null,
       csrfToken:
         p.session.clientType === "WEB"

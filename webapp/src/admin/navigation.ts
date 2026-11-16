@@ -7,6 +7,7 @@ export { definition } from "../../../shared/workspace";
 export const adminModuleIds = [
   "accueil",
   "entreprises",
+  "boutiques",
   "utilisateurs",
   "invitations",
   "activite",

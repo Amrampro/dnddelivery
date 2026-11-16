@@ -1,5 +1,7 @@
 # Préparation Android et iOS — Bloc 14
 
+> Mise à jour du 16 novembre 2026 : le mobile utilise désormais [Expo SDK 58](MOBILE_SDK_58.md). Le démarrage par défaut est en LAN pour Expo Go. Les anciennes dépendances `decode-uri-component` et `query-string` ne sont plus présentes ; le patch mobile correspondant et `patch-package` ont été retirés. Les résultats d'audit ci-dessous décrivent la campagne historique, pas la nouvelle installation.
+
 Nom et identifiants conservés : **DND Delivery**, `com.goulbam.dnddelivery` pour Android et iOS, schéma `dnddelivery`. Icônes et splash réutilisent les fichiers officiels ; aucune nouvelle marque. Les versions et numéros de build de publication doivent être pilotés par l’équipe via la configuration EAS existante.
 
 Depuis la campagne d’intrusion complémentaire, construire avec Node **22.23.4** ou une branche corrigée admise par `engines`. Les profils EAS restent préservés ; vérifier aussi le moteur effectif de l’image de construction distante. Le lanceur local `scripts/npm-local.ps1 -App mobileapp` emploie le runtime portable corrigé de cette machine. Voir [le rapport d’intrusion](PENTEST_LOCAL_2026-10-29.md).

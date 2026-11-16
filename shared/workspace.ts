@@ -158,7 +158,8 @@ export const workspaces: Record<
     ],
     modules: [
       overview,
-      item("entreprises", "Entreprises", "platform.manage", "building"),
+      item("entreprises", "Entreprises de livraison", "platform.manage", "building"),
+      item("boutiques", "Boutiques", "platform.manage", "building"),
       item(
         "abonnements",
         "Abonnements",

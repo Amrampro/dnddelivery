@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AppState, Platform } from "react-native";
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import { useRouter } from "expo-router";
 import { useAuth } from "../auth/AuthProvider";
 import { api } from "../auth/client";
@@ -18,7 +19,10 @@ export function PushNavigation() {
   const userId = auth.profile?.user.id;
   const contextSnapshot = JSON.stringify(auth.profile?.activeContext ?? null);
   useEffect(() => {
-    if (Platform.OS === "web") return;
+    if (
+      Platform.OS === "web" ||
+      Constants.executionEnvironment === ExecutionEnvironment.StoreClient
+    ) return;
     let live = true;
     const removers: Array<() => void> = [];
     void import("expo-notifications")

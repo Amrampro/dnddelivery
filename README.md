@@ -2,7 +2,7 @@
 
 Dernière vérification transversale : [audit de sécurité du 29 octobre 2026](docs/SECURITY_AUDIT_2026-10-29.md). **399 tests distincts réussis**, corrections de dépendances, sessions/contextes Web, appareils push, récupération et stockage privé. Audit npm API/Web : 0 avis connus ; mobile : rétroportages locaux testés et alerte Zod 3 de l’outillage encore ouverte. Lire les limites du rapport avant diffusion ; aucun déploiement de production effectué.
 
-Fondations indépendantes : `api` (Express/TypeScript), `webapp` (React/Vite), `mobileapp` (Expo SDK 57). Node.js **22.23.4** recommandé ; branches corrigées 24.22.1+ et 26.12.1+ également acceptées selon `engines`. MySQL 8 est requis ; la santé API et les interfaces de présentation démarrent sans connexion, avec un runtime autorisé.
+Fondations indépendantes : `api` (Express/TypeScript), `webapp` (React/Vite), `mobileapp` (Expo SDK 58). Node.js **22.23.4** recommandé ; branches corrigées 24.22.1+ et 26.12.1+ également acceptées selon `engines`. MySQL 8 est requis ; la santé API et les interfaces de présentation démarrent sans connexion, avec un runtime autorisé.
 
 Campagne d’intrusion complémentaire : [preuves, corrections et limites](docs/PENTEST_LOCAL_2026-10-29.md). Sur cette machine, `scripts/npm-local.ps1 -App api` (ou `webapp` / `mobileapp`) lance le projet avec le Node portable corrigé sans remplacer la version globale de Windows.
 
@@ -30,7 +30,7 @@ npm ci
 npm start
 ```
 
-Web : http://localhost:5173. API : http://localhost:3000/api/health et /api/v1/health. Expo : scanner le QR avec un environnement compatible SDK 57, ou utiliser un build de développement adapté. Sous PowerShell, utiliser `npm.cmd` et `npx.cmd` si les arguments précédés de `--` sont mal transmis par npm.ps1.
+Web : http://localhost:5173. API : http://localhost:3000/api/health et /api/v1/health. Expo : scanner le QR avec un environnement compatible SDK 58, ou utiliser un build de développement adapté. Sous PowerShell, utiliser `npm.cmd` et `npx.cmd` si les arguments précédés de `--` sont mal transmis par npm.ps1.
 
 En cas d’erreur de connexion, vérifier `http://localhost:3000/api/ready`. Un statut 503 indique que la configuration de l’authentification ou la connexion MySQL nécessite une vérification. Au démarrage, l’API indique le nom des paramètres d’authentification invalides dans son terminal. Sur Windows, relancer une fois `npm run dev` pour charger le lanceur mis à jour. Il recharge ensuite les modifications du fichier `api/.env` présent au lancement. Sur Linux, redémarrer le processus après une modification de ce fichier.
 
@@ -75,7 +75,9 @@ Les rubriques légales doivent être complétées avec des informations validée
 
 Voir `docs/BLOC-1-RAPPORT.md` pour le bilan et les limites de validation.
 
-## État actuel : SDK 57 et Bloc 10
+Migration mobile actuelle : voir [Expo SDK 58](docs/MOBILE_SDK_58.md) pour les versions et le démarrage sur téléphone.
+
+## Socle initial : SDK 57 et Bloc 10
 
 Consulter `docs/MOBILE_SDK_57.md`, `docs/DATABASE_DESIGN.md`, `docs/MIGRATIONS.md` et `docs/BLOC-2-RAPPORT.md`. Générer le client avec `cd api` puis `npm run db:generate`. Les opérations de base de données exigent une nouvelle DATABASE_URL MySQL, jamais une ancienne configuration. Le `.env` privé existant est conservé.
 

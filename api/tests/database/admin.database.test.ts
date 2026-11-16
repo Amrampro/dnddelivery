@@ -209,7 +209,8 @@ test("MySQL company administration: transactions, invitations, permissions and a
       async () => {
         assert.equal((await anonymous.request("/admin/companies")).status, 401);
         await admin.login(owner.email);
-        assert.equal((await admin.request("/admin/dashboard")).status, 403);
+        // The sole global workspace is selected at login, after server-side authorization.
+        assert.equal((await admin.request("/admin/dashboard")).status, 200);
         assert.equal(
           (
             await admin.request("/auth/switch-organization", "POST", {
@@ -811,6 +812,73 @@ test("MySQL company administration: transactions, invitations, permissions and a
         );
       },
     );
+    await t.test("new company defaults to active and its sole administrator opens the company workspace at login", async () => {
+      const responsible = await db.user.create({ data: {
+        email: `new-responsible-${suffix}@example.invalid`, fullName: "Nouveau responsable", passwordHash: hash,
+      } });
+      const response = await admin.request("/admin/companies", "POST", {
+        ...fields("DEFAULT-ACTIVE"), status: undefined,
+        administrator: { mode: "existing", userId: responsible.id },
+      });
+      assert.equal(response.status, 201);
+      const { company } = await response.json();
+      assert.equal(company.status, "ACTIVE");
+      const responsibleClient = client(); await responsibleClient.login(responsible.email);
+      let profile = await (await responsibleClient.request("/auth/me")).json();
+      assert.equal(profile.activeContext.companyId, company.id);
+      assert.equal(profile.activeContext.portal, "entreprise");
+      assert.equal((await admin.request(`/admin/companies/${company.id}/status`, "PATCH", {
+        version: company.version, status: "INACTIVE", reason: "Test désactivation explicite",
+      })).status, 200);
+      profile = await (await responsibleClient.request("/auth/me")).json();
+      assert.equal(profile.activeContext, null);
+      assert.equal(profile.organizations.length, 0);
+      assert.ok(profile.unavailableOrganizations.some((v: { name: string; status: string }) => v.name === company.name && v.status === "INACTIVE"));
+    });
+    await t.test("global shop list, suspension, stale version, reactivation and archival preserve ownership", async () => {
+      const shop = await db.shop.create({ data: {
+        name: `Boutique globale ${suffix}`, reference: `GLOBAL-SHOP-${suffix}`,
+        email: `shop-${suffix}@example.invalid`, phone: "000", address: "Test",
+      } });
+      const role = await db.role.findUniqueOrThrow({ where: { code: "shop_owner" } });
+      const member = await db.shopMembership.create({ data: {
+        shopId: shop.id, userId: second.id, roleId: role.id, roleScope: "SHOP",
+      } });
+      assert.equal((await anonymous.request("/admin/shops")).status, 401);
+      assert.equal((await tenant.request("/admin/shops")).status, 403);
+      const result = await admin.request(`/admin/shops?q=${shop.reference}&pageSize=1`);
+      assert.equal(result.status, 200);
+      const list = await result.json();
+      assert.equal(list.total, 1);
+      assert.equal(list.items[0].id, shop.id);
+      assert.ok(!("registrationKey" in list.items[0]));
+      const detail = await (await admin.request(`/admin/shops/${shop.id}`)).json();
+      assert.equal(detail.owners[0].user.id, second.id);
+      assert.ok(!("passwordHash" in detail.owners[0].user));
+      assert.equal((await admin.request(`/admin/shops/${shop.id}/status`, "PATCH",
+        { version: 1, status: "SUSPENDED", reason: "Contrôle" }, { "X-CSRF-Token": "" })).status, 403);
+      assert.equal((await admin.request(`/admin/shops/${shop.id}/status`, "PATCH",
+        { version: 1, status: "SUSPENDED", reason: "Contrôle" })).status, 200);
+      assert.equal((await admin.request(`/admin/shops/${shop.id}/status`, "PATCH",
+        { version: 1, status: "ACTIVE", reason: "Ancienne fiche" })).status, 409);
+      const shopClient = client(); await shopClient.login(second.email);
+      let profile = await (await shopClient.request("/auth/me")).json();
+      assert.ok(!profile.organizations.some((v: { shopId?: string }) => v.shopId === shop.id));
+      assert.ok(profile.unavailableOrganizations.some((v: { name: string; status: string }) => v.name === shop.name && v.status === "SUSPENDED"));
+      assert.equal((await admin.request(`/admin/shops/${shop.id}/status`, "PATCH",
+        { version: 2, status: "ACTIVE", reason: "Contrôle terminé" })).status, 200);
+      profile = await (await shopClient.request("/auth/me")).json();
+      assert.ok(profile.organizations.some((v: { shopId?: string }) => v.shopId === shop.id));
+      assert.equal((await admin.request(`/admin/shops/${shop.id}`, "DELETE",
+        { version: 3, reason: "Fermeture de test" })).status, 200);
+      const archived = await db.shop.findUniqueOrThrow({ where: { id: shop.id } });
+      assert.equal(archived.status, "ARCHIVED"); assert.ok(archived.archivedAt);
+      assert.equal((await db.shopMembership.findUniqueOrThrow({ where: { id: member.id } })).active, true);
+      assert.equal(await db.auditLog.count({ where: { entityType: "Shop", entityId: shop.id,
+        action: { in: ["PLATFORM_SHOP_STATUS_CHANGED", "PLATFORM_SHOP_ARCHIVED"] } } }), 3);
+      assert.equal((await admin.request(`/admin/shops/${shop.id}/status`, "PATCH",
+        { version: 4, status: "ACTIVE", reason: "Tentative" })).status, 409);
+    });
   } finally {
     server.closeAllConnections();
     await new Promise<void>((resolve) => server.close(() => resolve()));

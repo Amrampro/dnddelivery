@@ -1,3 +1,5 @@
+> Document historique. Pour la version actuelle et les essais sur téléphone, voir [Expo SDK 58](MOBILE_SDK_58.md).
+
 # Migration mobile vers Expo SDK 57
 
 ## Problèmes constatés

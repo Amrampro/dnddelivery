@@ -20,6 +20,7 @@ export interface Workspace {
 export interface Profile {
   user: { id: string; email: string; fullName: string; phone: string | null };
   organizations: Workspace[];
+  unavailableOrganizations?: { kind: "COMPANY" | "SHOP"; name: string; status: "INACTIVE" | "SUSPENDED" | "ARCHIVED" }[];
   activeContext: Workspace | null;
   csrfToken: string | null;
 }

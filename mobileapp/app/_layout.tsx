@@ -12,6 +12,7 @@ export default function Layout() {
         <Stack
           screenOptions={{
             headerStyle: { backgroundColor: "#F5F8F7" },
+            headerTransparent: false,
             headerTintColor: "#033173",
             headerShadowVisible: false,
             headerBackTitle: "Retour",

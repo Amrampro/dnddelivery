@@ -181,6 +181,7 @@ export class MemoryAuthStore implements AuthStore {
       globalGrant: async (u: string) => this.data.globalGrants.get(u) ?? null,
     };
   }
+  async unavailableOrganizations() { return []; }
   async workspaces(userId: string) {
     const auth = this.authorization(),
       out: Workspace[] = [];

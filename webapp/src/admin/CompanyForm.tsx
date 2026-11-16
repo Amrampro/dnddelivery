@@ -53,7 +53,7 @@ export function CompanyForm({ company }: { company?: Company }) {
     [adminEmail, setAdminEmail] = useState(""),
     [adminName, setAdminName] = useState(""),
     [user, setUser] = useState<SelectedUser | null>(null),
-    [status, setStatus] = useState("INACTIVE"),
+    [status, setStatus] = useState("ACTIVE"),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [logo, setLogo] = useState<File | null>(null);
@@ -112,7 +112,9 @@ export function CompanyForm({ company }: { company?: Company }) {
       let notice =
         result.invitationDelivery === "FAILED"
           ? "Entreprise enregistrée. L’invitation est conservée mais son e-mail n’a pas été envoyé. Vous pouvez réessayer depuis Invitations."
-          : "Entreprise enregistrée.";
+          : result.company.status === "ACTIVE"
+            ? "Entreprise active enregistrée. Le responsable associé peut accéder à son espace ; un nouvel utilisateur doit d'abord accepter son invitation."
+            : "Entreprise enregistrée mais désactivée : son responsable n'aura aucun accès tant que vous ne l'aurez pas activée depuis cette fiche.";
       if (logo) {
         try {
           await api(`/admin/companies/${result.company.id}/logo`, {

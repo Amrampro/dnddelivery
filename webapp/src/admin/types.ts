@@ -97,6 +97,8 @@ export function invitationState(invite: Invitation) {
         : "En attente";
 }
 export const actionLabels: Record<string, string> = {
+  PLATFORM_SHOP_ARCHIVED: "Boutique supprimée et archivée",
+  PLATFORM_SHOP_STATUS_CHANGED: "Statut de boutique modifié",
   COMPANY_CREATED: "Entreprise créée",
   COMPANY_UPDATED: "Informations modifiées",
   COMPANY_ACTIVATED: "Entreprise activée",

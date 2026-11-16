@@ -18,7 +18,7 @@ Les tableaux de bord entreprise/agence utilisent les synthèses des endpoints ex
 
 ## Native et responsabilités
 
-SDK 57 et matrice `bundledNativeModules.json` vérifiée par `expo install --check`, pas par choix arbitraire de versions. DateTimePicker et SystemUI complètent les modules image-picker/notifications/SecureStore existants. SystemUI applique le thème clair Android déclaré. Le dossier Android de recette est généré par Expo CNG et ignoré en versionnement ; `app.json` et les plugins restent la source de configuration.
+SDK 58 et matrice `bundledNativeModules.json` vérifiée par `expo install --check`, pas par choix arbitraire de versions. DateTimePicker et SystemUI complètent les modules image-picker/notifications/SecureStore existants. SystemUI applique le thème clair Android déclaré. Le dossier Android de recette est généré par Expo CNG et ignoré en versionnement ; `app.json` et les plugins restent la source de configuration.
 
 L’OTP et la clôture sont décidés exclusivement par le serveur. Caméra sur action explicite, galerie non alimentée automatiquement, aperçu et réessai sans succès local anticipé. Les photos restent privées et horodatées au serveur. Voir [preuves](DELIVERY_PROOFS.md) et [confirmation](DELIVERY_CONFIRMATION.md).
 

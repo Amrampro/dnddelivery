@@ -53,7 +53,7 @@ export function CompanyDetail({
             : "Suspendre cette entreprise ?",
       description:
         status === "ACTIVE"
-          ? "Les utilisateurs affiliés retrouveront leurs accès selon leurs permissions. Les règles d’abonnement seront gérées séparément au Bloc 6."
+          ? "Les utilisateurs affiliés retrouveront leur espace. Les opérations soumises à abonnement nécessitent aussi un abonnement actif."
           : "Les nouvelles requêtes d’accès à cette entreprise seront refusées. Les autres entreprises ne seront pas affectées.",
       reason: true,
       submit: (reason) =>
@@ -92,6 +92,12 @@ export function CompanyDetail({
         ))}
         <Link to={companyBase}>Toutes les entreprises</Link>
       </nav>
+      {(c.status === "INACTIVE" || c.status === "SUSPENDED") && (
+        <Card title="Accès de l'entreprise bloqué">
+          <p>Le responsable peut se connecter à son compte mais ne peut pas ouvrir cet espace tant que l'entreprise est désactivée ou suspendue.</p>
+          <Button onClick={() => status("ACTIVE")}>Activer l'entreprise</Button>
+        </Card>
+      )}
       {notice && (
         <div className="admin-notice" role="status">
           <p>{notice}</p>

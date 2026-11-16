@@ -265,13 +265,14 @@ function ProductList({ context, can }: { context: Workspace; can: boolean }) {
               : "Produits des boutiques"}
           </h1>
           <p>
-            Une référence commerciale, utilisable auprès de plusieurs
-            agences de livraison.
+            {context.scope === "SHOP"
+              ? "Ajoutez vos articles ici, puis sélectionnez-les dans une nouvelle commande. Le catalogue peut être créé sans agence de livraison partenaire."
+              : "Une référence commerciale, utilisable auprès de plusieurs agences de livraison."}
           </p>
         </div>
         {can && (
           <Link className="ds-button ds-primary" to={`${base}/nouveau`}>
-            Créer un produit
+            Ajouter un article
           </Link>
         )}
       </div>

@@ -60,6 +60,23 @@ export function Organizations() {
             vérifier vos affiliations.
           </p>
         )}
+        {!!auth.profile?.unavailableOrganizations?.length && (
+          <section aria-label="Espaces indisponibles">
+            <h2>Vos espaces indisponibles</h2>
+            {auth.profile.unavailableOrganizations.map((org, index) => (
+              <p key={`${org.kind}:${index}`}><strong>{org.name}</strong> — {
+                org.status === "INACTIVE" ? "désactivée : l'administrateur global doit activer cet espace."
+                  : org.status === "SUSPENDED" ? "suspendue : contactez l'administrateur global."
+                  : "archivée : cet espace n'est plus accessible."
+              }</p>
+            ))}
+          </section>
+        )}
+        <button className="text-link" disabled={!!busy} onClick={async () => {
+          setBusy("refresh"); setError("");
+          try { await auth.reload(); } catch { setError("Impossible d'actualiser vos accès."); }
+          finally { setBusy(""); }
+        }}>Actualiser mes accès</button>
         <Link className="text-link" to="/profil">
           Mon profil et mes sessions
         </Link>

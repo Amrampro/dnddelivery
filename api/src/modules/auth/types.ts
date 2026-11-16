@@ -1,5 +1,10 @@
 import type { AuthorizationStore } from "../authorization/tenant-access.js";
 export type ClientType = "WEB" | "MOBILE";
+export interface UnavailableOrganization {
+  kind: "COMPANY" | "SHOP";
+  name: string;
+  status: "INACTIVE" | "SUSPENDED" | "ARCHIVED";
+}
 export interface AuthUser {
   id: string;
   email: string;
@@ -89,6 +94,7 @@ export interface AuthStore {
     metadata: Record<string, string>,
   ): Promise<void>;
   workspaces(userId: string): Promise<Workspace[]>;
+  unavailableOrganizations(userId: string): Promise<UnavailableOrganization[]>;
   authorization(): AuthorizationStore;
 }
 export interface ResetMailer {

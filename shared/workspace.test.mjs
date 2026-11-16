@@ -7,6 +7,13 @@ import {
   mobileNavigation,
   mobileModuleAccess,
 } from "./workspace.ts";
+test("global shop administration is visible only with global platform permission", () => {
+  const context = { portal: "super-admin", scope: "GLOBAL", key: "global", permissions: ["workspace.access", "platform.manage"] };
+  assert.equal(moduleAccess(context, "boutiques")?.label, "Boutiques");
+  assert.equal(moduleAccess({ ...context, permissions: ["workspace.access"] }, "boutiques"), undefined);
+  assert.equal(moduleAccess({ ...context, scope: "SHOP", portal: "boutique" }, "boutiques"), undefined);
+});
+
 const fixtures = [
   [
     "super-admin",

@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 import * as SecureStore from "expo-secure-store";
-import Constants from "expo-constants";
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import { api } from "../auth/client";
 const key = "dnd.push.preference.v1";
 export interface PushPreference {
@@ -45,6 +45,13 @@ export async function synchronizePushDevice(
   requestPermission = false,
 ): Promise<PushPreference | undefined> {
   if (Platform.OS === "web") return;
+  if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) {
+    if (requestPermission)
+      throw Error(
+        "Les notifications push nécessitent une installation dédiée de DND Delivery. Dans Expo Go, consultez les notifications dans votre espace.",
+      );
+    return;
+  }
   if (syncing && !requestPermission) return syncing;
   const version = generation;
   const task = (async () => {

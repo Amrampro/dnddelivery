@@ -24,9 +24,9 @@ export async function access(
       "shop.orders." + permission,
     );
     if (c.companyId && companyId && c.companyId !== companyId)
-      throw stockError("COMPANY_DENIED", "Transporteur non autorisé.", 403);
+      throw stockError("COMPANY_DENIED", "Agence de livraison non autorisée.", 403);
     if (write && !companyId)
-      throw stockError("CONTEXT_REQUIRED", "Choisissez le transporteur.", 403);
+      throw stockError("CONTEXT_REQUIRED", "Choisissez l’agence de livraison.", 403);
     if (write) {
       await tx.$queryRaw`SELECT id FROM Company WHERE id=${companyId!} FOR UPDATE`;
       if (

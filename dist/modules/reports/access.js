@@ -34,7 +34,7 @@ export async function reportAccess(tx, c, q, kind) {
         throw stockError("REPORT_SCOPE_DENIED", "Filtre hors de votre périmètre.", 403);
     const companyId = c.companyId ?? q.companyId, agencyId = c.scope === "AGENCY" ? c.agencyId : q.agencyId, shopId = c.scope === "SHOP" ? c.shopId : q.shopId, courierId = self ? c.actorId : q.courierId;
     if (c.scope === "SHOP" && companyId && !await tx.companyShop.findUnique({ where: { companyId_shopId: { companyId, shopId: c.shopId } } }))
-        throw stockError("REPORT_SCOPE_DENIED", "Transporteur non associé.", 403);
+        throw stockError("REPORT_SCOPE_DENIED", "Agence de livraison non associée.", 403);
     return { kinds, self, permissions, companyId, agencyId, shopId, courierId };
 }
 // SQL identifiers are fixed by the application; every external value is parameterized.

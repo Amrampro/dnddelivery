@@ -90,7 +90,7 @@ export async function scopeStock(
     if (q.companyId && !peers.length)
       throw stockError(
         "COMPANY_DENIED",
-        "Ce transporteur n’est pas autorisé.",
+        "Cette agence de livraison n’est pas autorisée.",
         403,
       );
     return {

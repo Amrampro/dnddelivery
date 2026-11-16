@@ -36,7 +36,7 @@ export async function scopeStock(tx, c, q = {}) {
             select: { companyId: true },
         });
         if (q.companyId && !peers.length)
-            throw stockError("COMPANY_DENIED", "Ce transporteur n’est pas autorisé.", 403);
+            throw stockError("COMPANY_DENIED", "Cette agence de livraison n’est pas autorisée.", 403);
         return {
             shopId: c.shopId,
             companyId: { in: peers.map((p) => p.companyId) },

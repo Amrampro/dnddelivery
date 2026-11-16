@@ -69,6 +69,9 @@ export function PartnerRegistration() {
     <AccountLayout>
       <section className="entry-card partner-subscribe">
         <span className="eyebrow">BOUTIQUE PARTENAIRE</span>
+        <Link className="text-link" to="/acces/entreprise-livraison">
+          Vous êtes une entreprise de livraison ? Demandez votre accès ici.
+        </Link>
         <h1>Un compte pour toutes vos agences de livraison.</h1>
         <p>
           Créez votre identité commerciale et choisissez ensuite les entreprises

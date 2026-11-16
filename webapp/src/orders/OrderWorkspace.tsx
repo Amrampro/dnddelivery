@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useId } from "react";
+import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { useResource } from "../admin/useResource";
 import { api } from "../auth/client";
 import type { Workspace } from "../auth/types";
@@ -38,6 +39,8 @@ export function OrderWorkspace({
   context: Workspace;
   moduleId: string;
 }) {
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const filtersId = useId();
   const [mode, setMode] = useState<"list" | "form" | "detail">(
       moduleId === "nouvelle-commande" ? "form" : "list",
     ),
@@ -380,130 +383,145 @@ export function OrderWorkspace({
           ))}
         </div>
       )}
-      <Card>
-        <div className="order-grid">
-          <Field
-            label="Référence ou destinataire"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setPage(1);
-            }}
-          />
-          <Select
-            label="Demandes"
-            value={filter.draft}
-            onChange={(e) => change("draft", e.target.value)}
-          >
-            <option value="false">Soumises</option>
-            <option value="true">Brouillons</option>
-            <option value="">Toutes</option>
-          </Select>
-          <Select
-            label="Statut"
-            value={filter.status ?? ""}
-            onChange={(e) => change("status", e.target.value)}
-          >
-            <option value="">Tous les statuts</option>
-            {Object.entries(orderStatus).map(([v, label]) => (
-              <option key={v} value={v}>
-                {label}
-              </option>
-            ))}
-          </Select>
-          <Select
-            label="Type"
-            value={filter.type ?? ""}
-            onChange={(e) => change("type", e.target.value)}
-          >
-            <option value="">Tous</option>
-            <option value="ONE_OFF">Ponctuelle</option>
-            <option value="FROM_STOCK">Depuis stock</option>
-          </Select>
-          <Select
-            label="Agence de livraison"
-            value={filter.companyId ?? ""}
-            onChange={(e) => {
-              change("companyId", e.target.value);
-              change("agencyId", "");
-            }}
-          >
-            <option value="">Tous ceux du contexte</option>
-            {options.data &&
-              Array.from(
-                new Map(
-                  options.data.pairs.map((p) => [p.companyId, p.company]),
-                ).values(),
-              ).map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
+      <div className="order-actions">
+        <Button
+          type="button"
+          variant="secondary"
+          aria-expanded={filtersOpen}
+          aria-controls={filtersId}
+          onClick={() => setFiltersOpen((open) => !open)}
+        >
+          <SlidersHorizontal size={18} aria-hidden="true" />
+          Filtres
+          {filtersOpen ? <ChevronUp size={16} aria-hidden="true" /> : <ChevronDown size={16} aria-hidden="true" />}
+        </Button>
+      </div>
+      <div id={filtersId} hidden={!filtersOpen}>
+        <Card>
+          <div className="order-grid">
+            <Field
+              label="Référence ou destinataire"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setPage(1);
+              }}
+            />
+            <Select
+              label="Demandes"
+              value={filter.draft}
+              onChange={(e) => change("draft", e.target.value)}
+            >
+              <option value="false">Soumises</option>
+              <option value="true">Brouillons</option>
+              <option value="">Toutes</option>
+            </Select>
+            <Select
+              label="Statut"
+              value={filter.status ?? ""}
+              onChange={(e) => change("status", e.target.value)}
+            >
+              <option value="">Tous les statuts</option>
+              {Object.entries(orderStatus).map(([v, label]) => (
+                <option key={v} value={v}>
+                  {label}
                 </option>
               ))}
-          </Select>
-          <Select
-            label="Boutique"
-            value={filter.shopId ?? ""}
-            onChange={(e) => change("shopId", e.target.value)}
-          >
-            <option value="">Toutes celles du contexte</option>
-            {options.data &&
-              Array.from(
-                new Map(
-                  options.data.pairs.map((p) => [p.shopId, p.shop]),
-                ).values(),
-              ).map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-          </Select>
-          <Select
-            label="Agence"
-            value={filter.agencyId ?? ""}
-            onChange={(e) => change("agencyId", e.target.value)}
-          >
-            <option value="">Toutes celles du contexte</option>
-            {options.data?.agencies
-              .filter(
-                (a) => !filter.companyId || a.companyId === filter.companyId,
-              )
-              .map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name}
-                </option>
-              ))}
-          </Select>
-          <Select
-            label="Encaissement requis"
-            value={filter.collectionRequired ?? ""}
-            onChange={(e) => change("collectionRequired", e.target.value)}
-          >
-            <option value="">Tous</option>
-            <option value="true">Oui</option>
-            <option value="false">Non</option>
-          </Select>
-          <Field
-            label="Du"
-            type="date"
-            value={filter.from ?? ""}
-            onChange={(e) => change("from", e.target.value)}
-          />
-          <Field
-            label="Au"
-            type="date"
-            value={filter.to ?? ""}
-            onChange={(e) => change("to", e.target.value)}
-          />
-          <Select
-            label="Tri"
-            value={filter.sort ?? "newest"}
-            onChange={(e) => change("sort", e.target.value)}
-          >
-            <option value="newest">Plus récentes</option>
-            <option value="oldest">Plus anciennes</option>
-          </Select>
-        </div>
-      </Card>
+            </Select>
+            <Select
+              label="Type"
+              value={filter.type ?? ""}
+              onChange={(e) => change("type", e.target.value)}
+            >
+              <option value="">Tous</option>
+              <option value="ONE_OFF">Ponctuelle</option>
+              <option value="FROM_STOCK">Depuis stock</option>
+            </Select>
+            <Select
+              label="Agence de livraison"
+              value={filter.companyId ?? ""}
+              onChange={(e) => {
+                change("companyId", e.target.value);
+                change("agencyId", "");
+              }}
+            >
+              <option value="">Tous ceux du contexte</option>
+              {options.data &&
+                Array.from(
+                  new Map(
+                    options.data.pairs.map((p) => [p.companyId, p.company]),
+                  ).values(),
+                ).map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+            </Select>
+            <Select
+              label="Boutique"
+              value={filter.shopId ?? ""}
+              onChange={(e) => change("shopId", e.target.value)}
+            >
+              <option value="">Toutes celles du contexte</option>
+              {options.data &&
+                Array.from(
+                  new Map(
+                    options.data.pairs.map((p) => [p.shopId, p.shop]),
+                  ).values(),
+                ).map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+            </Select>
+            <Select
+              label="Agence"
+              value={filter.agencyId ?? ""}
+              onChange={(e) => change("agencyId", e.target.value)}
+            >
+              <option value="">Toutes celles du contexte</option>
+              {options.data?.agencies
+                .filter(
+                  (a) => !filter.companyId || a.companyId === filter.companyId,
+                )
+                .map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name}
+                  </option>
+                ))}
+            </Select>
+            <Select
+              label="Encaissement requis"
+              value={filter.collectionRequired ?? ""}
+              onChange={(e) => change("collectionRequired", e.target.value)}
+            >
+              <option value="">Tous</option>
+              <option value="true">Oui</option>
+              <option value="false">Non</option>
+            </Select>
+            <Field
+              label="Du"
+              type="date"
+              value={filter.from ?? ""}
+              onChange={(e) => change("from", e.target.value)}
+            />
+            <Field
+              label="Au"
+              type="date"
+              value={filter.to ?? ""}
+              onChange={(e) => change("to", e.target.value)}
+            />
+            <Select
+              label="Tri"
+              value={filter.sort ?? "newest"}
+              onChange={(e) => change("sort", e.target.value)}
+            >
+              <option value="newest">Plus récentes</option>
+              <option value="oldest">Plus anciennes</option>
+            </Select>
+          </div>
+        </Card>
+      </div>
       {list.error ? (
         <ErrorState message={list.error} retry={list.reload} />
       ) : !list.data ? (

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { AdminDashboard } from "./Dashboard";
 import { CompanyList } from "./CompanyList";
 import { ShopAdmin } from "./ShopAdmin";
+import { AccessRequests } from "./AccessRequests";
 import { CompanyForm, EditCompany } from "./CompanyForm";
 import { CompanyDetail } from "./CompanyDetail";
 import { GlobalHistory, GlobalInvitations, GlobalUsers } from "./GlobalPages";
@@ -10,6 +11,7 @@ import "./admin.css";
 export function AdminWorkspace({ moduleId }: { moduleId: string }) {
   const { entityId, action } = useParams();
   if (moduleId === "accueil") return <AdminDashboard />;
+  if (moduleId === "demandes-acces") return <AccessRequests />;
   if (moduleId === "activite") return <GlobalHistory />;
   if (moduleId === "invitations") return <GlobalInvitations />;
   if (moduleId === "utilisateurs") return <GlobalUsers />;

@@ -16,6 +16,7 @@ import {
   createInvitationRouter,
 } from "../../src/modules/admin/routes.js";
 import { errors } from "../../src/middlewares/errors.js";
+import { createCompanyAccessRequestRouter } from "../../src/modules/admin/access-requests.js";
 
 const url = process.env.TEST_DATABASE_URL;
 if (
@@ -130,6 +131,7 @@ test("MySQL company administration: transactions, invitations, permissions and a
     "/api/invitations",
     createInvitationRouter(() => service, origins),
   );
+  app.use("/api/company-access-requests", createCompanyAccessRequestRouter(() => service, origins));
   app.use(errors);
   const server = app.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -878,6 +880,75 @@ test("MySQL company administration: transactions, invitations, permissions and a
         action: { in: ["PLATFORM_SHOP_STATUS_CHANGED", "PLATFORM_SHOP_ARCHIVED"] } } }), 3);
       assert.equal((await admin.request(`/admin/shops/${shop.id}/status`, "PATCH",
         { version: 4, status: "ACTIVE", reason: "Tentative" })).status, 409);
+    });
+    await t.test("delivery-company access requests: public intake, global review, invitations and counters", async () => {
+      const reviewer = await db.user.create({ data: { email: `reviewer-${suffix}@example.invalid`, fullName: "Request reviewer", passwordHash: hash } });
+      await db.globalRoleGrant.create({ data: { userId: reviewer.id, roleId: globalRole.id, roleScope: "GLOBAL" } });
+      const reviewAdmin = client(); await reviewAdmin.login(reviewer.email);
+      const payload = {
+        name: `Delivery applicant ${suffix}`, fullName: "Applicant responsible",
+        email: `applicant-${suffix}@example.invalid`, phone: "+237600000000",
+        countryCode: "CM", city: "Douala", address: "Test address",
+        organizationType: "DELIVERY_COMPANY", confirmedDeliveryCompany: true,
+      };
+      assert.equal((await anonymous.request("/company-access-requests", "POST", { ...payload, organizationType: "SHOP" })).status, 400);
+      assert.equal((await anonymous.request("/company-access-requests", "POST", { ...payload, confirmedDeliveryCompany: false })).status, 400);
+      assert.equal((await anonymous.request("/company-access-requests", "POST", payload, { Origin: "https://untrusted.invalid" })).status, 403);
+      const companiesBefore = await db.company.count();
+      for (let i = 0; i < 2; i++) assert.equal((await anonymous.request("/company-access-requests", "POST", payload)).status, 202);
+      assert.equal(await db.companyAccessRequest.count({ where: { email: payload.email } }), 1);
+      assert.equal(await db.company.count(), companiesBefore, "submission grants no company access");
+      assert.equal(await db.user.count({ where: { email: payload.email } }), 0);
+      assert.equal((await anonymous.request("/admin/access-requests")).status, 401);
+      assert.equal((await tenant.request("/admin/access-requests")).status, 403);
+      const row = await db.companyAccessRequest.findFirstOrThrow({ where: { email: payload.email } });
+      const endpoint = `/admin/access-requests/${row.id}/decision`;
+      const decision = { version: 1, decision: "APPROVED", reason: "Delivery activity verified" };
+      assert.equal((await tenant.request(endpoint, "POST", decision)).status, 403);
+      assert.equal((await reviewAdmin.request(endpoint, "POST", decision, { "X-CSRF-Token": "" })).status, 403);
+      const approved = await reviewAdmin.request(endpoint, "POST", decision);
+      assert.equal(approved.status, 200, await approved.clone().text());
+      const approvedData = await approved.json();
+      assert.equal(approvedData.invitationDelivery, "SENT");
+      assert.equal((await reviewAdmin.request(endpoint, "POST", decision)).status, 409);
+      const email = sent.find(v => v.to === payload.email.toLowerCase())!;
+      assert.ok(email);
+      const token = new URLSearchParams(new URL(email.link).hash.slice(1)).get("token")!;
+      await service.accept(token, payload.fullName, password);
+      const applicant = client(); await applicant.login(payload.email);
+      const profile = await (await applicant.request("/auth/me")).json();
+      assert.equal(profile.activeContext.companyId, approvedData.company.id);
+      assert.equal(profile.activeContext.portal, "entreprise");
+
+      const refusedEmail = `refused-${suffix}@example.invalid`;
+      await anonymous.request("/company-access-requests", "POST", { ...payload, email: refusedEmail });
+      const refused = await db.companyAccessRequest.findFirstOrThrow({ where: { email: refusedEmail } });
+      assert.equal((await reviewAdmin.request(`/admin/access-requests/${refused.id}/decision`, "POST", { version: 1, decision: "REJECTED", reason: "This is a shop" })).status, 200);
+      assert.equal(await db.user.count({ where: { email: refusedEmail } }), 0);
+      assert.equal(await db.company.count({ where: { email: refusedEmail } }), 0);
+
+      await anonymous.request("/company-access-requests", "POST", { ...payload, email: other.email });
+      const existing = await db.companyAccessRequest.findFirstOrThrow({ where: { email: other.email, status: "PENDING" } });
+      const linked = await reviewAdmin.request(`/admin/access-requests/${existing.id}/decision`, "POST", decision);
+      assert.equal(linked.status, 200, await linked.clone().text());
+      const linkedData = await linked.json();
+      assert.equal(linkedData.invitationDelivery, null);
+      assert.equal(await db.companyMembership.count({ where: { companyId: linkedData.company.id, userId: other.id, active: true } }), 1);
+
+      failMail = true;
+      const failedEmail = `mail-failure-${suffix}@example.invalid`;
+      await anonymous.request("/company-access-requests", "POST", { ...payload, email: failedEmail });
+      const failed = await db.companyAccessRequest.findFirstOrThrow({ where: { email: failedEmail } });
+      const failedResponse = await reviewAdmin.request(`/admin/access-requests/${failed.id}/decision`, "POST", decision);
+      assert.equal(failedResponse.status, 200, await failedResponse.clone().text());
+      assert.equal((await failedResponse.json()).invitationDelivery, "FAILED");
+      failMail = false;
+      assert.equal((await db.companyAccessRequest.findUniqueOrThrow({ where: { id: failed.id } })).status, "APPROVED");
+      const listing = await (await reviewAdmin.request("/admin/access-requests?status=APPROVED")).json();
+      assert.ok(listing.counts.APPROVED >= 3);
+      assert.ok(listing.counts.REJECTED >= 1);
+      assert.ok(listing.items.every((v: { status: string }) => v.status === "APPROVED"));
+      assert.equal(await db.auditLog.count({ where: { entityId: row.id, action: "COMPANY_ACCESS_APPROVED" } }), 1);
     });
   } finally {
     server.closeAllConnections();

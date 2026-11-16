@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AccessRequestSummary } from "./AccessRequests";
 import { SubscriptionOverview } from "../subscriptions/Subscriptions";
 import { Link } from "react-router-dom";
 import {
@@ -44,6 +45,7 @@ export function AdminDashboard() {
           Créer une entreprise
         </Link>
       </header>
+      <AccessRequestSummary />
       <div className="admin-toolbar">
         <Select
           label="Période des créations et activités"

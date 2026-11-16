@@ -75,6 +75,7 @@ export async function api<T>(
       options.method ?? "GET",
     ),
     publicPath = [
+      "/company-access-requests",
       "/auth/login",
       "/auth/forgot-password",
       "/auth/reset-password",

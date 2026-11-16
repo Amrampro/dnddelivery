@@ -247,6 +247,28 @@ model GlobalRoleGrant {
   subscriptionEvent_actorRecords       SubscriptionEvent[]   @relation("SubscriptionEvent_actor")
 }
 
+model CompanyAccessRequest {
+  id String @id @default(uuid()) @db.Char(36)
+  name String @db.VarChar(160)
+  fullName String @db.VarChar(160)
+  email String @db.VarChar(254)
+  phone String @db.VarChar(32)
+  countryCode String @db.Char(2)
+  city String @db.VarChar(120)
+  address String @db.VarChar(500)
+  description String? @db.VarChar(2000)
+  status String @default("PENDING") @db.VarChar(12)
+  pendingEmail String? @unique @db.VarChar(254)
+  companyId String? @unique @db.Char(36)
+  reviewedById String? @db.Char(36)
+  reviewedAt DateTime? @db.DateTime(3)
+  reason String? @db.VarChar(500)
+  version Int @default(1)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  updatedAt DateTime @updatedAt @db.DateTime(3)
+  @@index([status, createdAt])
+}
+
 model Company {
   id                                 String                @id @default(uuid()) @db.Char(36)
   reference                          String                @unique @db.VarChar(50)

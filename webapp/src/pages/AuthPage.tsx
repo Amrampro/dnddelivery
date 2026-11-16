@@ -166,6 +166,11 @@ export function AuthPage() {
           </Link>
         )}
         {!forgot && !reset && (
+          <Link className="text-link" to="/acces/entreprise-livraison">
+            Demander un accès entreprise de livraison
+          </Link>
+        )}
+        {!forgot && !reset && (
           <Link className="text-link" to="/mot-de-passe-oublie">
             Mot de passe oublié ?
           </Link>

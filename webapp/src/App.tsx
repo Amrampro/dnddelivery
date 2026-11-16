@@ -2,6 +2,7 @@ import { useEffect, lazy, Suspense } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Landing } from "./pages/Landing";
 import { Entry } from "./pages/Entry";
+import { AccessChoice, CompanyAccessForm } from "./pages/CompanyAccess";
 import { PortalLayout } from "./layouts/PortalLayout";
 import { AuthPage } from "./pages/AuthPage";
 import { Organizations } from "./pages/Organizations";
@@ -36,6 +37,8 @@ export default function App() {
         <Route path="/suivi" element={<Suspense fallback={<p role="status">Chargement du suivi…</p>}><TrackingPage /></Suspense>} />
       </Route>
       <Route path="/connexion" element={<AuthPage key="login" />} />
+      <Route path="/acces" element={<AccessChoice />} />
+      <Route path="/acces/entreprise-livraison" element={<CompanyAccessForm />} />
       <Route path="/invitation" element={<InvitationPage />} />
       <Route
         path="/inscription-boutique"

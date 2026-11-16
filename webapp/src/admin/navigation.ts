@@ -8,6 +8,7 @@ export const adminModuleIds = [
   "accueil",
   "entreprises",
   "boutiques",
+  "demandes-acces",
   "utilisateurs",
   "invitations",
   "activite",
@@ -20,7 +21,15 @@ export function navigation(context: Context): Module[] {
     context.permissions.includes("platform.manage") &&
     context.permissions.includes("workspace.access")
     ? [
-        ...modules,
+        ...modules.slice(0, 2),
+        {
+          id: "demandes-acces",
+          label: "Demandes d’accès entreprises",
+          permission: "platform.manage",
+          icon: "mail",
+          description: "Demandes d’inscription des entreprises de livraison.",
+        },
+        ...modules.slice(2),
         {
           id: "invitations",
           label: "Invitations",

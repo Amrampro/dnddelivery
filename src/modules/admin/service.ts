@@ -243,7 +243,10 @@ export class AdminService {
     return sent;
   }
   async create(actor: string, input: CreateCompany) {
-    const result = await this.write(actor, async (tx) => {
+    const result = await this.write(actor, tx => this.createInTransaction(tx, actor, input));
+    return this.finishCreation(result);
+  }
+  async createInTransaction(tx: Tx, actor: string, input: CreateCompany) {
       const { administrator, ...fields } = input;
       const company = await tx.company.create({
         data: {
@@ -272,7 +275,8 @@ export class AdminService {
           actor,
         );
       return { company, pending };
-    });
+  }
+  async finishCreation(result: Awaited<ReturnType<AdminService["createInTransaction"]>>) {
     const sent = result.pending
       ? await this.deliver(
           result.pending.invitation,

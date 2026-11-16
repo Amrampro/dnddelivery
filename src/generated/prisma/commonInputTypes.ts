@@ -193,13 +193,6 @@ export type IntFilter<$PrismaModel = never> = {
   not?: Prisma.NestedIntFilter<$PrismaModel> | number
 }
 
-export type EnumOrganizationStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.OrganizationStatus | Prisma.EnumOrganizationStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.OrganizationStatus[]
-  notIn?: $Enums.OrganizationStatus[]
-  not?: Prisma.NestedEnumOrganizationStatusFilter<$PrismaModel> | $Enums.OrganizationStatus
-}
-
 export type IntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -214,6 +207,13 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedIntFilter<$PrismaModel>
   _max?: Prisma.NestedIntFilter<$PrismaModel>
+}
+
+export type EnumOrganizationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.OrganizationStatus | Prisma.EnumOrganizationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.OrganizationStatus[]
+  notIn?: $Enums.OrganizationStatus[]
+  not?: Prisma.NestedEnumOrganizationStatusFilter<$PrismaModel> | $Enums.OrganizationStatus
 }
 
 export type EnumOrganizationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -1008,13 +1008,6 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
-export type NestedEnumOrganizationStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.OrganizationStatus | Prisma.EnumOrganizationStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.OrganizationStatus[]
-  notIn?: $Enums.OrganizationStatus[]
-  not?: Prisma.NestedEnumOrganizationStatusFilter<$PrismaModel> | $Enums.OrganizationStatus
-}
-
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -1040,6 +1033,13 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type NestedEnumOrganizationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.OrganizationStatus | Prisma.EnumOrganizationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.OrganizationStatus[]
+  notIn?: $Enums.OrganizationStatus[]
+  not?: Prisma.NestedEnumOrganizationStatusFilter<$PrismaModel> | $Enums.OrganizationStatus
 }
 
 export type NestedEnumOrganizationStatusWithAggregatesFilter<$PrismaModel = never> = {

@@ -44,6 +44,7 @@ export const ModelName = {
     Permission: 'Permission',
     RolePermission: 'RolePermission',
     GlobalRoleGrant: 'GlobalRoleGrant',
+    CompanyAccessRequest: 'CompanyAccessRequest',
     Company: 'Company',
     CompanyMembership: 'CompanyMembership',
     CompanyInvitation: 'CompanyInvitation',
@@ -159,6 +160,26 @@ export const GlobalRoleGrantScalarFieldEnum = {
     roleId: 'roleId',
     roleScope: 'roleScope',
     active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+};
+export const CompanyAccessRequestScalarFieldEnum = {
+    id: 'id',
+    name: 'name',
+    fullName: 'fullName',
+    email: 'email',
+    phone: 'phone',
+    countryCode: 'countryCode',
+    city: 'city',
+    address: 'address',
+    description: 'description',
+    status: 'status',
+    pendingEmail: 'pendingEmail',
+    companyId: 'companyId',
+    reviewedById: 'reviewedById',
+    reviewedAt: 'reviewedAt',
+    reason: 'reason',
+    version: 'version',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -1216,6 +1237,22 @@ export const GlobalRoleGrantOrderByRelevanceFieldEnum = {
     id: 'id',
     userId: 'userId',
     roleId: 'roleId'
+};
+export const CompanyAccessRequestOrderByRelevanceFieldEnum = {
+    id: 'id',
+    name: 'name',
+    fullName: 'fullName',
+    email: 'email',
+    phone: 'phone',
+    countryCode: 'countryCode',
+    city: 'city',
+    address: 'address',
+    description: 'description',
+    status: 'status',
+    pendingEmail: 'pendingEmail',
+    companyId: 'companyId',
+    reviewedById: 'reviewedById',
+    reason: 'reason'
 };
 export const CompanyOrderByRelevanceFieldEnum = {
     id: 'id',

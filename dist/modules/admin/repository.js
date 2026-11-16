@@ -35,6 +35,8 @@ export const invitationSelect = {
     createdAt: true,
 };
 export const adminActions = [
+    "COMPANY_ACCESS_APPROVED",
+    "COMPANY_ACCESS_REJECTED",
     "PLATFORM_SHOP_ARCHIVED",
     "PLATFORM_SHOP_STATUS_CHANGED",
     "COMPANY_CREATED",

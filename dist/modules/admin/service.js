@@ -156,27 +156,31 @@ export class AdminService {
         return sent;
     }
     async create(actor, input) {
-        const result = await this.write(actor, async (tx) => {
-            const { administrator, ...fields } = input;
-            const company = await tx.company.create({
-                data: {
-                    ...fields,
-                    statusChangedAt: new Date(),
-                    statusChangedById: actor,
-                },
-                select: companySelect,
-            });
-            await this.audit(tx, actor, company.id, "COMPANY_CREATED", {
-                reference: company.reference,
-                status: company.status,
-            });
-            let pending;
-            if (administrator.mode === "existing")
-                await this.assign(tx, company.id, administrator.userId, true, actor);
-            else
-                pending = await this.prepareInvitation(tx, company.id, administrator.email, administrator.fullName, true, actor);
-            return { company, pending };
+        const result = await this.write(actor, tx => this.createInTransaction(tx, actor, input));
+        return this.finishCreation(result);
+    }
+    async createInTransaction(tx, actor, input) {
+        const { administrator, ...fields } = input;
+        const company = await tx.company.create({
+            data: {
+                ...fields,
+                statusChangedAt: new Date(),
+                statusChangedById: actor,
+            },
+            select: companySelect,
         });
+        await this.audit(tx, actor, company.id, "COMPANY_CREATED", {
+            reference: company.reference,
+            status: company.status,
+        });
+        let pending;
+        if (administrator.mode === "existing")
+            await this.assign(tx, company.id, administrator.userId, true, actor);
+        else
+            pending = await this.prepareInvitation(tx, company.id, administrator.email, administrator.fullName, true, actor);
+        return { company, pending };
+    }
+    async finishCreation(result) {
         const sent = result.pending
             ? await this.deliver(result.pending.invitation, result.pending.raw, result.company.name)
             : null;

@@ -67,6 +67,11 @@ export type RolePermission = Prisma.RolePermissionModel
  */
 export type GlobalRoleGrant = Prisma.GlobalRoleGrantModel
 /**
+ * Model CompanyAccessRequest
+ * 
+ */
+export type CompanyAccessRequest = Prisma.CompanyAccessRequestModel
+/**
  * Model Company
  * 
  */

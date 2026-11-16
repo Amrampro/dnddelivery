@@ -19,6 +19,7 @@ import { OrganizationService } from "../organization/service.js";
 import { listShops, shopDetail } from "./shops.js";
 import { idSchema, listQuery, statusChange, versionSchema } from "./validation.js";
 import { z } from "zod";
+import { accessRequestQuery, accessRequestDecision, listAccessRequests, decideAccessRequest } from "./access-requests.js";
 export function createAdminRouter(
   auth: () => AuthService = getAuthService,
   service: () => AdminService = getAdminService,
@@ -75,6 +76,13 @@ export function createAdminRouter(
       : next(),
   );
   router.get("/dashboard", controller.dashboard);
+  router.get("/access-requests", async (req, res) => {
+    res.json(await listAccessRequests(service(), accessRequestQuery.parse(req.query)));
+  });
+  router.post("/access-requests/:id/decision", invites, async (req, res) => {
+    res.json(await decideAccessRequest(service(), principal(res).user.id,
+      idSchema.parse(req.params.id), accessRequestDecision.parse(req.body)));
+  });
   router.get("/shops", async (req, res) => {
     res.json(await listShops(service().db, listQuery.parse(req.query)));
   });

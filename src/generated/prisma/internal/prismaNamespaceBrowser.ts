@@ -56,6 +56,7 @@ export const ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   GlobalRoleGrant: 'GlobalRoleGrant',
+  CompanyAccessRequest: 'CompanyAccessRequest',
   Company: 'Company',
   CompanyMembership: 'CompanyMembership',
   CompanyInvitation: 'CompanyInvitation',
@@ -200,6 +201,30 @@ export const GlobalRoleGrantScalarFieldEnum = {
 } as const
 
 export type GlobalRoleGrantScalarFieldEnum = (typeof GlobalRoleGrantScalarFieldEnum)[keyof typeof GlobalRoleGrantScalarFieldEnum]
+
+
+export const CompanyAccessRequestScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  countryCode: 'countryCode',
+  city: 'city',
+  address: 'address',
+  description: 'description',
+  status: 'status',
+  pendingEmail: 'pendingEmail',
+  companyId: 'companyId',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  reason: 'reason',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyAccessRequestScalarFieldEnum = (typeof CompanyAccessRequestScalarFieldEnum)[keyof typeof CompanyAccessRequestScalarFieldEnum]
 
 
 export const CompanyScalarFieldEnum = {
@@ -1551,6 +1576,26 @@ export const GlobalRoleGrantOrderByRelevanceFieldEnum = {
 } as const
 
 export type GlobalRoleGrantOrderByRelevanceFieldEnum = (typeof GlobalRoleGrantOrderByRelevanceFieldEnum)[keyof typeof GlobalRoleGrantOrderByRelevanceFieldEnum]
+
+
+export const CompanyAccessRequestOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  countryCode: 'countryCode',
+  city: 'city',
+  address: 'address',
+  description: 'description',
+  status: 'status',
+  pendingEmail: 'pendingEmail',
+  companyId: 'companyId',
+  reviewedById: 'reviewedById',
+  reason: 'reason'
+} as const
+
+export type CompanyAccessRequestOrderByRelevanceFieldEnum = (typeof CompanyAccessRequestOrderByRelevanceFieldEnum)[keyof typeof CompanyAccessRequestOrderByRelevanceFieldEnum]
 
 
 export const CompanyOrderByRelevanceFieldEnum = {

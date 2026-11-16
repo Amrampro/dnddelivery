@@ -1,6 +1,7 @@
 import { createAuthRouter } from "../modules/auth/auth.routes.js";
 import { createAdminRouter, createInvitationRouter, } from "../modules/admin/routes.js";
 import { Router } from "express";
+import { createCompanyAccessRequestRouter } from "../modules/admin/access-requests.js";
 import { createReportRouter } from "../modules/reports/routes.js";
 import { createSubscriptionRouter } from "../modules/subscriptions/routes.js";
 import { health, readiness } from "../controllers/health.controller.js";
@@ -13,6 +14,7 @@ import { createDeliveryRouter } from "../modules/deliveries/routes.js";
 import { createFinancialRouter } from "../modules/collections/routes.js";
 import { createTrackingRouter, createConfirmationRouter } from "../modules/confirmation/routes.js";
 export const routes = Router();
+routes.use("/company-access-requests", createCompanyAccessRequestRouter());
 routes.get("/health", health);
 routes.get("/ready", readiness);
 routes.use("/tracking", createTrackingRouter());

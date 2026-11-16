@@ -402,6 +402,7 @@ export const ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   GlobalRoleGrant: 'GlobalRoleGrant',
+  CompanyAccessRequest: 'CompanyAccessRequest',
   Company: 'Company',
   CompanyMembership: 'CompanyMembership',
   CompanyInvitation: 'CompanyInvitation',
@@ -482,7 +483,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permission" | "rolePermission" | "globalRoleGrant" | "company" | "companyMembership" | "companyInvitation" | "agency" | "agencyMembership" | "driverProfile" | "shop" | "shopMembership" | "companyShop" | "product" | "session" | "accountToken" | "authEvent" | "stock" | "transfer" | "transferItem" | "transferEvent" | "recipient" | "order" | "orderItem" | "stockReservation" | "stockMovement" | "orderEvent" | "delivery" | "deliveryAssignment" | "deliveryEvent" | "deliveryOtp" | "deliveryProof" | "fileAsset" | "proofPhoto" | "collection" | "remittance" | "remittanceItem" | "collectionEvent" | "remittanceEvent" | "subscriptionPlan" | "subscriptionPrice" | "subscription" | "subscriptionPayment" | "subscriptionPeriod" | "subscriptionEvent" | "userDevice" | "notification" | "auditLog" | "shopInvitation" | "stockDeposit" | "stockDepositItem" | "stockWithdrawal" | "transferIncident" | "inventorySession" | "inventoryItem" | "parcelLeg" | "parcelHandover" | "deliveryAttempt" | "deliveryIncident" | "deliveryReturn" | "financialCorrection" | "financialDiscrepancy" | "trackingAccess" | "trackingThrottle" | "otpAttempt" | "otpException" | "deliveryEvidence" | "notificationAttempt" | "financialEvent"
+    modelProps: "user" | "role" | "permission" | "rolePermission" | "globalRoleGrant" | "companyAccessRequest" | "company" | "companyMembership" | "companyInvitation" | "agency" | "agencyMembership" | "driverProfile" | "shop" | "shopMembership" | "companyShop" | "product" | "session" | "accountToken" | "authEvent" | "stock" | "transfer" | "transferItem" | "transferEvent" | "recipient" | "order" | "orderItem" | "stockReservation" | "stockMovement" | "orderEvent" | "delivery" | "deliveryAssignment" | "deliveryEvent" | "deliveryOtp" | "deliveryProof" | "fileAsset" | "proofPhoto" | "collection" | "remittance" | "remittanceItem" | "collectionEvent" | "remittanceEvent" | "subscriptionPlan" | "subscriptionPrice" | "subscription" | "subscriptionPayment" | "subscriptionPeriod" | "subscriptionEvent" | "userDevice" | "notification" | "auditLog" | "shopInvitation" | "stockDeposit" | "stockDepositItem" | "stockWithdrawal" | "transferIncident" | "inventorySession" | "inventoryItem" | "parcelLeg" | "parcelHandover" | "deliveryAttempt" | "deliveryIncident" | "deliveryReturn" | "financialCorrection" | "financialDiscrepancy" | "trackingAccess" | "trackingThrottle" | "otpAttempt" | "otpException" | "deliveryEvidence" | "notificationAttempt" | "financialEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -813,6 +814,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.GlobalRoleGrantCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.GlobalRoleGrantCountAggregateOutputType> | number
+        }
+      }
+    }
+    CompanyAccessRequest: {
+      payload: Prisma.$CompanyAccessRequestPayload<ExtArgs>
+      fields: Prisma.CompanyAccessRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CompanyAccessRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CompanyAccessRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.CompanyAccessRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CompanyAccessRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload>
+        }
+        findMany: {
+          args: Prisma.CompanyAccessRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload>[]
+        }
+        create: {
+          args: Prisma.CompanyAccessRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload>
+        }
+        createMany: {
+          args: Prisma.CompanyAccessRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.CompanyAccessRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload>
+        }
+        update: {
+          args: Prisma.CompanyAccessRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.CompanyAccessRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CompanyAccessRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.CompanyAccessRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyAccessRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.CompanyAccessRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompanyAccessRequest>
+        }
+        groupBy: {
+          args: Prisma.CompanyAccessRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyAccessRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CompanyAccessRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyAccessRequestCountAggregateOutputType> | number
         }
       }
     }
@@ -5208,6 +5275,30 @@ export const GlobalRoleGrantScalarFieldEnum = {
 export type GlobalRoleGrantScalarFieldEnum = (typeof GlobalRoleGrantScalarFieldEnum)[keyof typeof GlobalRoleGrantScalarFieldEnum]
 
 
+export const CompanyAccessRequestScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  countryCode: 'countryCode',
+  city: 'city',
+  address: 'address',
+  description: 'description',
+  status: 'status',
+  pendingEmail: 'pendingEmail',
+  companyId: 'companyId',
+  reviewedById: 'reviewedById',
+  reviewedAt: 'reviewedAt',
+  reason: 'reason',
+  version: 'version',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyAccessRequestScalarFieldEnum = (typeof CompanyAccessRequestScalarFieldEnum)[keyof typeof CompanyAccessRequestScalarFieldEnum]
+
+
 export const CompanyScalarFieldEnum = {
   id: 'id',
   reference: 'reference',
@@ -6559,6 +6650,26 @@ export const GlobalRoleGrantOrderByRelevanceFieldEnum = {
 export type GlobalRoleGrantOrderByRelevanceFieldEnum = (typeof GlobalRoleGrantOrderByRelevanceFieldEnum)[keyof typeof GlobalRoleGrantOrderByRelevanceFieldEnum]
 
 
+export const CompanyAccessRequestOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  countryCode: 'countryCode',
+  city: 'city',
+  address: 'address',
+  description: 'description',
+  status: 'status',
+  pendingEmail: 'pendingEmail',
+  companyId: 'companyId',
+  reviewedById: 'reviewedById',
+  reason: 'reason'
+} as const
+
+export type CompanyAccessRequestOrderByRelevanceFieldEnum = (typeof CompanyAccessRequestOrderByRelevanceFieldEnum)[keyof typeof CompanyAccessRequestOrderByRelevanceFieldEnum]
+
+
 export const CompanyOrderByRelevanceFieldEnum = {
   id: 'id',
   reference: 'reference',
@@ -7902,6 +8013,7 @@ export type GlobalOmitConfig = {
   permission?: Prisma.PermissionOmit
   rolePermission?: Prisma.RolePermissionOmit
   globalRoleGrant?: Prisma.GlobalRoleGrantOmit
+  companyAccessRequest?: Prisma.CompanyAccessRequestOmit
   company?: Prisma.CompanyOmit
   companyMembership?: Prisma.CompanyMembershipOmit
   companyInvitation?: Prisma.CompanyInvitationOmit

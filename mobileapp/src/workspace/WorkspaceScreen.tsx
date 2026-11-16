@@ -462,7 +462,9 @@ function Content({ moduleId }: { moduleId: string }) {
                             ? "Suivi"
                             : tab.id === "courses"
                               ? "Courses"
-                              : tab.label}
+                              : tab.id === "affectations"
+                                ? "Affecter"
+                                : tab.label}
                 </Text>
               </Pressable>
             );

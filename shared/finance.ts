@@ -303,6 +303,7 @@ export interface FinanceOptions {
   permissions: string[];
 }
 export interface FinanceFormTarget {
+  agencies?: { id: string; name: string }[];
   allowAgencyRefund?: boolean;
   currencies?: string[];
   code:

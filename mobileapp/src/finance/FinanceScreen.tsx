@@ -528,6 +528,7 @@ export function FinanceScreen({
           onPress={() =>
             open({
               code: "REMIT",
+              agencies: options.data?.agencies,
               agencyId: context.agencyId,
               currencies: data?.money
                 .filter((m) => m.available && m.available !== "0.0000")

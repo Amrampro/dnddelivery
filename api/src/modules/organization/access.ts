@@ -152,15 +152,14 @@ export async function assertDriverAssignable(
   const profile = await tx.driverProfile.findUnique({
     where: { companyId_userId: { companyId, userId } },
   });
-  const assigned = await tx.agencyMembership.findFirst({
+  const assigned = await tx.companyMembership.findFirst({
     where: {
       companyId,
-      agencyId,
       userId,
       active: true,
-      role: { code: "courier" },
-      agency: { status: "ACTIVE", archivedAt: null },
-      membership: { active: true, organizationRole: "courier" },
+      organizationRole: "courier",
+      employmentStatus: "ACTIVE",
+      user: { status: "ACTIVE", archivedAt: null },
     },
   });
   if (
@@ -172,7 +171,7 @@ export async function assertDriverAssignable(
     throw new AuthError(
       403,
       "DRIVER_UNAVAILABLE",
-      "Ce livreur n’est pas disponible dans cette agence.",
+      "Ce livreur n'est pas disponible dans cette entreprise.",
     );
   return profile;
 }

@@ -66,7 +66,7 @@ export const staffInput = z
   })
   .strict()
   .refine(
-    (v) => v.role === "employee" || v.agencyIds.length > 0,
+    (v) => ["employee", "courier"].includes(v.role) || v.agencyIds.length > 0,
     "Sélectionnez au moins une agence.",
   );
 export const inviteInput = z
@@ -78,7 +78,7 @@ export const inviteInput = z
   })
   .strict()
   .refine(
-    (v) => v.role === "employee" || v.agencyIds.length > 0,
+    (v) => ["employee", "courier"].includes(v.role) || v.agencyIds.length > 0,
     "Sélectionnez au moins une agence.",
   );
 export const employeeInput = z
@@ -90,7 +90,7 @@ export const employeeInput = z
   })
   .strict()
   .refine(
-    (v) => v.role === "employee" || v.agencyIds.length > 0,
+    (v) => ["employee", "courier"].includes(v.role) || v.agencyIds.length > 0,
     "Sélectionnez au moins une agence.",
   );
 export const removalInput = z.object({ version, reason: text(500) }).strict();

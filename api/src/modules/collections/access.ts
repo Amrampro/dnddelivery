@@ -55,8 +55,6 @@ export async function access(tx: Prisma.TransactionClient, c: Context) {
     selection(c),
     kind === "operator" ? "financial.supervise.read" : "collections.self.read",
   );
-  if (kind === "driver" && c.scope !== "AGENCY")
-    throw stockError("AGENCY_REQUIRED", "Choisissez votre agence.", 403);
   return { kind, permissions };
 }
 export async function permission(

@@ -13,7 +13,7 @@ import { OrderService } from "../../src/modules/orders/service.js";
 import { FinancialService } from "../../src/modules/collections/service.js";
 import { creation } from "../../src/modules/orders/validation.js";
 import type { Context } from "../../src/modules/deliveries/access.js";
-export async function confirmationFixture() {
+export async function confirmationFixture(companyCouriers = false) {
   const url = process.env.TEST_DATABASE_URL;
   if (
     !url ||
@@ -94,18 +94,23 @@ export async function confirmationFixture() {
       data: {
         companyId: company.id,
         userId: u.id,
-        roleId: await role("company_member"),
+        roleId: await role(
+          companyCouriers && code === "courier"
+            ? "company_courier"
+            : "company_member",
+        ),
         ...(code === "courier" ? { organizationRole: "courier" } : {}),
       },
     });
-    await db.agencyMembership.create({
-      data: {
-        companyId: company.id,
-        agencyId: agency.id,
-        userId: u.id,
-        roleId: await role(code),
-      },
-    });
+    if (!companyCouriers || code !== "courier")
+      await db.agencyMembership.create({
+        data: {
+          companyId: company.id,
+          agencyId: agency.id,
+          userId: u.id,
+          roleId: await role(code),
+        },
+      });
     if (code === "courier")
       await db.driverProfile.create({
         data: {
@@ -175,9 +180,9 @@ export async function confirmationFixture() {
     },
     dc: Context = {
       actorId: courier.id,
-      scope: "AGENCY",
+      scope: companyCouriers ? "COMPANY" : "AGENCY",
       companyId: company.id,
-      agencyId: agency.id,
+      agencyId: companyCouriers ? undefined : agency.id,
     },
     ec: Context = { ...dc, actorId: peer.id },
     sc: Context = { actorId: owner.id, scope: "SHOP", shopId: shop.id },
@@ -196,13 +201,13 @@ export async function confirmationFixture() {
     operationKey: key(),
     reason: "Confirmation test decision",
   });
-  async function fresh(expected = "0", engage = true) {
+  async function fresh(expected = "0", engage = true, agencyId = agency.id) {
     const o = await orders.create(
       sc,
       creation.parse({
         companyId: company.id,
         shopId: shop.id,
-        agencyId: agency.id,
+        agencyId,
         clientKey: key(),
         type: "ONE_OFF",
         recipient: {

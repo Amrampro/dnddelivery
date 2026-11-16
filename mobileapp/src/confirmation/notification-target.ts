@@ -39,7 +39,7 @@ export function deliveryModule(context: Workspace): string | undefined {
   if (context.permissions.includes("deliveries.supervise.read"))
     return "livraisons";
   if (
-    context.scope === "AGENCY" &&
+    ["COMPANY", "AGENCY"].includes(context.scope) &&
     context.permissions.includes("deliveries.self.read")
   )
     return "courses";

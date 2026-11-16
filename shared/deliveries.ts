@@ -279,6 +279,7 @@ export interface DeliveryPage<T> {
   };
 }
 export interface EligibleDriver {
+  agencyLinked?: boolean;
   id: string;
   fullName: string;
   availability: string;

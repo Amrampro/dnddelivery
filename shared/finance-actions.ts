@@ -1,6 +1,7 @@
 import type { FinanceFormTarget } from "./finance";
 import { exactUnits, decimal } from "./finance.ts";
 export interface FinanceValues {
+  agencyId: string;
   amount: string;
   method: string;
   reason: string;
@@ -61,6 +62,7 @@ export function initialFinanceValues(t: FinanceFormTarget): FinanceValues {
             : t.code === "CORRECT"
               ? (t.entry?.gross ?? "")
               : "",
+    agencyId: t.agencyId ?? "",
     method: "CASH",
     reason: "",
     notes: "",
@@ -153,13 +155,29 @@ export function financeRequest(
           throw Error("Un montant dépasse les fonds disponibles ou est nul.");
         return { collectionId: id, amount: x };
       });
-    if (!items.length || !t.agencyId)
+    const agencyIds = new Set(
+      items.map(
+        (i) =>
+          t.entries?.find((e) => e.id === i.collectionId)?.agencyId ??
+          t.agencyId,
+      ),
+    );
+    const agencyId = v.agencyId || [...agencyIds][0];
+    if (
+      agencyIds.size > 1 ||
+      (v.agencyId && [...agencyIds][0] !== v.agencyId) ||
+      (t.agencyId && agencyId !== t.agencyId)
+    )
+      throw Error(
+        "Une remise doit concerner une seule agence. Sélectionnez séparément les encaissements de chaque agence.",
+      );
+    if (!items.length || !agencyId)
       throw Error("Sélectionnez les montants à remettre à votre agence.");
     return {
       path: "/driver/cash-remittances",
       body: {
         ...base,
-        agencyId: t.agencyId,
+        agencyId,
         currency: v.currency,
         items,
         notes,

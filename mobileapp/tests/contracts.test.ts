@@ -17,6 +17,18 @@ const context = {
   portal: "livreur",
   permissions: ["deliveries.self.read"],
 };
+test("company courier opens mission notifications without an agency context", () => {
+  const workspace = parseWorkspace({
+    ...context,
+    key: "company:c",
+    scope: "COMPANY",
+    companyId: "c",
+    agencyId: undefined,
+    roleCode: "company_courier",
+  });
+  assert.equal(deliveryModule(workspace), "courses");
+  assert.equal(deliveryModule({ ...workspace, permissions: [] }), undefined);
+});
 test("a malformed workspace or permission array cannot authorize navigation", () => {
   for (const value of [
     null,
@@ -58,7 +70,7 @@ test("notification payloads cannot inject a URL or arbitrary route", () => {
 });
 test("notification destinations follow current API permissions and selected agency", () => {
   assert.equal(deliveryModule(context), "courses");
-  assert.equal(deliveryModule({ ...context, scope: "COMPANY" }), undefined);
+  assert.equal(deliveryModule({ ...context, scope: "COMPANY" }), "courses");
   assert.equal(
     deliveryModule({ ...context, permissions: ["deliveries.supervise.read"] }),
     "livraisons",

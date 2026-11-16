@@ -550,7 +550,7 @@ test("MySQL internal organization: agencies, secure staff acceptance, scope, dri
         const user = await db.user.findUniqueOrThrow({
             where: { id: newCourier },
           }),
-          courier = await client(user.email, "agency:" + company.id + ":" + a);
+          courier = await client(user.email, "company:" + company.id);
         const p = await courier.request("/driver/profile");
         assert.equal(p.status, 200);
         assert.equal(p.body.user.id, newCourier);

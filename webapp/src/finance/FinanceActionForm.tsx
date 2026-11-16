@@ -48,7 +48,7 @@ export function FinanceActionForm({
     );
   const available = useFinanceData<FinancePage<FinanceEntry>>(
     t.code === "REMIT" && values.currency
-      ? `/collections?status=AVAILABLE&size=20&page=${sourcePage}&currency=${values.currency}&q=${encodeURIComponent(sourceQ)}`
+      ? `/collections?status=AVAILABLE&size=20&page=${sourcePage}&currency=${values.currency}${values.agencyId || t.agencyId ? `&agencyId=${values.agencyId || t.agencyId}` : ""}&q=${encodeURIComponent(sourceQ)}`
       : null,
   );
   const key = useRef(crypto.randomUUID()),
@@ -208,6 +208,23 @@ export function FinanceActionForm({
           )}
           {t.code === "REMIT" && (
             <>
+              <Select
+                label="Agence destinataire des fonds"
+                value={values.agencyId}
+                onChange={(e) => {
+                  set("agencyId", e.target.value);
+                  set("lines", {});
+                  setSourcePage(1);
+                }}
+                disabled={!!t.agencyId}
+              >
+                <option value="">Choisir une agence</option>
+                {(t.agencies ?? []).map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name}
+                  </option>
+                ))}
+              </Select>
               <Select
                 label="Devise de la remise"
                 value={values.currency}

@@ -1,303 +1,196 @@
-import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
   ArrowRight,
-  Check,
-  Smartphone,
-  Globe2,
-  ShieldCheck,
-  Layers3,
+  Store,
   Truck,
+  MapPin,
+  ShieldCheck,
+  Smartphone,
+  PackageCheck,
 } from "lucide-react";
 import { Header } from "../components/Header";
 import { Brand } from "../components/Brand";
-import { DashboardPreview } from "../components/DashboardPreview";
 import { TrackingForm } from "../components/TrackingForm";
-import { features, steps } from "../data";
-const reveal = {
-  initial: { opacity: 0, y: 18 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.15 },
-  transition: { duration: 0.45 },
-};
+import { DeliveryScene } from "../components/DeliveryScene";
+import "./landing.css";
+
 export function Landing() {
   return (
-    <>
+    <div className="delivery-home">
       <a className="skip-link" href="#contenu">
         Aller au contenu
       </a>
       <Header />
       <main id="contenu">
-        <section className="hero">
-          <div className="container hero-grid">
-            <motion.div {...reveal} className="hero-copy">
-              <span className="eyebrow">
-                <span className="live-dot" /> LA LOGISTIQUE, MIEUX CONNECTÉE
+        <section className="home-hero">
+          <div className="container home-hero-grid">
+            <div className="home-copy">
+              <span className="home-kicker">
+                <span /> PLUS PROCHES DE VOS CLIENTS
               </span>
               <h1>
-                Toute votre
+                Vos colis avancent.
                 <br />
-                logistique.
-                <br />
-                <span>
-                  Une seule
-                  <br className="desktop-break" /> plateforme.
-                </span>
+                <em>Vous gardez le fil.</em>
               </h1>
               <p>
-                Centralisez vos agences, commandes, stocks, livreurs et
-                opérations de livraison dans une solution intelligente,
-                accessible partout.
+                De la boutique au destinataire, retrouvez vos commandes, vos
+                équipes et vos livraisons au même endroit.
               </p>
-              <div className="hero-actions">
-                <a className="button" href="#solution">
-                  Découvrir la plateforme <ArrowRight size={18} />
-                </a>
-                <Link className="text-link" to="/acces">
-                  Demander un accès <ArrowUpRight size={17} />
+              <div className="home-actions">
+                <Link className="button" to="/connexion">
+                  Accéder à mon espace <ArrowUpRight size={18} />
                 </Link>
+                <a className="button home-secondary" href="#suivi">
+                  Suivre un colis <ArrowRight size={18} />
+                </a>
               </div>
-              <div className="hero-notes">
+              <Link className="home-join" to="/acces">
+                Vous nous rejoignez ? Demander un accès{" "}
+                <ArrowUpRight size={15} />
+              </Link>
+              <div className="home-reassurance">
                 <span>
-                  <Check /> Pensée pour vos équipes
+                  <ShieldCheck size={16} /> Accès professionnel sécurisé
                 </span>
                 <span>
-                  <Check /> Web & mobile
+                  <Smartphone size={16} /> Web & mobile
                 </span>
               </div>
-            </motion.div>
-            <motion.div
-              {...reveal}
-              transition={{ delay: 0.15, duration: 0.6 }}
-              className="hero-visual"
-            >
-              <div className="visual-caption">
-                <span className="line" /> UNE VISION CLAIRE. DU DÉPART À
-                L’ARRIVÉE.
-              </div>
-              <DashboardPreview />
-              <div className="floating-chip">
-                <span className="chip-icon">
-                  <PackageIcon />
-                </span>
-                <div>
-                  Moins de dispersion.<strong>Plus de mouvement.</strong>
-                </div>
-                <span className="chip-arrow">↗</span>
-              </div>
-              <div className="visual-footnote">
-                Aperçu de l’expérience cible · Données fictives
-              </div>
-            </motion.div>
-          </div>
-          <div className="container hero-bottom">
-            <span>UN ÉCOSYSTÈME. TOUTE VOTRE ACTIVITÉ.</span>
-            <div>
-              <BuildingLabel text="Agences" />
-              <BuildingLabel text="Boutiques" />
-              <BuildingLabel text="Livreurs" />
-              <BuildingLabel text="Destinataires" />
             </div>
+            <DeliveryScene />
           </div>
         </section>
-        <section className="section container" id="solution">
-          <motion.div {...reveal} className="section-heading">
-            <div>
-              <span className="eyebrow">01 / LA SOLUTION</span>
-              <h2>
-                Tout s’articule.
-                <br />
-                <span>Tout devient plus simple.</span>
-              </h2>
-            </div>
-            <p>
-              Votre activité avance mieux quand l’information circule. DND
-              Delivery prépare un espace commun pour chaque maillon de votre
-              logistique.
-            </p>
-          </motion.div>
-          <div className="feature-grid">
-            {features.map(({ icon: Icon, title, text }, i) => (
-              <motion.article {...reveal} key={title} className="feature-card">
-                <div className="feature-top">
-                  <span className="feature-icon">
-                    <Icon size={24} />
-                  </span>
-                  <span className="feature-number">0{i + 1}</span>
-                </div>
+        <section className="container home-section" id="solution">
+          <div className="home-heading">
+            <span className="home-kicker">
+              CHACUN SON ESPACE. UN MÊME MOUVEMENT.
+            </span>
+            <h2>
+              La bonne information,
+              <br />
+              pour la bonne personne.
+            </h2>
+          </div>
+          <div className="home-roles">
+            {[
+              {
+                Icon: Store,
+                title: "Vous êtes une boutique",
+                text: "Créez vos commandes, choisissez votre entreprise de livraison et suivez vos envois.",
+                link: "/acces",
+                action: "Inscrire ma boutique",
+              },
+              {
+                Icon: Truck,
+                title: "Vous livrez au quotidien",
+                text: "Organisez les commandes, affectez vos livreurs et gardez une vue sur vos opérations.",
+                link: "/acces",
+                action: "Accès entreprise de livraison",
+              },
+              {
+                Icon: MapPin,
+                title: "Vous attendez un colis",
+                text: "Retrouvez les étapes de votre livraison grâce à votre référence et à votre accès personnel.",
+                link: "/suivi",
+                action: "Retrouver mon colis",
+              },
+            ].map(({ Icon, title, text, link, action }) => (
+              <article key={title}>
+                <span className="home-role-icon">
+                  <Icon size={25} />
+                </span>
                 <h3>{title}</h3>
                 <p>{text}</p>
-                <span className="feature-line" />
-              </motion.article>
+                <Link to={link}>
+                  {action}
+                  <ArrowUpRight size={17} />
+                </Link>
+              </article>
             ))}
           </div>
-          <p className="section-note">
-            Les modules présentés constituent la vision produit. Leur
-            intégration métier sera réalisée progressivement.
-          </p>
         </section>
-        <section className="journey section" id="parcours">
-          <div className="container">
-            <motion.div {...reveal} className="center-heading">
-              <span className="eyebrow">02 / UN PARCOURS CONNECTÉ</span>
+        <section className="home-path" id="parcours">
+          <div className="container home-path-inner">
+            <div className="home-heading">
+              <span className="home-kicker">DU DÉPART À L’ARRIVÉE</span>
               <h2>
-                De votre première agence
-                <br />
-                au dernier kilomètre.
+                Un parcours clair.
+                <br />À chaque étape.
               </h2>
-              <p>Un fonctionnement pensé pour que chacun sache où aller.</p>
-            </motion.div>
-            <div className="steps">
-              {steps.map((s, i) => (
-                <motion.div {...reveal} className="step" key={s}>
-                  <span>{String(i + 1).padStart(2, "0")}</span>
-                  <h3>{s}</h3>
-                  <p>
-                    {
-                      [
-                        "Votre entreprise dispose de son point de départ.",
-                        "Votre réseau prend forme.",
-                        "Vos boutiques lancent le mouvement.",
-                        "Vos responsables organisent le terrain.",
-                        "Vos livreurs prennent le relais.",
-                        "Vos destinataires gardent le fil.",
-                      ][i]
-                    }
-                  </p>
-                </motion.div>
-              ))}
             </div>
+            <ol className="home-steps">
+              {[
+                {
+                  title: "La boutique prépare",
+                  text: "Elle enregistre la commande et les informations du destinataire.",
+                },
+                {
+                  title: "L’entreprise organise",
+                  text: "Elle prend en charge la demande et affecte un livreur de son équipe.",
+                },
+                {
+                  title: "Le colis arrive",
+                  text: "Le livreur actualise les étapes et confirme la remise avec les preuves requises.",
+                },
+              ].map((step, i) => (
+                <li key={step.title}>
+                  <span>0{i + 1}</span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
-        <section className="section container experience" id="experience">
-          <motion.div {...reveal} className="experience-visual">
-            <div className="mini-desktop">
-              <DashboardPreview compact />
-            </div>
-            <div className="phone">
-              <div className="phone-notch" />
-              <div className="phone-top">
-                <img src="/logo%20square.jpg" alt="DND Delivery" />
-                <span>9:41</span>
-              </div>
-              <small>VOTRE JOURNÉE, SIMPLIFIÉE</small>
-              <h3>
-                Prêt pour
-                <br />
-                le prochain départ ?
-              </h3>
-              <div className="phone-card">
-                <Truck />
-                <strong>Votre espace terrain</strong>
-                <p>Vos missions à portée de main.</p>
-                <span>
-                  À venir <ArrowUpRight size={16} />
-                </span>
-              </div>
-              <div className="phone-placeholder">
-                <span />
-                <span />
-                <span />
-              </div>
-              <p className="phone-demo">MAQUETTE DE DÉMONSTRATION</p>
-            </div>
-          </motion.div>
-          <motion.div {...reveal} className="experience-copy">
-            <span className="eyebrow">03 / PARTOUT AVEC VOUS</span>
-            <h2>
-              Au bureau.
-              <br />
-              Sur le terrain.
-              <br />
-              <span>Toujours connectés.</span>
-            </h2>
+        <section className="container home-connected" id="experience">
+          <Smartphone size={28} />
+          <div>
+            <h2>Au bureau comme sur le terrain.</h2>
             <p>
-              Un espace Web pour prendre de la hauteur. Une expérience mobile
-              pour accompagner le mouvement. La même clarté, quel que soit votre
-              écran.
+              Un espace Web pour organiser l’activité. Une application mobile
+              pour accompagner les équipes en mouvement.
             </p>
-            <ul className="benefits">
-              <li>
-                <Globe2 /> Un pilotage central depuis le Web
-              </li>
-              <li>
-                <Smartphone /> Une expérience pensée pour le terrain
-              </li>
-              <li>
-                <Layers3 /> Une identité commune à toute l’équipe
-              </li>
-            </ul>
-            <Link to="/acces" className="text-link">
-              Découvrir votre futur espace <ArrowRight size={17} />
-            </Link>
-          </motion.div>
+          </div>
+          <Link to="/connexion" className="text-link">
+            Retrouver mon espace <ArrowRight size={17} />
+          </Link>
         </section>
         <section className="tracking-section" id="suivi">
           <div className="container tracking-grid">
             <div>
-              <span className="eyebrow">04 / GARDER LE FIL</span>
+              <span className="home-kicker">VOTRE COLIS, SIMPLEMENT</span>
               <h2>
-                Un colis en route ?<br />
-                <span>Tout commence ici.</span>
+                Où en est
+                <br />
+                <span>votre livraison ?</span>
               </h2>
               <p>
-                Le futur point de repère de vos destinataires.
-                <br />
-                Un accès simple au parcours de leur colis.
+                Saisissez votre référence pour accéder au parcours de suivi
+                sécurisé.
               </p>
             </div>
             <TrackingForm />
           </div>
         </section>
-        <section className="section container">
-          <motion.div {...reveal} className="cta">
-            <div className="cta-orbit" aria-hidden="true" />
-            <span className="eyebrow">LE PROCHAIN DÉPART, C’EST LE VÔTRE.</span>
-            <h2>
-              Donnez une nouvelle
-              <br />
-              direction à votre logistique.
-            </h2>
-            <p>
-              Une plateforme pensée pour les entreprises qui font avancer les
-              choses.
-            </p>
-            <Link className="button light" to="/acces">
-              Rejoindre DND Delivery <ArrowUpRight size={18} />
-            </Link>
-            <span className="cta-note">
-              <ShieldCheck size={15} /> Accès aux entreprises · Plateforme en
-              préparation
-            </span>
-          </motion.div>
-        </section>
       </main>
       <footer className="footer">
-        <div className="container footer-main">
+        <div className="container home-footer">
           <div>
             <Brand />
-            <p>
-              Plus proches de vos clients.
-              <br />
-              Plus connectés à votre activité.
-            </p>
+            <p>Plus proches de vos clients.</p>
           </div>
-          <div>
-            <strong>La plateforme</strong>
-            <a href="#solution">La solution</a>
-            <a href="#parcours">Comment ça marche</a>
-            <a href="#experience">Web & mobile</a>
-          </div>
-          <div>
-            <strong>Votre espace</strong>
+          <nav aria-label="Liens utiles">
             <Link to="/connexion">Connexion</Link>
-            <a href="#suivi">Suivre un colis</a>
             <Link to="/acces">Demander un accès</Link>
-          </div>
-          <div className="footer-tag">
-            <span className="live-dot" /> Le mouvement commence ici.
-          </div>
+            <a href="#suivi">Suivre un colis</a>
+          </nav>
+          <span>
+            <PackageCheck size={19} /> Vos équipes connectées.
+          </span>
         </div>
         <div className="container footer-bottom">
           <span>
@@ -307,20 +200,8 @@ export function Landing() {
             <Link to="/mentions-legales">Mentions légales</Link>
             <Link to="/confidentialite">Confidentialité</Link>
           </div>
-          <span>Conçu pour aller plus loin ↗</span>
         </div>
       </footer>
-    </>
+    </div>
   );
-}
-function BuildingLabel({ text }: { text: string }) {
-  return (
-    <span>
-      <span className="tiny-cross">+</span>
-      {text}
-    </span>
-  );
-}
-function PackageIcon() {
-  return <Layers3 size={23} />;
 }

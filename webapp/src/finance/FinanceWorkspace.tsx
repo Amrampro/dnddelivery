@@ -171,6 +171,7 @@ export function FinanceWorkspace({
     setPage(1);
     setForm({
       code: "REMIT",
+      agencies: options.data?.agencies,
       agencyId: context.agencyId,
       entries: [],
       currencies: data?.money

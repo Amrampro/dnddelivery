@@ -37,6 +37,7 @@ export function DeliveryActionForm({
   onClose: () => void;
   scrollToTop: () => void;
 }) {
+  const [driverPool, setDriverPool] = useState("company");
   const [m] = useState(() => mission),
     [h] = useState(() => handover),
     key = useRef(localKey()),
@@ -67,6 +68,7 @@ export function DeliveryActionForm({
     eligible = (drivers.data ?? []).filter(
       (d) =>
         d.eligible &&
+        (driverPool === "company" || d.agencyLinked === true) &&
         (!["REASSIGN", "RESOLVE_INCIDENT"].includes(action) ||
           d.id !== m?.courierId),
     );
@@ -162,6 +164,20 @@ export function DeliveryActionForm({
           {needsDriver && (
             <>
               <Selector
+                label="Rechercher parmi"
+                value={driverPool}
+                disabled={busy}
+                options={[
+                  { id: "company", label: "Tous les livreurs de l’entreprise" },
+                  { id: "agency", label: "Livreurs de cette agence" },
+                ]}
+                onChange={(pool) => {
+                  setDriverPool(pool);
+                  setValues((v) => ({ ...v, courierId: "" }));
+                }}
+              />
+
+              <Selector
                 label={
                   action === "TRANSFER_CREATE"
                     ? "Agent de transport"
@@ -171,7 +187,7 @@ export function DeliveryActionForm({
                 disabled={busy}
                 options={eligible.map((d) => ({
                   id: d.id,
-                  label: d.fullName,
+                  label: `${d.fullName} · ${d.agencyLinked ? "Cette agence" : "Entreprise"}`,
                   description: `Disponible · ${d.activeMissions} mission(s) active(s)`,
                 }))}
                 onChange={(courierId) =>

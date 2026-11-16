@@ -147,6 +147,34 @@ try {
         });
       }
     }
+    const companyCourier = await tx.role.upsert({
+      where: { code: "company_courier" },
+      create: {
+        code: "company_courier",
+        name: "Livreur entreprise",
+        scope: "COMPANY",
+      },
+      update: {},
+    });
+    if (companyCourier.scope !== "COMPANY")
+      throw new Error("Incompatible company courier scope");
+    const courier = await tx.role.findUniqueOrThrow({
+      where: { code: "courier" },
+    });
+    for (const link of await tx.rolePermission.findMany({
+      where: { roleId: courier.id },
+    })) {
+      await tx.rolePermission.upsert({
+        where: {
+          roleId_permissionId: {
+            roleId: companyCourier.id,
+            permissionId: link.permissionId,
+          },
+        },
+        create: { roleId: companyCourier.id, permissionId: link.permissionId },
+        update: {},
+      });
+    }
     if (
       process.env.SUBSCRIPTION_SEED_PRICE ||
       process.env.SUBSCRIPTION_SEED_CURRENCY

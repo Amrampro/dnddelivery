@@ -3,18 +3,46 @@ import type { Workspace, UnavailableOrganization } from "./types.js";
 import { effectiveStatus } from "../subscriptions/rules.js";
 import { restrictedCourierPermissions } from "../organization/permissions.js";
 /** Diagnostic only: these records never grant a selectable workspace or permissions. */
-export async function loadUnavailableOrganizations(db: Prisma.TransactionClient, userId: string): Promise<UnavailableOrganization[]> {
-  const unavailable = { OR: [{ status: { not: "ACTIVE" as const } }, { archivedAt: { not: null } }] };
+export async function loadUnavailableOrganizations(
+  db: Prisma.TransactionClient,
+  userId: string,
+): Promise<UnavailableOrganization[]> {
+  const unavailable = {
+    OR: [{ status: { not: "ACTIVE" as const } }, { archivedAt: { not: null } }],
+  };
   const [companies, shops] = await Promise.all([
-    db.companyMembership.findMany({ where: { userId, active: true, company: unavailable },
-      select: { company: { select: { name: true, status: true, archivedAt: true } } }, orderBy: { createdAt: "asc" } }),
-    db.shopMembership.findMany({ where: { userId, active: true, shop: unavailable },
-      select: { shop: { select: { name: true, status: true, archivedAt: true } } }, orderBy: { createdAt: "asc" } }),
+    db.companyMembership.findMany({
+      where: { userId, active: true, company: unavailable },
+      select: {
+        company: { select: { name: true, status: true, archivedAt: true } },
+      },
+      orderBy: { createdAt: "asc" },
+    }),
+    db.shopMembership.findMany({
+      where: { userId, active: true, shop: unavailable },
+      select: {
+        shop: { select: { name: true, status: true, archivedAt: true } },
+      },
+      orderBy: { createdAt: "asc" },
+    }),
   ]);
-  const record = (kind: UnavailableOrganization["kind"], org: { name: string; status: string; archivedAt: Date | null }): UnavailableOrganization => ({
-    kind, name: org.name, status: org.archivedAt || org.status === "ARCHIVED" ? "ARCHIVED" : org.status === "SUSPENDED" ? "SUSPENDED" : "INACTIVE",
+  const record = (
+    kind: UnavailableOrganization["kind"],
+    org: { name: string; status: string; archivedAt: Date | null },
+  ): UnavailableOrganization => ({
+    kind,
+    name: org.name,
+    status:
+      org.archivedAt || org.status === "ARCHIVED"
+        ? "ARCHIVED"
+        : org.status === "SUSPENDED"
+          ? "SUSPENDED"
+          : "INACTIVE",
   });
-  return [...companies.map(m => record("COMPANY", m.company)), ...shops.map(m => record("SHOP", m.shop))];
+  return [
+    ...companies.map((m) => record("COMPANY", m.company)),
+    ...shops.map((m) => record("SHOP", m.shop)),
+  ];
 }
 export async function loadWorkspaces(
   db: Prisma.TransactionClient,
@@ -36,7 +64,7 @@ export async function loadWorkspaces(
       ? "super-admin"
       : code === "stock_manager"
         ? "stock"
-        : code === "courier"
+        : ["courier", "company_courier"].includes(code)
           ? "livreur"
           : scope === "SHOP"
             ? "boutique"
@@ -70,7 +98,19 @@ export async function loadWorkspaces(
   });
   for (const member of members) {
     if (member.role.scope !== "COMPANY") continue;
-    const base = await permissions(member.roleId);
+    let base = await permissions(member.roleId);
+    if (member.role.code === "company_courier") {
+      if (
+        member.organizationRole !== "courier" ||
+        member.employmentStatus !== "ACTIVE"
+      )
+        continue;
+      const profile = await db.driverProfile.findUnique({
+        where: { companyId_userId: { companyId: member.companyId, userId } },
+      });
+      if (profile?.status !== "ACTIVE")
+        base = restrictedCourierPermissions(base);
+    }
     if (base.includes("workspace.access"))
       result.push({
         key: `company:${member.companyId}`,
@@ -91,15 +131,16 @@ export async function loadWorkspaces(
       },
       include: { agency: true, role: true },
     });
-    const agencies = base.includes("agencies.read")
-      ? await db.agency.findMany({
-          where: {
-            companyId: member.companyId,
-            status: "ACTIVE",
-            archivedAt: null,
-          },
-        })
-      : agencyGrants.map((v) => v.agency);
+    const agencies =
+      base.includes("agencies.read") && member.role.code !== "company_courier"
+        ? await db.agency.findMany({
+            where: {
+              companyId: member.companyId,
+              status: "ACTIVE",
+              archivedAt: null,
+            },
+          })
+        : agencyGrants.map((v) => v.agency);
     for (const agency of agencies) {
       const grant = agencyGrants.find(
         (v) => v.agencyId === agency.id && v.role.scope === "AGENCY",
@@ -152,7 +193,9 @@ export async function loadWorkspaces(
       companyName: "Ma boutique",
       roleCode: grant.role.code,
       roleName: grant.role.name,
-      permissions: p.filter(code => code === "workspace.access" || code.startsWith("shop.")),
+      permissions: p.filter(
+        (code) => code === "workspace.access" || code.startsWith("shop."),
+      ),
       portal: "boutique",
     });
     const collaborations = await db.companyShop.findMany({

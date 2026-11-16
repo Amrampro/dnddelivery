@@ -292,10 +292,10 @@ export class OrganizationService {
     const user = await tx.user.findUnique({ where: { id: userId } });
     if (!user || (active && (user.status !== "ACTIVE" || user.archivedAt)))
       throw conflict("Ce compte ne peut pas être activé dans l’entreprise.");
-    if (role !== "employee" && !ids.length)
+    if (!["employee", "courier"].includes(role) && !ids.length)
       throw conflict("Sélectionnez une agence.");
     const companyRole = await tx.role.findUnique({
-        where: { code: "company_member" },
+        where: { code: role === "courier" ? "company_courier" : "company_member" },
       }),
       localRole = await tx.role.findUnique({
         where: { code: agencyRole(role) },
@@ -306,12 +306,9 @@ export class OrganizationService {
       where: { companyId_userId: { companyId: c.companyId, userId } },
       include: { role: true },
     });
-    await protectFinancialAffiliation(
-      tx,
-      c.companyId,
-      userId,
-      active && role === "courier" ? ids : undefined,
-    );
+    // Agency preferences no longer revoke a courier's company-wide settlement access.
+    if (!active || role !== "courier")
+      await protectFinancialAffiliation(tx, c.companyId, userId);
     if (old?.role.code === "company_admin")
       throw conflict(
         "Les administrateurs sont gérés depuis le module global.",
@@ -566,22 +563,20 @@ export class OrganizationService {
           "Votre profil livreur n’est pas actif.",
         );
       checkVersion(d.version, input.version);
-      const assigned = await tx.agencyMembership.findFirst({
+      const assigned = await tx.companyMembership.findFirst({
         where: {
           companyId: c.companyId,
           userId: c.actorId,
-          ...(c.agencyId ? { agencyId: c.agencyId } : {}),
           active: true,
-          role: { code: "courier" },
-          agency: { status: "ACTIVE", archivedAt: null },
-          membership: { active: true },
+          organizationRole: "courier",
+          employmentStatus: "ACTIVE",
         },
       });
       if (!assigned)
         throw new AuthError(
           403,
           "DRIVER_UNASSIGNED",
-          "Aucune agence active autorisée.",
+          "Aucune affiliation livreur active dans cette entreprise.",
         );
       const result = await tx.driverProfile.update({
         where: { id: d.id },
@@ -597,7 +592,7 @@ export class OrganizationService {
         "DRIVER_AVAILABILITY_CHANGED",
         d.id,
         { availability: input.availability },
-        assigned.agencyId,
+        c.agencyId,
       );
       return result;
     });

@@ -85,10 +85,10 @@ function AgencySelector({
   );
   return (
     <fieldset className="org-agency-selector">
-      <legend>Agences autorisées</legend>
+      <legend>Rattachements aux agences</legend>
       <p>
         {selected.length} agence(s) sélectionnée(s). Les affectations sont
-        limitées aux agences actives de cette entreprise.
+        limitées aux agences actives de cette entreprise. Pour un livreur, ces rattachements sont facultatifs : il peut recevoir des missions de toute l’entreprise, même sans agence sélectionnée.
       </p>
       <div className="org-chips">
         {selected.map((id) => (

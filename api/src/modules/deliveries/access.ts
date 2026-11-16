@@ -62,12 +62,6 @@ export async function access(
     selection(c),
     kind === "operator" ? "deliveries.supervise.read" : "deliveries.self.read",
   );
-  if (kind === "driver" && c.scope !== "AGENCY")
-    throw stockError(
-      "AGENCY_REQUIRED",
-      "Choisissez votre agence livreur.",
-      403,
-    );
   return { kind, permissions };
 }
 export function scope(

@@ -17,7 +17,7 @@ export const remittanceInclude = {
     },
     courier: {
         select: {
-            membership: { select: { user: { select: { fullName: true } } } },
+            user: { select: { fullName: true } },
         },
     },
 };
@@ -324,9 +324,7 @@ export class FinancialReads {
                 include: {
                     courier: {
                         select: {
-                            membership: {
-                                select: { user: { select: { fullName: true } } },
-                            },
+                            user: { select: { fullName: true } },
                         },
                     },
                 },
@@ -337,7 +335,7 @@ export class FinancialReads {
                     ...r,
                     declaredAmount: r.declaredAmount.toFixed(4),
                     confirmedAmount: r.confirmedAmount?.toFixed(4) ?? null,
-                    courierName: r.courier.membership.user.fullName,
+                    courierName: r.courier.user.fullName,
                     legacy: !r.operationKey,
                     operationKey: undefined,
                     requestHash: undefined,
@@ -366,7 +364,7 @@ export class FinancialReads {
                 companyId: r.companyId,
                 agencyId: r.agencyId,
                 courierId: r.courierId,
-                courierName: r.courier.membership.user.fullName,
+                courierName: r.courier.user.fullName,
                 version: r.version,
                 currency: r.currency,
                 status: r.status,

@@ -345,7 +345,7 @@ export type RemittanceWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Remittance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Remittance"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipScalarRelationFilter, Prisma.AgencyMembershipWhereInput>
+  courier?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   confirmer?: Prisma.XOR<Prisma.CompanyMembershipNullableScalarRelationFilter, Prisma.CompanyMembershipWhereInput> | null
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemListRelationFilter
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventListRelationFilter
@@ -373,7 +373,7 @@ export type RemittanceOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
-  courier?: Prisma.AgencyMembershipOrderByWithRelationInput
+  courier?: Prisma.CompanyMembershipOrderByWithRelationInput
   confirmer?: Prisma.CompanyMembershipOrderByWithRelationInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemOrderByRelationAggregateInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventOrderByRelationAggregateInput
@@ -409,7 +409,7 @@ export type RemittanceWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Remittance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Remittance"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipScalarRelationFilter, Prisma.AgencyMembershipWhereInput>
+  courier?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   confirmer?: Prisma.XOR<Prisma.CompanyMembershipNullableScalarRelationFilter, Prisma.CompanyMembershipWhereInput> | null
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemListRelationFilter
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventListRelationFilter
@@ -477,6 +477,7 @@ export type RemittanceCreateInput = {
   decisionReason?: string | null
   id?: string
   reference: string
+  agencyId: string
   declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -487,7 +488,7 @@ export type RemittanceCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutRemittance_companyRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
   confirmer?: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_confirmerRecordsInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemCreateNestedManyWithoutRemittanceInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventCreateNestedManyWithoutRemittanceInput
@@ -526,6 +527,7 @@ export type RemittanceUpdateInput = {
   decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -536,7 +538,7 @@ export type RemittanceUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutRemittance_companyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
   confirmer?: Prisma.CompanyMembershipUpdateOneWithoutRemittance_confirmerRecordsNestedInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemUpdateManyWithoutRemittanceNestedInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUpdateManyWithoutRemittanceNestedInput
@@ -598,6 +600,7 @@ export type RemittanceUpdateManyMutationInput = {
   decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -799,48 +802,6 @@ export type RemittanceUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.RemittanceScalarWhereInput | Prisma.RemittanceScalarWhereInput[]
 }
 
-export type RemittanceCreateNestedManyWithoutConfirmerInput = {
-  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
-  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
-  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
-  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-}
-
-export type RemittanceUncheckedCreateNestedManyWithoutConfirmerInput = {
-  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
-  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
-  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
-  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-}
-
-export type RemittanceUpdateManyWithoutConfirmerNestedInput = {
-  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
-  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
-  upsert?: Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput[]
-  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
-  set?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  disconnect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  delete?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  update?: Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput[]
-  updateMany?: Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput | Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput[]
-  deleteMany?: Prisma.RemittanceScalarWhereInput | Prisma.RemittanceScalarWhereInput[]
-}
-
-export type RemittanceUncheckedUpdateManyWithoutConfirmerNestedInput = {
-  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
-  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
-  upsert?: Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput[]
-  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
-  set?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  disconnect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  delete?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
-  update?: Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput[]
-  updateMany?: Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput | Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput[]
-  deleteMany?: Prisma.RemittanceScalarWhereInput | Prisma.RemittanceScalarWhereInput[]
-}
-
 export type RemittanceCreateNestedManyWithoutCourierInput = {
   create?: Prisma.XOR<Prisma.RemittanceCreateWithoutCourierInput, Prisma.RemittanceUncheckedCreateWithoutCourierInput> | Prisma.RemittanceCreateWithoutCourierInput[] | Prisma.RemittanceUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutCourierInput | Prisma.RemittanceCreateOrConnectWithoutCourierInput[]
@@ -848,10 +809,24 @@ export type RemittanceCreateNestedManyWithoutCourierInput = {
   connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
 }
 
+export type RemittanceCreateNestedManyWithoutConfirmerInput = {
+  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
+  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
+  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
+  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+}
+
 export type RemittanceUncheckedCreateNestedManyWithoutCourierInput = {
   create?: Prisma.XOR<Prisma.RemittanceCreateWithoutCourierInput, Prisma.RemittanceUncheckedCreateWithoutCourierInput> | Prisma.RemittanceCreateWithoutCourierInput[] | Prisma.RemittanceUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutCourierInput | Prisma.RemittanceCreateOrConnectWithoutCourierInput[]
   createMany?: Prisma.RemittanceCreateManyCourierInputEnvelope
+  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+}
+
+export type RemittanceUncheckedCreateNestedManyWithoutConfirmerInput = {
+  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
+  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
+  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
   connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
 }
 
@@ -869,6 +844,20 @@ export type RemittanceUpdateManyWithoutCourierNestedInput = {
   deleteMany?: Prisma.RemittanceScalarWhereInput | Prisma.RemittanceScalarWhereInput[]
 }
 
+export type RemittanceUpdateManyWithoutConfirmerNestedInput = {
+  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
+  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
+  upsert?: Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput[]
+  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
+  set?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  disconnect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  delete?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  update?: Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput[]
+  updateMany?: Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput | Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput[]
+  deleteMany?: Prisma.RemittanceScalarWhereInput | Prisma.RemittanceScalarWhereInput[]
+}
+
 export type RemittanceUncheckedUpdateManyWithoutCourierNestedInput = {
   create?: Prisma.XOR<Prisma.RemittanceCreateWithoutCourierInput, Prisma.RemittanceUncheckedCreateWithoutCourierInput> | Prisma.RemittanceCreateWithoutCourierInput[] | Prisma.RemittanceUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutCourierInput | Prisma.RemittanceCreateOrConnectWithoutCourierInput[]
@@ -880,6 +869,20 @@ export type RemittanceUncheckedUpdateManyWithoutCourierNestedInput = {
   connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
   update?: Prisma.RemittanceUpdateWithWhereUniqueWithoutCourierInput | Prisma.RemittanceUpdateWithWhereUniqueWithoutCourierInput[]
   updateMany?: Prisma.RemittanceUpdateManyWithWhereWithoutCourierInput | Prisma.RemittanceUpdateManyWithWhereWithoutCourierInput[]
+  deleteMany?: Prisma.RemittanceScalarWhereInput | Prisma.RemittanceScalarWhereInput[]
+}
+
+export type RemittanceUncheckedUpdateManyWithoutConfirmerNestedInput = {
+  create?: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput> | Prisma.RemittanceCreateWithoutConfirmerInput[] | Prisma.RemittanceUncheckedCreateWithoutConfirmerInput[]
+  connectOrCreate?: Prisma.RemittanceCreateOrConnectWithoutConfirmerInput | Prisma.RemittanceCreateOrConnectWithoutConfirmerInput[]
+  upsert?: Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpsertWithWhereUniqueWithoutConfirmerInput[]
+  createMany?: Prisma.RemittanceCreateManyConfirmerInputEnvelope
+  set?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  disconnect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  delete?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  connect?: Prisma.RemittanceWhereUniqueInput | Prisma.RemittanceWhereUniqueInput[]
+  update?: Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput | Prisma.RemittanceUpdateWithWhereUniqueWithoutConfirmerInput[]
+  updateMany?: Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput | Prisma.RemittanceUpdateManyWithWhereWithoutConfirmerInput[]
   deleteMany?: Prisma.RemittanceScalarWhereInput | Prisma.RemittanceScalarWhereInput[]
 }
 
@@ -923,6 +926,7 @@ export type RemittanceCreateWithoutCompanyInput = {
   decisionReason?: string | null
   id?: string
   reference: string
+  agencyId: string
   declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -932,7 +936,7 @@ export type RemittanceCreateWithoutCompanyInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
   confirmer?: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_confirmerRecordsInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemCreateNestedManyWithoutRemittanceInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventCreateNestedManyWithoutRemittanceInput
@@ -1014,7 +1018,7 @@ export type RemittanceScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Remittance"> | Date | string
 }
 
-export type RemittanceCreateWithoutConfirmerInput = {
+export type RemittanceCreateWithoutCourierInput = {
   version?: number
   operationKey?: string | null
   requestHash?: string | null
@@ -1022,6 +1026,7 @@ export type RemittanceCreateWithoutConfirmerInput = {
   decisionReason?: string | null
   id?: string
   reference: string
+  agencyId: string
   declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1032,7 +1037,64 @@ export type RemittanceCreateWithoutConfirmerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutRemittance_companyRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
+  confirmer?: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_confirmerRecordsInput
+  remittanceItem_remittanceRecords?: Prisma.RemittanceItemCreateNestedManyWithoutRemittanceInput
+  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventCreateNestedManyWithoutRemittanceInput
+}
+
+export type RemittanceUncheckedCreateWithoutCourierInput = {
+  version?: number
+  operationKey?: string | null
+  requestHash?: string | null
+  decision?: string | null
+  decisionReason?: string | null
+  id?: string
+  reference: string
+  agencyId: string
+  declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  status?: $Enums.RemittanceStatus
+  declaredAt?: Date | string
+  confirmedById?: string | null
+  confirmedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  remittanceItem_remittanceRecords?: Prisma.RemittanceItemUncheckedCreateNestedManyWithoutRemittanceInput
+  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUncheckedCreateNestedManyWithoutRemittanceInput
+}
+
+export type RemittanceCreateOrConnectWithoutCourierInput = {
+  where: Prisma.RemittanceWhereUniqueInput
+  create: Prisma.XOR<Prisma.RemittanceCreateWithoutCourierInput, Prisma.RemittanceUncheckedCreateWithoutCourierInput>
+}
+
+export type RemittanceCreateManyCourierInputEnvelope = {
+  data: Prisma.RemittanceCreateManyCourierInput | Prisma.RemittanceCreateManyCourierInput[]
+  skipDuplicates?: boolean
+}
+
+export type RemittanceCreateWithoutConfirmerInput = {
+  version?: number
+  operationKey?: string | null
+  requestHash?: string | null
+  decision?: string | null
+  decisionReason?: string | null
+  id?: string
+  reference: string
+  agencyId: string
+  declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  status?: $Enums.RemittanceStatus
+  declaredAt?: Date | string
+  confirmedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutRemittance_companyRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemCreateNestedManyWithoutRemittanceInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventCreateNestedManyWithoutRemittanceInput
 }
@@ -1070,77 +1132,6 @@ export type RemittanceCreateManyConfirmerInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type RemittanceUpsertWithWhereUniqueWithoutConfirmerInput = {
-  where: Prisma.RemittanceWhereUniqueInput
-  update: Prisma.XOR<Prisma.RemittanceUpdateWithoutConfirmerInput, Prisma.RemittanceUncheckedUpdateWithoutConfirmerInput>
-  create: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput>
-}
-
-export type RemittanceUpdateWithWhereUniqueWithoutConfirmerInput = {
-  where: Prisma.RemittanceWhereUniqueInput
-  data: Prisma.XOR<Prisma.RemittanceUpdateWithoutConfirmerInput, Prisma.RemittanceUncheckedUpdateWithoutConfirmerInput>
-}
-
-export type RemittanceUpdateManyWithWhereWithoutConfirmerInput = {
-  where: Prisma.RemittanceScalarWhereInput
-  data: Prisma.XOR<Prisma.RemittanceUpdateManyMutationInput, Prisma.RemittanceUncheckedUpdateManyWithoutConfirmerInput>
-}
-
-export type RemittanceCreateWithoutCourierInput = {
-  version?: number
-  operationKey?: string | null
-  requestHash?: string | null
-  decision?: string | null
-  decisionReason?: string | null
-  id?: string
-  reference: string
-  declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency: string
-  status?: $Enums.RemittanceStatus
-  declaredAt?: Date | string
-  confirmedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutRemittance_companyRecordsInput
-  confirmer?: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_confirmerRecordsInput
-  remittanceItem_remittanceRecords?: Prisma.RemittanceItemCreateNestedManyWithoutRemittanceInput
-  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventCreateNestedManyWithoutRemittanceInput
-}
-
-export type RemittanceUncheckedCreateWithoutCourierInput = {
-  version?: number
-  operationKey?: string | null
-  requestHash?: string | null
-  decision?: string | null
-  decisionReason?: string | null
-  id?: string
-  reference: string
-  declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency: string
-  status?: $Enums.RemittanceStatus
-  declaredAt?: Date | string
-  confirmedById?: string | null
-  confirmedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  remittanceItem_remittanceRecords?: Prisma.RemittanceItemUncheckedCreateNestedManyWithoutRemittanceInput
-  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUncheckedCreateNestedManyWithoutRemittanceInput
-}
-
-export type RemittanceCreateOrConnectWithoutCourierInput = {
-  where: Prisma.RemittanceWhereUniqueInput
-  create: Prisma.XOR<Prisma.RemittanceCreateWithoutCourierInput, Prisma.RemittanceUncheckedCreateWithoutCourierInput>
-}
-
-export type RemittanceCreateManyCourierInputEnvelope = {
-  data: Prisma.RemittanceCreateManyCourierInput | Prisma.RemittanceCreateManyCourierInput[]
-  skipDuplicates?: boolean
-}
-
 export type RemittanceUpsertWithWhereUniqueWithoutCourierInput = {
   where: Prisma.RemittanceWhereUniqueInput
   update: Prisma.XOR<Prisma.RemittanceUpdateWithoutCourierInput, Prisma.RemittanceUncheckedUpdateWithoutCourierInput>
@@ -1157,6 +1148,22 @@ export type RemittanceUpdateManyWithWhereWithoutCourierInput = {
   data: Prisma.XOR<Prisma.RemittanceUpdateManyMutationInput, Prisma.RemittanceUncheckedUpdateManyWithoutCourierInput>
 }
 
+export type RemittanceUpsertWithWhereUniqueWithoutConfirmerInput = {
+  where: Prisma.RemittanceWhereUniqueInput
+  update: Prisma.XOR<Prisma.RemittanceUpdateWithoutConfirmerInput, Prisma.RemittanceUncheckedUpdateWithoutConfirmerInput>
+  create: Prisma.XOR<Prisma.RemittanceCreateWithoutConfirmerInput, Prisma.RemittanceUncheckedCreateWithoutConfirmerInput>
+}
+
+export type RemittanceUpdateWithWhereUniqueWithoutConfirmerInput = {
+  where: Prisma.RemittanceWhereUniqueInput
+  data: Prisma.XOR<Prisma.RemittanceUpdateWithoutConfirmerInput, Prisma.RemittanceUncheckedUpdateWithoutConfirmerInput>
+}
+
+export type RemittanceUpdateManyWithWhereWithoutConfirmerInput = {
+  where: Prisma.RemittanceScalarWhereInput
+  data: Prisma.XOR<Prisma.RemittanceUpdateManyMutationInput, Prisma.RemittanceUncheckedUpdateManyWithoutConfirmerInput>
+}
+
 export type RemittanceCreateWithoutRemittanceItem_remittanceRecordsInput = {
   version?: number
   operationKey?: string | null
@@ -1165,6 +1172,7 @@ export type RemittanceCreateWithoutRemittanceItem_remittanceRecordsInput = {
   decisionReason?: string | null
   id?: string
   reference: string
+  agencyId: string
   declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1175,7 +1183,7 @@ export type RemittanceCreateWithoutRemittanceItem_remittanceRecordsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutRemittance_companyRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
   confirmer?: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_confirmerRecordsInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventCreateNestedManyWithoutRemittanceInput
 }
@@ -1228,6 +1236,7 @@ export type RemittanceUpdateWithoutRemittanceItem_remittanceRecordsInput = {
   decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1238,7 +1247,7 @@ export type RemittanceUpdateWithoutRemittanceItem_remittanceRecordsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutRemittance_companyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
   confirmer?: Prisma.CompanyMembershipUpdateOneWithoutRemittance_confirmerRecordsNestedInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUpdateManyWithoutRemittanceNestedInput
 }
@@ -1275,6 +1284,7 @@ export type RemittanceCreateWithoutRemittanceEvent_remittanceRecordsInput = {
   decisionReason?: string | null
   id?: string
   reference: string
+  agencyId: string
   declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1285,7 +1295,7 @@ export type RemittanceCreateWithoutRemittanceEvent_remittanceRecordsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutRemittance_companyRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput
   confirmer?: Prisma.CompanyMembershipCreateNestedOneWithoutRemittance_confirmerRecordsInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemCreateNestedManyWithoutRemittanceInput
 }
@@ -1338,6 +1348,7 @@ export type RemittanceUpdateWithoutRemittanceEvent_remittanceRecordsInput = {
   decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1348,7 +1359,7 @@ export type RemittanceUpdateWithoutRemittanceEvent_remittanceRecordsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutRemittance_companyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
   confirmer?: Prisma.CompanyMembershipUpdateOneWithoutRemittance_confirmerRecordsNestedInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemUpdateManyWithoutRemittanceNestedInput
 }
@@ -1407,6 +1418,7 @@ export type RemittanceUpdateWithoutCompanyInput = {
   decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1416,7 +1428,7 @@ export type RemittanceUpdateWithoutCompanyInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
   confirmer?: Prisma.CompanyMembershipUpdateOneWithoutRemittance_confirmerRecordsNestedInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemUpdateManyWithoutRemittanceNestedInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUpdateManyWithoutRemittanceNestedInput
@@ -1468,6 +1480,27 @@ export type RemittanceUncheckedUpdateManyWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type RemittanceCreateManyCourierInput = {
+  version?: number
+  operationKey?: string | null
+  requestHash?: string | null
+  decision?: string | null
+  decisionReason?: string | null
+  id?: string
+  reference: string
+  agencyId: string
+  declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  status?: $Enums.RemittanceStatus
+  declaredAt?: Date | string
+  confirmedById?: string | null
+  confirmedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
 export type RemittanceCreateManyConfirmerInput = {
   version?: number
   operationKey?: string | null
@@ -1489,7 +1522,7 @@ export type RemittanceCreateManyConfirmerInput = {
   updatedAt?: Date | string
 }
 
-export type RemittanceUpdateWithoutConfirmerInput = {
+export type RemittanceUpdateWithoutCourierInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1497,6 +1530,7 @@ export type RemittanceUpdateWithoutConfirmerInput = {
   decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1507,7 +1541,75 @@ export type RemittanceUpdateWithoutConfirmerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutRemittance_companyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
+  confirmer?: Prisma.CompanyMembershipUpdateOneWithoutRemittance_confirmerRecordsNestedInput
+  remittanceItem_remittanceRecords?: Prisma.RemittanceItemUpdateManyWithoutRemittanceNestedInput
+  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUpdateManyWithoutRemittanceNestedInput
+}
+
+export type RemittanceUncheckedUpdateWithoutCourierInput = {
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRemittanceStatusFieldUpdateOperationsInput | $Enums.RemittanceStatus
+  declaredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  confirmedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remittanceItem_remittanceRecords?: Prisma.RemittanceItemUncheckedUpdateManyWithoutRemittanceNestedInput
+  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUncheckedUpdateManyWithoutRemittanceNestedInput
+}
+
+export type RemittanceUncheckedUpdateManyWithoutCourierInput = {
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRemittanceStatusFieldUpdateOperationsInput | $Enums.RemittanceStatus
+  declaredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  confirmedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RemittanceUpdateWithoutConfirmerInput = {
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reference?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRemittanceStatusFieldUpdateOperationsInput | $Enums.RemittanceStatus
+  declaredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutRemittance_companyRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput
   remittanceItem_remittanceRecords?: Prisma.RemittanceItemUpdateManyWithoutRemittanceNestedInput
   remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUpdateManyWithoutRemittanceNestedInput
 }
@@ -1550,91 +1652,6 @@ export type RemittanceUncheckedUpdateManyWithoutConfirmerInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumRemittanceStatusFieldUpdateOperationsInput | $Enums.RemittanceStatus
   declaredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type RemittanceCreateManyCourierInput = {
-  version?: number
-  operationKey?: string | null
-  requestHash?: string | null
-  decision?: string | null
-  decisionReason?: string | null
-  id?: string
-  reference: string
-  declaredAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  confirmedAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency: string
-  status?: $Enums.RemittanceStatus
-  declaredAt?: Date | string
-  confirmedById?: string | null
-  confirmedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type RemittanceUpdateWithoutCourierInput = {
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  decision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference?: Prisma.StringFieldUpdateOperationsInput | string
-  declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumRemittanceStatusFieldUpdateOperationsInput | $Enums.RemittanceStatus
-  declaredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutRemittance_companyRecordsNestedInput
-  confirmer?: Prisma.CompanyMembershipUpdateOneWithoutRemittance_confirmerRecordsNestedInput
-  remittanceItem_remittanceRecords?: Prisma.RemittanceItemUpdateManyWithoutRemittanceNestedInput
-  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUpdateManyWithoutRemittanceNestedInput
-}
-
-export type RemittanceUncheckedUpdateWithoutCourierInput = {
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  decision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference?: Prisma.StringFieldUpdateOperationsInput | string
-  declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumRemittanceStatusFieldUpdateOperationsInput | $Enums.RemittanceStatus
-  declaredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  confirmedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  remittanceItem_remittanceRecords?: Prisma.RemittanceItemUncheckedUpdateManyWithoutRemittanceNestedInput
-  remittanceEvent_remittanceRecords?: Prisma.RemittanceEventUncheckedUpdateManyWithoutRemittanceNestedInput
-}
-
-export type RemittanceUncheckedUpdateManyWithoutCourierInput = {
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  decision?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  decisionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  reference?: Prisma.StringFieldUpdateOperationsInput | string
-  declaredAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  confirmedAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumRemittanceStatusFieldUpdateOperationsInput | $Enums.RemittanceStatus
-  declaredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  confirmedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1703,7 +1720,7 @@ export type RemittanceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
-  courier?: boolean | Prisma.AgencyMembershipDefaultArgs<ExtArgs>
+  courier?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   confirmer?: boolean | Prisma.Remittance$confirmerArgs<ExtArgs>
   remittanceItem_remittanceRecords?: boolean | Prisma.Remittance$remittanceItem_remittanceRecordsArgs<ExtArgs>
   remittanceEvent_remittanceRecords?: boolean | Prisma.Remittance$remittanceEvent_remittanceRecordsArgs<ExtArgs>
@@ -1738,7 +1755,7 @@ export type RemittanceSelectScalar = {
 export type RemittanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"version" | "operationKey" | "requestHash" | "decision" | "decisionReason" | "id" | "companyId" | "reference" | "agencyId" | "courierId" | "declaredAmount" | "confirmedAmount" | "currency" | "status" | "declaredAt" | "confirmedById" | "confirmedAt" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["remittance"]>
 export type RemittanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
-  courier?: boolean | Prisma.AgencyMembershipDefaultArgs<ExtArgs>
+  courier?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   confirmer?: boolean | Prisma.Remittance$confirmerArgs<ExtArgs>
   remittanceItem_remittanceRecords?: boolean | Prisma.Remittance$remittanceItem_remittanceRecordsArgs<ExtArgs>
   remittanceEvent_remittanceRecords?: boolean | Prisma.Remittance$remittanceEvent_remittanceRecordsArgs<ExtArgs>
@@ -1749,7 +1766,7 @@ export type $RemittancePayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "Remittance"
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
-    courier: Prisma.$AgencyMembershipPayload<ExtArgs>
+    courier: Prisma.$CompanyMembershipPayload<ExtArgs>
     confirmer: Prisma.$CompanyMembershipPayload<ExtArgs> | null
     remittanceItem_remittanceRecords: Prisma.$RemittanceItemPayload<ExtArgs>[]
     remittanceEvent_remittanceRecords: Prisma.$RemittanceEventPayload<ExtArgs>[]
@@ -2116,7 +2133,7 @@ readonly fields: RemittanceFieldRefs;
 export interface Prisma__RemittanceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  courier<T extends Prisma.AgencyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AgencyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__AgencyMembershipClient<runtime.Types.Result.GetResult<Prisma.$AgencyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  courier<T extends Prisma.CompanyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   confirmer<T extends Prisma.Remittance$confirmerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Remittance$confirmerArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   remittanceItem_remittanceRecords<T extends Prisma.Remittance$remittanceItem_remittanceRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Remittance$remittanceItem_remittanceRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RemittanceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   remittanceEvent_remittanceRecords<T extends Prisma.Remittance$remittanceEvent_remittanceRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Remittance$remittanceEvent_remittanceRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RemittanceEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>

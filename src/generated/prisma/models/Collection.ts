@@ -358,7 +358,7 @@ export type CollectionWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   delivery?: Prisma.XOR<Prisma.DeliveryScalarRelationFilter, Prisma.DeliveryWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipScalarRelationFilter, Prisma.AgencyMembershipWhereInput>
+  courier?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   verifier?: Prisma.XOR<Prisma.CompanyMembershipNullableScalarRelationFilter, Prisma.CompanyMembershipWhereInput> | null
   remittanceItem_collectionRecords?: Prisma.RemittanceItemListRelationFilter
   collectionEvent_collectionRecords?: Prisma.CollectionEventListRelationFilter
@@ -388,7 +388,7 @@ export type CollectionOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   delivery?: Prisma.DeliveryOrderByWithRelationInput
-  courier?: Prisma.AgencyMembershipOrderByWithRelationInput
+  courier?: Prisma.CompanyMembershipOrderByWithRelationInput
   verifier?: Prisma.CompanyMembershipOrderByWithRelationInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemOrderByRelationAggregateInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventOrderByRelationAggregateInput
@@ -427,7 +427,7 @@ export type CollectionWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   delivery?: Prisma.XOR<Prisma.DeliveryScalarRelationFilter, Prisma.DeliveryWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipScalarRelationFilter, Prisma.AgencyMembershipWhereInput>
+  courier?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   verifier?: Prisma.XOR<Prisma.CompanyMembershipNullableScalarRelationFilter, Prisma.CompanyMembershipWhereInput> | null
   remittanceItem_collectionRecords?: Prisma.RemittanceItemListRelationFilter
   collectionEvent_collectionRecords?: Prisma.CollectionEventListRelationFilter
@@ -496,6 +496,7 @@ export type CollectionCreateInput = {
   operationKey?: string | null
   requestHash?: string | null
   id?: string
+  agencyId: string
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -508,7 +509,7 @@ export type CollectionCreateInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutCollection_companyRecordsInput
   delivery: Prisma.DeliveryCreateNestedOneWithoutCollection_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
   verifier?: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemCreateNestedManyWithoutCollectionInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventCreateNestedManyWithoutCollectionInput
@@ -547,6 +548,7 @@ export type CollectionUpdateInput = {
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -559,7 +561,7 @@ export type CollectionUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutCollection_companyRecordsNestedInput
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutCollection_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
   verifier?: Prisma.CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemUpdateManyWithoutCollectionNestedInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventUpdateManyWithoutCollectionNestedInput
@@ -622,6 +624,7 @@ export type CollectionUpdateManyMutationInput = {
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -836,48 +839,6 @@ export type CollectionUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
 }
 
-export type CollectionCreateNestedManyWithoutVerifierInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
-  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
-  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-}
-
-export type CollectionUncheckedCreateNestedManyWithoutVerifierInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
-  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
-  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-}
-
-export type CollectionUpdateManyWithoutVerifierNestedInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
-  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput[]
-  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
-  set?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  disconnect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  delete?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput[]
-  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput | Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput[]
-  deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
-}
-
-export type CollectionUncheckedUpdateManyWithoutVerifierNestedInput = {
-  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
-  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
-  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput[]
-  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
-  set?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  disconnect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  delete?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
-  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput[]
-  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput | Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput[]
-  deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
-}
-
 export type CollectionCreateNestedManyWithoutCourierInput = {
   create?: Prisma.XOR<Prisma.CollectionCreateWithoutCourierInput, Prisma.CollectionUncheckedCreateWithoutCourierInput> | Prisma.CollectionCreateWithoutCourierInput[] | Prisma.CollectionUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutCourierInput | Prisma.CollectionCreateOrConnectWithoutCourierInput[]
@@ -885,10 +846,24 @@ export type CollectionCreateNestedManyWithoutCourierInput = {
   connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
 }
 
+export type CollectionCreateNestedManyWithoutVerifierInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
+  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
+  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+}
+
 export type CollectionUncheckedCreateNestedManyWithoutCourierInput = {
   create?: Prisma.XOR<Prisma.CollectionCreateWithoutCourierInput, Prisma.CollectionUncheckedCreateWithoutCourierInput> | Prisma.CollectionCreateWithoutCourierInput[] | Prisma.CollectionUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutCourierInput | Prisma.CollectionCreateOrConnectWithoutCourierInput[]
   createMany?: Prisma.CollectionCreateManyCourierInputEnvelope
+  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+}
+
+export type CollectionUncheckedCreateNestedManyWithoutVerifierInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
+  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
   connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
 }
 
@@ -906,6 +881,20 @@ export type CollectionUpdateManyWithoutCourierNestedInput = {
   deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
 }
 
+export type CollectionUpdateManyWithoutVerifierNestedInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
+  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput[]
+  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
+  set?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  disconnect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  delete?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput[]
+  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput | Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput[]
+  deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
+}
+
 export type CollectionUncheckedUpdateManyWithoutCourierNestedInput = {
   create?: Prisma.XOR<Prisma.CollectionCreateWithoutCourierInput, Prisma.CollectionUncheckedCreateWithoutCourierInput> | Prisma.CollectionCreateWithoutCourierInput[] | Prisma.CollectionUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutCourierInput | Prisma.CollectionCreateOrConnectWithoutCourierInput[]
@@ -917,6 +906,20 @@ export type CollectionUncheckedUpdateManyWithoutCourierNestedInput = {
   connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
   update?: Prisma.CollectionUpdateWithWhereUniqueWithoutCourierInput | Prisma.CollectionUpdateWithWhereUniqueWithoutCourierInput[]
   updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutCourierInput | Prisma.CollectionUpdateManyWithWhereWithoutCourierInput[]
+  deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
+}
+
+export type CollectionUncheckedUpdateManyWithoutVerifierNestedInput = {
+  create?: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput> | Prisma.CollectionCreateWithoutVerifierInput[] | Prisma.CollectionUncheckedCreateWithoutVerifierInput[]
+  connectOrCreate?: Prisma.CollectionCreateOrConnectWithoutVerifierInput | Prisma.CollectionCreateOrConnectWithoutVerifierInput[]
+  upsert?: Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpsertWithWhereUniqueWithoutVerifierInput[]
+  createMany?: Prisma.CollectionCreateManyVerifierInputEnvelope
+  set?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  disconnect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  delete?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  connect?: Prisma.CollectionWhereUniqueInput | Prisma.CollectionWhereUniqueInput[]
+  update?: Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput | Prisma.CollectionUpdateWithWhereUniqueWithoutVerifierInput[]
+  updateMany?: Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput | Prisma.CollectionUpdateManyWithWhereWithoutVerifierInput[]
   deleteMany?: Prisma.CollectionScalarWhereInput | Prisma.CollectionScalarWhereInput[]
 }
 
@@ -1005,6 +1008,7 @@ export type CollectionCreateWithoutCompanyInput = {
   operationKey?: string | null
   requestHash?: string | null
   id?: string
+  agencyId: string
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1016,7 +1020,7 @@ export type CollectionCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   delivery: Prisma.DeliveryCreateNestedOneWithoutCollection_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
   verifier?: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemCreateNestedManyWithoutCollectionInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventCreateNestedManyWithoutCollectionInput
@@ -1100,13 +1104,14 @@ export type CollectionScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Collection"> | Date | string
 }
 
-export type CollectionCreateWithoutVerifierInput = {
+export type CollectionCreateWithoutCourierInput = {
   legacySlot?: number | null
   version?: number
   reference?: string | null
   operationKey?: string | null
   requestHash?: string | null
   id?: string
+  agencyId: string
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1119,7 +1124,66 @@ export type CollectionCreateWithoutVerifierInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutCollection_companyRecordsInput
   delivery: Prisma.DeliveryCreateNestedOneWithoutCollection_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
+  verifier?: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput
+  remittanceItem_collectionRecords?: Prisma.RemittanceItemCreateNestedManyWithoutCollectionInput
+  collectionEvent_collectionRecords?: Prisma.CollectionEventCreateNestedManyWithoutCollectionInput
+}
+
+export type CollectionUncheckedCreateWithoutCourierInput = {
+  legacySlot?: number | null
+  version?: number
+  reference?: string | null
+  operationKey?: string | null
+  requestHash?: string | null
+  id?: string
+  deliveryId: string
+  agencyId: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  method?: $Enums.PaymentMethod | null
+  status?: $Enums.CollectionStatus
+  declaredAt?: Date | string | null
+  verifiedById?: string | null
+  verifiedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  remittanceItem_collectionRecords?: Prisma.RemittanceItemUncheckedCreateNestedManyWithoutCollectionInput
+  collectionEvent_collectionRecords?: Prisma.CollectionEventUncheckedCreateNestedManyWithoutCollectionInput
+}
+
+export type CollectionCreateOrConnectWithoutCourierInput = {
+  where: Prisma.CollectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.CollectionCreateWithoutCourierInput, Prisma.CollectionUncheckedCreateWithoutCourierInput>
+}
+
+export type CollectionCreateManyCourierInputEnvelope = {
+  data: Prisma.CollectionCreateManyCourierInput | Prisma.CollectionCreateManyCourierInput[]
+  skipDuplicates?: boolean
+}
+
+export type CollectionCreateWithoutVerifierInput = {
+  legacySlot?: number | null
+  version?: number
+  reference?: string | null
+  operationKey?: string | null
+  requestHash?: string | null
+  id?: string
+  agencyId: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  method?: $Enums.PaymentMethod | null
+  status?: $Enums.CollectionStatus
+  declaredAt?: Date | string | null
+  verifiedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutCollection_companyRecordsInput
+  delivery: Prisma.DeliveryCreateNestedOneWithoutCollection_deliveryRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemCreateNestedManyWithoutCollectionInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventCreateNestedManyWithoutCollectionInput
 }
@@ -1158,79 +1222,6 @@ export type CollectionCreateManyVerifierInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type CollectionUpsertWithWhereUniqueWithoutVerifierInput = {
-  where: Prisma.CollectionWhereUniqueInput
-  update: Prisma.XOR<Prisma.CollectionUpdateWithoutVerifierInput, Prisma.CollectionUncheckedUpdateWithoutVerifierInput>
-  create: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput>
-}
-
-export type CollectionUpdateWithWhereUniqueWithoutVerifierInput = {
-  where: Prisma.CollectionWhereUniqueInput
-  data: Prisma.XOR<Prisma.CollectionUpdateWithoutVerifierInput, Prisma.CollectionUncheckedUpdateWithoutVerifierInput>
-}
-
-export type CollectionUpdateManyWithWhereWithoutVerifierInput = {
-  where: Prisma.CollectionScalarWhereInput
-  data: Prisma.XOR<Prisma.CollectionUpdateManyMutationInput, Prisma.CollectionUncheckedUpdateManyWithoutVerifierInput>
-}
-
-export type CollectionCreateWithoutCourierInput = {
-  legacySlot?: number | null
-  version?: number
-  reference?: string | null
-  operationKey?: string | null
-  requestHash?: string | null
-  id?: string
-  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency: string
-  method?: $Enums.PaymentMethod | null
-  status?: $Enums.CollectionStatus
-  declaredAt?: Date | string | null
-  verifiedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutCollection_companyRecordsInput
-  delivery: Prisma.DeliveryCreateNestedOneWithoutCollection_deliveryRecordsInput
-  verifier?: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput
-  remittanceItem_collectionRecords?: Prisma.RemittanceItemCreateNestedManyWithoutCollectionInput
-  collectionEvent_collectionRecords?: Prisma.CollectionEventCreateNestedManyWithoutCollectionInput
-}
-
-export type CollectionUncheckedCreateWithoutCourierInput = {
-  legacySlot?: number | null
-  version?: number
-  reference?: string | null
-  operationKey?: string | null
-  requestHash?: string | null
-  id?: string
-  deliveryId: string
-  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency: string
-  method?: $Enums.PaymentMethod | null
-  status?: $Enums.CollectionStatus
-  declaredAt?: Date | string | null
-  verifiedById?: string | null
-  verifiedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  remittanceItem_collectionRecords?: Prisma.RemittanceItemUncheckedCreateNestedManyWithoutCollectionInput
-  collectionEvent_collectionRecords?: Prisma.CollectionEventUncheckedCreateNestedManyWithoutCollectionInput
-}
-
-export type CollectionCreateOrConnectWithoutCourierInput = {
-  where: Prisma.CollectionWhereUniqueInput
-  create: Prisma.XOR<Prisma.CollectionCreateWithoutCourierInput, Prisma.CollectionUncheckedCreateWithoutCourierInput>
-}
-
-export type CollectionCreateManyCourierInputEnvelope = {
-  data: Prisma.CollectionCreateManyCourierInput | Prisma.CollectionCreateManyCourierInput[]
-  skipDuplicates?: boolean
-}
-
 export type CollectionUpsertWithWhereUniqueWithoutCourierInput = {
   where: Prisma.CollectionWhereUniqueInput
   update: Prisma.XOR<Prisma.CollectionUpdateWithoutCourierInput, Prisma.CollectionUncheckedUpdateWithoutCourierInput>
@@ -1247,6 +1238,22 @@ export type CollectionUpdateManyWithWhereWithoutCourierInput = {
   data: Prisma.XOR<Prisma.CollectionUpdateManyMutationInput, Prisma.CollectionUncheckedUpdateManyWithoutCourierInput>
 }
 
+export type CollectionUpsertWithWhereUniqueWithoutVerifierInput = {
+  where: Prisma.CollectionWhereUniqueInput
+  update: Prisma.XOR<Prisma.CollectionUpdateWithoutVerifierInput, Prisma.CollectionUncheckedUpdateWithoutVerifierInput>
+  create: Prisma.XOR<Prisma.CollectionCreateWithoutVerifierInput, Prisma.CollectionUncheckedCreateWithoutVerifierInput>
+}
+
+export type CollectionUpdateWithWhereUniqueWithoutVerifierInput = {
+  where: Prisma.CollectionWhereUniqueInput
+  data: Prisma.XOR<Prisma.CollectionUpdateWithoutVerifierInput, Prisma.CollectionUncheckedUpdateWithoutVerifierInput>
+}
+
+export type CollectionUpdateManyWithWhereWithoutVerifierInput = {
+  where: Prisma.CollectionScalarWhereInput
+  data: Prisma.XOR<Prisma.CollectionUpdateManyMutationInput, Prisma.CollectionUncheckedUpdateManyWithoutVerifierInput>
+}
+
 export type CollectionCreateWithoutDeliveryInput = {
   legacySlot?: number | null
   version?: number
@@ -1254,6 +1261,7 @@ export type CollectionCreateWithoutDeliveryInput = {
   operationKey?: string | null
   requestHash?: string | null
   id?: string
+  agencyId: string
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1265,7 +1273,7 @@ export type CollectionCreateWithoutDeliveryInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutCollection_companyRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
   verifier?: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemCreateNestedManyWithoutCollectionInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventCreateNestedManyWithoutCollectionInput
@@ -1328,6 +1336,7 @@ export type CollectionCreateWithoutRemittanceItem_collectionRecordsInput = {
   operationKey?: string | null
   requestHash?: string | null
   id?: string
+  agencyId: string
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1340,7 +1349,7 @@ export type CollectionCreateWithoutRemittanceItem_collectionRecordsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutCollection_companyRecordsInput
   delivery: Prisma.DeliveryCreateNestedOneWithoutCollection_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
   verifier?: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventCreateNestedManyWithoutCollectionInput
 }
@@ -1393,6 +1402,7 @@ export type CollectionUpdateWithoutRemittanceItem_collectionRecordsInput = {
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1405,7 +1415,7 @@ export type CollectionUpdateWithoutRemittanceItem_collectionRecordsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutCollection_companyRecordsNestedInput
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutCollection_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
   verifier?: Prisma.CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventUpdateManyWithoutCollectionNestedInput
 }
@@ -1442,6 +1452,7 @@ export type CollectionCreateWithoutCollectionEvent_collectionRecordsInput = {
   operationKey?: string | null
   requestHash?: string | null
   id?: string
+  agencyId: string
   expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency: string
@@ -1454,7 +1465,7 @@ export type CollectionCreateWithoutCollectionEvent_collectionRecordsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutCollection_companyRecordsInput
   delivery: Prisma.DeliveryCreateNestedOneWithoutCollection_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_courierRecordsInput
   verifier?: Prisma.CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemCreateNestedManyWithoutCollectionInput
 }
@@ -1507,6 +1518,7 @@ export type CollectionUpdateWithoutCollectionEvent_collectionRecordsInput = {
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1519,7 +1531,7 @@ export type CollectionUpdateWithoutCollectionEvent_collectionRecordsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutCollection_companyRecordsNestedInput
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutCollection_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
   verifier?: Prisma.CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemUpdateManyWithoutCollectionNestedInput
 }
@@ -1579,6 +1591,7 @@ export type CollectionUpdateWithoutCompanyInput = {
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1590,7 +1603,7 @@ export type CollectionUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutCollection_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
   verifier?: Prisma.CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemUpdateManyWithoutCollectionNestedInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventUpdateManyWithoutCollectionNestedInput
@@ -1644,6 +1657,28 @@ export type CollectionUncheckedUpdateManyWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type CollectionCreateManyCourierInput = {
+  legacySlot?: number | null
+  version?: number
+  reference?: string | null
+  operationKey?: string | null
+  requestHash?: string | null
+  id?: string
+  deliveryId: string
+  agencyId: string
+  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency: string
+  method?: $Enums.PaymentMethod | null
+  status?: $Enums.CollectionStatus
+  declaredAt?: Date | string | null
+  verifiedById?: string | null
+  verifiedAt?: Date | string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
 export type CollectionCreateManyVerifierInput = {
   legacySlot?: number | null
   version?: number
@@ -1666,13 +1701,14 @@ export type CollectionCreateManyVerifierInput = {
   updatedAt?: Date | string
 }
 
-export type CollectionUpdateWithoutVerifierInput = {
+export type CollectionUpdateWithoutCourierInput = {
   legacySlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1685,7 +1721,78 @@ export type CollectionUpdateWithoutVerifierInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutCollection_companyRecordsNestedInput
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutCollection_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
+  verifier?: Prisma.CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput
+  remittanceItem_collectionRecords?: Prisma.RemittanceItemUpdateManyWithoutCollectionNestedInput
+  collectionEvent_collectionRecords?: Prisma.CollectionEventUpdateManyWithoutCollectionNestedInput
+}
+
+export type CollectionUncheckedUpdateWithoutCourierInput = {
+  legacySlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumCollectionStatusFieldUpdateOperationsInput | $Enums.CollectionStatus
+  declaredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  remittanceItem_collectionRecords?: Prisma.RemittanceItemUncheckedUpdateManyWithoutCollectionNestedInput
+  collectionEvent_collectionRecords?: Prisma.CollectionEventUncheckedUpdateManyWithoutCollectionNestedInput
+}
+
+export type CollectionUncheckedUpdateManyWithoutCourierInput = {
+  legacySlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumCollectionStatusFieldUpdateOperationsInput | $Enums.CollectionStatus
+  declaredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CollectionUpdateWithoutVerifierInput = {
+  legacySlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  method?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  status?: Prisma.EnumCollectionStatusFieldUpdateOperationsInput | $Enums.CollectionStatus
+  declaredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutCollection_companyRecordsNestedInput
+  delivery?: Prisma.DeliveryUpdateOneRequiredWithoutCollection_deliveryRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemUpdateManyWithoutCollectionNestedInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventUpdateManyWithoutCollectionNestedInput
 }
@@ -1736,95 +1843,6 @@ export type CollectionUncheckedUpdateManyWithoutVerifierInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CollectionCreateManyCourierInput = {
-  legacySlot?: number | null
-  version?: number
-  reference?: string | null
-  operationKey?: string | null
-  requestHash?: string | null
-  id?: string
-  deliveryId: string
-  expectedAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
-  declaredAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency: string
-  method?: $Enums.PaymentMethod | null
-  status?: $Enums.CollectionStatus
-  declaredAt?: Date | string | null
-  verifiedById?: string | null
-  verifiedAt?: Date | string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CollectionUpdateWithoutCourierInput = {
-  legacySlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  method?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
-  status?: Prisma.EnumCollectionStatusFieldUpdateOperationsInput | $Enums.CollectionStatus
-  declaredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutCollection_companyRecordsNestedInput
-  delivery?: Prisma.DeliveryUpdateOneRequiredWithoutCollection_deliveryRecordsNestedInput
-  verifier?: Prisma.CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput
-  remittanceItem_collectionRecords?: Prisma.RemittanceItemUpdateManyWithoutCollectionNestedInput
-  collectionEvent_collectionRecords?: Prisma.CollectionEventUpdateManyWithoutCollectionNestedInput
-}
-
-export type CollectionUncheckedUpdateWithoutCourierInput = {
-  legacySlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
-  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  method?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
-  status?: Prisma.EnumCollectionStatusFieldUpdateOperationsInput | $Enums.CollectionStatus
-  declaredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  verifiedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  remittanceItem_collectionRecords?: Prisma.RemittanceItemUncheckedUpdateManyWithoutCollectionNestedInput
-  collectionEvent_collectionRecords?: Prisma.CollectionEventUncheckedUpdateManyWithoutCollectionNestedInput
-}
-
-export type CollectionUncheckedUpdateManyWithoutCourierInput = {
-  legacySlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
-  expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  method?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
-  status?: Prisma.EnumCollectionStatusFieldUpdateOperationsInput | $Enums.CollectionStatus
-  declaredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  verifiedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type CollectionCreateManyDeliveryInput = {
   legacySlot?: number | null
   version?: number
@@ -1854,6 +1872,7 @@ export type CollectionUpdateWithoutDeliveryInput = {
   operationKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requestHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   expectedAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   declaredAmount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1865,7 +1884,7 @@ export type CollectionUpdateWithoutDeliveryInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutCollection_companyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput
   verifier?: Prisma.CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput
   remittanceItem_collectionRecords?: Prisma.RemittanceItemUpdateManyWithoutCollectionNestedInput
   collectionEvent_collectionRecords?: Prisma.CollectionEventUpdateManyWithoutCollectionNestedInput
@@ -1981,7 +2000,7 @@ export type CollectionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   delivery?: boolean | Prisma.DeliveryDefaultArgs<ExtArgs>
-  courier?: boolean | Prisma.AgencyMembershipDefaultArgs<ExtArgs>
+  courier?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   verifier?: boolean | Prisma.Collection$verifierArgs<ExtArgs>
   remittanceItem_collectionRecords?: boolean | Prisma.Collection$remittanceItem_collectionRecordsArgs<ExtArgs>
   collectionEvent_collectionRecords?: boolean | Prisma.Collection$collectionEvent_collectionRecordsArgs<ExtArgs>
@@ -2018,7 +2037,7 @@ export type CollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type CollectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   delivery?: boolean | Prisma.DeliveryDefaultArgs<ExtArgs>
-  courier?: boolean | Prisma.AgencyMembershipDefaultArgs<ExtArgs>
+  courier?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   verifier?: boolean | Prisma.Collection$verifierArgs<ExtArgs>
   remittanceItem_collectionRecords?: boolean | Prisma.Collection$remittanceItem_collectionRecordsArgs<ExtArgs>
   collectionEvent_collectionRecords?: boolean | Prisma.Collection$collectionEvent_collectionRecordsArgs<ExtArgs>
@@ -2030,7 +2049,7 @@ export type $CollectionPayload<ExtArgs extends runtime.Types.Extensions.Internal
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     delivery: Prisma.$DeliveryPayload<ExtArgs>
-    courier: Prisma.$AgencyMembershipPayload<ExtArgs>
+    courier: Prisma.$CompanyMembershipPayload<ExtArgs>
     verifier: Prisma.$CompanyMembershipPayload<ExtArgs> | null
     remittanceItem_collectionRecords: Prisma.$RemittanceItemPayload<ExtArgs>[]
     collectionEvent_collectionRecords: Prisma.$CollectionEventPayload<ExtArgs>[]
@@ -2399,7 +2418,7 @@ export interface Prisma__CollectionClient<T, Null = never, ExtArgs extends runti
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   delivery<T extends Prisma.DeliveryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DeliveryDefaultArgs<ExtArgs>>): Prisma.Prisma__DeliveryClient<runtime.Types.Result.GetResult<Prisma.$DeliveryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  courier<T extends Prisma.AgencyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AgencyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__AgencyMembershipClient<runtime.Types.Result.GetResult<Prisma.$AgencyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  courier<T extends Prisma.CompanyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   verifier<T extends Prisma.Collection$verifierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Collection$verifierArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   remittanceItem_collectionRecords<T extends Prisma.Collection$remittanceItem_collectionRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Collection$remittanceItem_collectionRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RemittanceItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   collectionEvent_collectionRecords<T extends Prisma.Collection$collectionEvent_collectionRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Collection$collectionEvent_collectionRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollectionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>

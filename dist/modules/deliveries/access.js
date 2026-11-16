@@ -41,8 +41,6 @@ export async function access(tx, c) {
         ? "operator"
         : "driver";
     await authorizeTenant(store, selection(c), kind === "operator" ? "deliveries.supervise.read" : "deliveries.self.read");
-    if (kind === "driver" && c.scope !== "AGENCY")
-        throw stockError("AGENCY_REQUIRED", "Choisissez votre agence livreur.", 403);
     return { kind, permissions };
 }
 export function scope(c, kind, history = false) {

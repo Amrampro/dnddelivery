@@ -18,7 +18,7 @@ export async function availableActions(tx, c, p, auth) {
     const can = (permission, safe = false) => auth.permissions.includes(permission) && (valid || (safe && closure));
     const current = c.scope === "COMPANY" || c.agencyId === p.agencyId, driver = auth.kind === "driver" &&
         p.courierId === c.actorId &&
-        p.agencyId === c.agencyId;
+        (c.scope === "COMPANY" || p.agencyId === c.agencyId);
     const agency = auth.kind === "operator" && current, held = p.custodyType === "COURIER", inAgency = p.custodyType === "AGENCY", pending = p.handovers.some((h) => h.status === "PENDING") ||
         p.legs.some((l) => l.status === "DRAFT" || l.status === "IN_TRANSIT"), phase = p.phase;
     const list = [];

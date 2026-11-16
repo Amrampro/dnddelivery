@@ -20,7 +20,7 @@ export const collectionInclude = {
     },
     courier: {
         select: {
-            membership: { select: { user: { select: { fullName: true } } } },
+            user: { select: { fullName: true } },
         },
     },
     remittanceItem_collectionRecords: { include: { remittance: true } },
@@ -89,7 +89,7 @@ export async function ledger(tx, rows) {
             companyId: p.companyId,
             agencyId: p.agencyId,
             courierId: p.courierId,
-            courierName: p.courier.membership.user.fullName,
+            courierName: p.courier.user.fullName,
             currency: p.currency,
             version: p.version,
             method: p.method,

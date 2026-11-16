@@ -30,17 +30,14 @@ export async function ensureOtp(tx, p, renew = false, now = new Date()) {
         !(await tx.driverProfile.count({
             where: { companyId: p.companyId, userId: p.courierId, status: "ACTIVE" },
         })) ||
-        !(await tx.agencyMembership.count({
+        !(await tx.companyMembership.count({
             where: {
                 companyId: p.companyId,
-                agencyId: p.agencyId,
                 userId: p.courierId,
                 active: true,
-                role: { code: "courier" },
-                membership: {
-                    active: true,
-                    user: { status: "ACTIVE", archivedAt: null },
-                },
+                organizationRole: "courier",
+                employmentStatus: "ACTIVE",
+                user: { status: "ACTIVE", archivedAt: null },
             },
         })))
         throw stockError("OTP_UNAVAILABLE", "Cette mission n’est plus autorisée à recevoir un code.", 403);

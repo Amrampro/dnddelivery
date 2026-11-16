@@ -294,7 +294,7 @@ export type DeliveryAssignmentWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"DeliveryAssignment"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   delivery?: Prisma.XOR<Prisma.DeliveryScalarRelationFilter, Prisma.DeliveryWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipScalarRelationFilter, Prisma.AgencyMembershipWhereInput>
+  courier?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   assigner?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
 }
 
@@ -315,7 +315,7 @@ export type DeliveryAssignmentOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   delivery?: Prisma.DeliveryOrderByWithRelationInput
-  courier?: Prisma.AgencyMembershipOrderByWithRelationInput
+  courier?: Prisma.CompanyMembershipOrderByWithRelationInput
   assigner?: Prisma.CompanyMembershipOrderByWithRelationInput
   _relevance?: Prisma.DeliveryAssignmentOrderByRelevanceInput
 }
@@ -343,7 +343,7 @@ export type DeliveryAssignmentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"DeliveryAssignment"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   delivery?: Prisma.XOR<Prisma.DeliveryScalarRelationFilter, Prisma.DeliveryWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipScalarRelationFilter, Prisma.AgencyMembershipWhereInput>
+  courier?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   assigner?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
 }, "id" | "companyId_id_deliveryId_courierId" | "companyId_deliveryId_activeSlot" | "companyId_id">
 
@@ -396,12 +396,13 @@ export type DeliveryAssignmentCreateInput = {
   activeSlot?: number | null
   purpose?: string
   id?: string
+  agencyId: string
   endedAt?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutDeliveryAssignment_companyRecordsInput
   delivery: Prisma.DeliveryCreateNestedOneWithoutDeliveryAssignment_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
   assigner: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_assignerRecordsInput
 }
 
@@ -429,12 +430,13 @@ export type DeliveryAssignmentUpdateInput = {
   activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   purpose?: Prisma.StringFieldUpdateOperationsInput | string
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutDeliveryAssignment_companyRecordsNestedInput
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutDeliveryAssignment_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
   assigner?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_assignerRecordsNestedInput
 }
 
@@ -479,6 +481,7 @@ export type DeliveryAssignmentUpdateManyMutationInput = {
   activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   purpose?: Prisma.StringFieldUpdateOperationsInput | string
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -638,48 +641,6 @@ export type DeliveryAssignmentUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.DeliveryAssignmentScalarWhereInput | Prisma.DeliveryAssignmentScalarWhereInput[]
 }
 
-export type DeliveryAssignmentCreateNestedManyWithoutAssignerInput = {
-  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
-  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
-  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
-  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-}
-
-export type DeliveryAssignmentUncheckedCreateNestedManyWithoutAssignerInput = {
-  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
-  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
-  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
-  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-}
-
-export type DeliveryAssignmentUpdateManyWithoutAssignerNestedInput = {
-  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
-  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
-  upsert?: Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput[]
-  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
-  set?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  disconnect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  delete?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  update?: Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput[]
-  updateMany?: Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput[]
-  deleteMany?: Prisma.DeliveryAssignmentScalarWhereInput | Prisma.DeliveryAssignmentScalarWhereInput[]
-}
-
-export type DeliveryAssignmentUncheckedUpdateManyWithoutAssignerNestedInput = {
-  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
-  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
-  upsert?: Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput[]
-  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
-  set?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  disconnect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  delete?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
-  update?: Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput[]
-  updateMany?: Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput[]
-  deleteMany?: Prisma.DeliveryAssignmentScalarWhereInput | Prisma.DeliveryAssignmentScalarWhereInput[]
-}
-
 export type DeliveryAssignmentCreateNestedManyWithoutCourierInput = {
   create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutCourierInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput> | Prisma.DeliveryAssignmentCreateWithoutCourierInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutCourierInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutCourierInput[]
@@ -687,10 +648,24 @@ export type DeliveryAssignmentCreateNestedManyWithoutCourierInput = {
   connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
 }
 
+export type DeliveryAssignmentCreateNestedManyWithoutAssignerInput = {
+  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
+  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
+  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
+  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+}
+
 export type DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput = {
   create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutCourierInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput> | Prisma.DeliveryAssignmentCreateWithoutCourierInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutCourierInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutCourierInput[]
   createMany?: Prisma.DeliveryAssignmentCreateManyCourierInputEnvelope
+  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+}
+
+export type DeliveryAssignmentUncheckedCreateNestedManyWithoutAssignerInput = {
+  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
+  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
+  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
   connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
 }
 
@@ -708,6 +683,20 @@ export type DeliveryAssignmentUpdateManyWithoutCourierNestedInput = {
   deleteMany?: Prisma.DeliveryAssignmentScalarWhereInput | Prisma.DeliveryAssignmentScalarWhereInput[]
 }
 
+export type DeliveryAssignmentUpdateManyWithoutAssignerNestedInput = {
+  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
+  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
+  upsert?: Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput[]
+  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
+  set?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  disconnect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  delete?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  update?: Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput[]
+  updateMany?: Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput[]
+  deleteMany?: Prisma.DeliveryAssignmentScalarWhereInput | Prisma.DeliveryAssignmentScalarWhereInput[]
+}
+
 export type DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput = {
   create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutCourierInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput> | Prisma.DeliveryAssignmentCreateWithoutCourierInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutCourierInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutCourierInput[]
@@ -719,6 +708,20 @@ export type DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput = {
   connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
   update?: Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutCourierInput | Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutCourierInput[]
   updateMany?: Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutCourierInput | Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutCourierInput[]
+  deleteMany?: Prisma.DeliveryAssignmentScalarWhereInput | Prisma.DeliveryAssignmentScalarWhereInput[]
+}
+
+export type DeliveryAssignmentUncheckedUpdateManyWithoutAssignerNestedInput = {
+  create?: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput> | Prisma.DeliveryAssignmentCreateWithoutAssignerInput[] | Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput[]
+  connectOrCreate?: Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput | Prisma.DeliveryAssignmentCreateOrConnectWithoutAssignerInput[]
+  upsert?: Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput[]
+  createMany?: Prisma.DeliveryAssignmentCreateManyAssignerInputEnvelope
+  set?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  disconnect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  delete?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  connect?: Prisma.DeliveryAssignmentWhereUniqueInput | Prisma.DeliveryAssignmentWhereUniqueInput[]
+  update?: Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput[]
+  updateMany?: Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput | Prisma.DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput[]
   deleteMany?: Prisma.DeliveryAssignmentScalarWhereInput | Prisma.DeliveryAssignmentScalarWhereInput[]
 }
 
@@ -775,11 +778,12 @@ export type DeliveryAssignmentCreateWithoutCompanyInput = {
   activeSlot?: number | null
   purpose?: string
   id?: string
+  agencyId: string
   endedAt?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
   delivery: Prisma.DeliveryCreateNestedOneWithoutDeliveryAssignment_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
   assigner: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_assignerRecordsInput
 }
 
@@ -845,6 +849,47 @@ export type DeliveryAssignmentScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"DeliveryAssignment"> | Date | string
 }
 
+export type DeliveryAssignmentCreateWithoutCourierInput = {
+  expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currencySnapshot?: string | null
+  collectionRequiredSnapshot?: boolean | null
+  activeSlot?: number | null
+  purpose?: string
+  id?: string
+  agencyId: string
+  endedAt?: Date | string | null
+  reason?: string | null
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutDeliveryAssignment_companyRecordsInput
+  delivery: Prisma.DeliveryCreateNestedOneWithoutDeliveryAssignment_deliveryRecordsInput
+  assigner: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_assignerRecordsInput
+}
+
+export type DeliveryAssignmentUncheckedCreateWithoutCourierInput = {
+  expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currencySnapshot?: string | null
+  collectionRequiredSnapshot?: boolean | null
+  activeSlot?: number | null
+  purpose?: string
+  id?: string
+  deliveryId: string
+  agencyId: string
+  assignedById: string
+  endedAt?: Date | string | null
+  reason?: string | null
+  createdAt?: Date | string
+}
+
+export type DeliveryAssignmentCreateOrConnectWithoutCourierInput = {
+  where: Prisma.DeliveryAssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutCourierInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput>
+}
+
+export type DeliveryAssignmentCreateManyCourierInputEnvelope = {
+  data: Prisma.DeliveryAssignmentCreateManyCourierInput | Prisma.DeliveryAssignmentCreateManyCourierInput[]
+  skipDuplicates?: boolean
+}
+
 export type DeliveryAssignmentCreateWithoutAssignerInput = {
   expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currencySnapshot?: string | null
@@ -852,12 +897,13 @@ export type DeliveryAssignmentCreateWithoutAssignerInput = {
   activeSlot?: number | null
   purpose?: string
   id?: string
+  agencyId: string
   endedAt?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutDeliveryAssignment_companyRecordsInput
   delivery: Prisma.DeliveryCreateNestedOneWithoutDeliveryAssignment_deliveryRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
 }
 
 export type DeliveryAssignmentUncheckedCreateWithoutAssignerInput = {
@@ -885,61 +931,6 @@ export type DeliveryAssignmentCreateManyAssignerInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput = {
-  where: Prisma.DeliveryAssignmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.DeliveryAssignmentUpdateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedUpdateWithoutAssignerInput>
-  create: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput>
-}
-
-export type DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput = {
-  where: Prisma.DeliveryAssignmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.DeliveryAssignmentUpdateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedUpdateWithoutAssignerInput>
-}
-
-export type DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput = {
-  where: Prisma.DeliveryAssignmentScalarWhereInput
-  data: Prisma.XOR<Prisma.DeliveryAssignmentUpdateManyMutationInput, Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutAssignerInput>
-}
-
-export type DeliveryAssignmentCreateWithoutCourierInput = {
-  expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currencySnapshot?: string | null
-  collectionRequiredSnapshot?: boolean | null
-  activeSlot?: number | null
-  purpose?: string
-  id?: string
-  endedAt?: Date | string | null
-  reason?: string | null
-  createdAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutDeliveryAssignment_companyRecordsInput
-  delivery: Prisma.DeliveryCreateNestedOneWithoutDeliveryAssignment_deliveryRecordsInput
-  assigner: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_assignerRecordsInput
-}
-
-export type DeliveryAssignmentUncheckedCreateWithoutCourierInput = {
-  expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currencySnapshot?: string | null
-  collectionRequiredSnapshot?: boolean | null
-  activeSlot?: number | null
-  purpose?: string
-  id?: string
-  deliveryId: string
-  assignedById: string
-  endedAt?: Date | string | null
-  reason?: string | null
-  createdAt?: Date | string
-}
-
-export type DeliveryAssignmentCreateOrConnectWithoutCourierInput = {
-  where: Prisma.DeliveryAssignmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutCourierInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutCourierInput>
-}
-
-export type DeliveryAssignmentCreateManyCourierInputEnvelope = {
-  data: Prisma.DeliveryAssignmentCreateManyCourierInput | Prisma.DeliveryAssignmentCreateManyCourierInput[]
-  skipDuplicates?: boolean
-}
-
 export type DeliveryAssignmentUpsertWithWhereUniqueWithoutCourierInput = {
   where: Prisma.DeliveryAssignmentWhereUniqueInput
   update: Prisma.XOR<Prisma.DeliveryAssignmentUpdateWithoutCourierInput, Prisma.DeliveryAssignmentUncheckedUpdateWithoutCourierInput>
@@ -956,6 +947,22 @@ export type DeliveryAssignmentUpdateManyWithWhereWithoutCourierInput = {
   data: Prisma.XOR<Prisma.DeliveryAssignmentUpdateManyMutationInput, Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierInput>
 }
 
+export type DeliveryAssignmentUpsertWithWhereUniqueWithoutAssignerInput = {
+  where: Prisma.DeliveryAssignmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.DeliveryAssignmentUpdateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedUpdateWithoutAssignerInput>
+  create: Prisma.XOR<Prisma.DeliveryAssignmentCreateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedCreateWithoutAssignerInput>
+}
+
+export type DeliveryAssignmentUpdateWithWhereUniqueWithoutAssignerInput = {
+  where: Prisma.DeliveryAssignmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.DeliveryAssignmentUpdateWithoutAssignerInput, Prisma.DeliveryAssignmentUncheckedUpdateWithoutAssignerInput>
+}
+
+export type DeliveryAssignmentUpdateManyWithWhereWithoutAssignerInput = {
+  where: Prisma.DeliveryAssignmentScalarWhereInput
+  data: Prisma.XOR<Prisma.DeliveryAssignmentUpdateManyMutationInput, Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutAssignerInput>
+}
+
 export type DeliveryAssignmentCreateWithoutDeliveryInput = {
   expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currencySnapshot?: string | null
@@ -963,11 +970,12 @@ export type DeliveryAssignmentCreateWithoutDeliveryInput = {
   activeSlot?: number | null
   purpose?: string
   id?: string
+  agencyId: string
   endedAt?: Date | string | null
   reason?: string | null
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutDeliveryAssignment_companyRecordsInput
-  courier: Prisma.AgencyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
+  courier: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput
   assigner: Prisma.CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_assignerRecordsInput
 }
 
@@ -1035,11 +1043,12 @@ export type DeliveryAssignmentUpdateWithoutCompanyInput = {
   activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   purpose?: Prisma.StringFieldUpdateOperationsInput | string
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutDeliveryAssignment_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
   assigner?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_assignerRecordsNestedInput
 }
 
@@ -1075,6 +1084,21 @@ export type DeliveryAssignmentUncheckedUpdateManyWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type DeliveryAssignmentCreateManyCourierInput = {
+  expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currencySnapshot?: string | null
+  collectionRequiredSnapshot?: boolean | null
+  activeSlot?: number | null
+  purpose?: string
+  id?: string
+  deliveryId: string
+  agencyId: string
+  assignedById: string
+  endedAt?: Date | string | null
+  reason?: string | null
+  createdAt?: Date | string
+}
+
 export type DeliveryAssignmentCreateManyAssignerInput = {
   expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currencySnapshot?: string | null
@@ -1090,6 +1114,52 @@ export type DeliveryAssignmentCreateManyAssignerInput = {
   createdAt?: Date | string
 }
 
+export type DeliveryAssignmentUpdateWithoutCourierInput = {
+  expectedAmountSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currencySnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  collectionRequiredSnapshot?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutDeliveryAssignment_companyRecordsNestedInput
+  delivery?: Prisma.DeliveryUpdateOneRequiredWithoutDeliveryAssignment_deliveryRecordsNestedInput
+  assigner?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_assignerRecordsNestedInput
+}
+
+export type DeliveryAssignmentUncheckedUpdateWithoutCourierInput = {
+  expectedAmountSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currencySnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  collectionRequiredSnapshot?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DeliveryAssignmentUncheckedUpdateManyWithoutCourierInput = {
+  expectedAmountSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  currencySnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  collectionRequiredSnapshot?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type DeliveryAssignmentUpdateWithoutAssignerInput = {
   expectedAmountSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currencySnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1097,12 +1167,13 @@ export type DeliveryAssignmentUpdateWithoutAssignerInput = {
   activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   purpose?: Prisma.StringFieldUpdateOperationsInput | string
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutDeliveryAssignment_companyRecordsNestedInput
   delivery?: Prisma.DeliveryUpdateOneRequiredWithoutDeliveryAssignment_deliveryRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
 }
 
 export type DeliveryAssignmentUncheckedUpdateWithoutAssignerInput = {
@@ -1135,63 +1206,6 @@ export type DeliveryAssignmentUncheckedUpdateManyWithoutAssignerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type DeliveryAssignmentCreateManyCourierInput = {
-  expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currencySnapshot?: string | null
-  collectionRequiredSnapshot?: boolean | null
-  activeSlot?: number | null
-  purpose?: string
-  id?: string
-  deliveryId: string
-  assignedById: string
-  endedAt?: Date | string | null
-  reason?: string | null
-  createdAt?: Date | string
-}
-
-export type DeliveryAssignmentUpdateWithoutCourierInput = {
-  expectedAmountSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currencySnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  collectionRequiredSnapshot?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutDeliveryAssignment_companyRecordsNestedInput
-  delivery?: Prisma.DeliveryUpdateOneRequiredWithoutDeliveryAssignment_deliveryRecordsNestedInput
-  assigner?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_assignerRecordsNestedInput
-}
-
-export type DeliveryAssignmentUncheckedUpdateWithoutCourierInput = {
-  expectedAmountSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currencySnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  collectionRequiredSnapshot?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
-  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type DeliveryAssignmentUncheckedUpdateManyWithoutCourierInput = {
-  expectedAmountSnapshot?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currencySnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  collectionRequiredSnapshot?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  deliveryId?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedById?: Prisma.StringFieldUpdateOperationsInput | string
-  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type DeliveryAssignmentCreateManyDeliveryInput = {
   expectedAmountSnapshot?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   currencySnapshot?: string | null
@@ -1214,11 +1228,12 @@ export type DeliveryAssignmentUpdateWithoutDeliveryInput = {
   activeSlot?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   purpose?: Prisma.StringFieldUpdateOperationsInput | string
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutDeliveryAssignment_companyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput
   assigner?: Prisma.CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_assignerRecordsNestedInput
 }
 
@@ -1271,7 +1286,7 @@ export type DeliveryAssignmentSelect<ExtArgs extends runtime.Types.Extensions.In
   createdAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   delivery?: boolean | Prisma.DeliveryDefaultArgs<ExtArgs>
-  courier?: boolean | Prisma.AgencyMembershipDefaultArgs<ExtArgs>
+  courier?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   assigner?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["deliveryAssignment"]>
 
@@ -1298,7 +1313,7 @@ export type DeliveryAssignmentOmit<ExtArgs extends runtime.Types.Extensions.Inte
 export type DeliveryAssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   delivery?: boolean | Prisma.DeliveryDefaultArgs<ExtArgs>
-  courier?: boolean | Prisma.AgencyMembershipDefaultArgs<ExtArgs>
+  courier?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   assigner?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
 }
 
@@ -1307,7 +1322,7 @@ export type $DeliveryAssignmentPayload<ExtArgs extends runtime.Types.Extensions.
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     delivery: Prisma.$DeliveryPayload<ExtArgs>
-    courier: Prisma.$AgencyMembershipPayload<ExtArgs>
+    courier: Prisma.$CompanyMembershipPayload<ExtArgs>
     assigner: Prisma.$CompanyMembershipPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1667,7 +1682,7 @@ export interface Prisma__DeliveryAssignmentClient<T, Null = never, ExtArgs exten
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   delivery<T extends Prisma.DeliveryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DeliveryDefaultArgs<ExtArgs>>): Prisma.Prisma__DeliveryClient<runtime.Types.Result.GetResult<Prisma.$DeliveryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  courier<T extends Prisma.AgencyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AgencyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__AgencyMembershipClient<runtime.Types.Result.GetResult<Prisma.$AgencyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  courier<T extends Prisma.CompanyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   assigner<T extends Prisma.CompanyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

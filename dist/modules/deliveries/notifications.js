@@ -72,16 +72,14 @@ export class DeliveryNotifications {
                 if (row.recipientUserId) {
                     eligible =
                         eligible &&
-                            !!(await this.service.db.agencyMembership.findFirst({
+                            !!(await this.service.db.companyMembership.findFirst({
                                 where: {
                                     companyId: row.companyId,
                                     userId: row.recipientUserId,
                                     active: true,
-                                    role: { code: "courier" },
-                                    membership: {
-                                        active: true,
-                                        user: { status: "ACTIVE", archivedAt: null },
-                                    },
+                                    organizationRole: "courier",
+                                    employmentStatus: "ACTIVE",
+                                    user: { status: "ACTIVE", archivedAt: null },
                                 },
                             })) &&
                             !!(await this.service.db.driverProfile.findFirst({

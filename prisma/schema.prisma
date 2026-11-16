@@ -332,6 +332,10 @@ model Company {
 }
 
 model CompanyMembership {
+  delivery_courierRecords           Delivery[]           @relation("Delivery_courier")
+  deliveryAssignment_courierRecords DeliveryAssignment[] @relation("DeliveryAssignment_courier")
+  collection_courierRecords         Collection[]         @relation("Collection_courier")
+  remittance_courierRecords         Remittance[]         @relation("Remittance_courier")
   organizationRole String @default("employee") @db.VarChar(30)
   employmentStatus String @default("ACTIVE") @db.VarChar(12)
   version Int @default(1)
@@ -438,10 +442,6 @@ model AgencyMembership {
   membership                        CompanyMembership    @relation("AgencyMembership_membership", fields: [companyId, userId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
   agency                            Agency               @relation("AgencyMembership_agency", fields: [companyId, agencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
   role                              Role                 @relation("AgencyMembership_role", fields: [roleId, roleScope], references: [id, scope], onDelete: Restrict, onUpdate: Restrict)
-  delivery_courierRecords           Delivery[]           @relation("Delivery_courier")
-  deliveryAssignment_courierRecords DeliveryAssignment[] @relation("DeliveryAssignment_courier")
-  collection_courierRecords         Collection[]         @relation("Collection_courier")
-  remittance_courierRecords         Remittance[]         @relation("Remittance_courier")
 
   @@unique([companyId, agencyId, userId])
   @@unique([companyId, id])
@@ -920,7 +920,7 @@ model Delivery {
   company                            Company              @relation("Delivery_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   order                              Order                @relation("Delivery_order", fields: [companyId, orderId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
   agency                             Agency               @relation("Delivery_agency", fields: [companyId, agencyId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
-  courier                            AgencyMembership?    @relation("Delivery_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  courier                            CompanyMembership?    @relation("Delivery_courier", fields: [companyId, courierId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict, map: "Delivery_company_courier_fk")
   deliveryAssignment_deliveryRecords DeliveryAssignment[] @relation("DeliveryAssignment_delivery")
   deliveryEvent_deliveryRecords      DeliveryEvent[]      @relation("DeliveryEvent_delivery")
   deliveryOtp_deliveryRecords        DeliveryOtp[]        @relation("DeliveryOtp_delivery")
@@ -953,7 +953,7 @@ model DeliveryAssignment {
   createdAt    DateTime          @default(now()) @db.DateTime(3)
   company      Company           @relation("DeliveryAssignment_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   delivery     Delivery          @relation("DeliveryAssignment_delivery", fields: [companyId, deliveryId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
-  courier      AgencyMembership  @relation("DeliveryAssignment_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  courier      CompanyMembership  @relation("DeliveryAssignment_courier", fields: [companyId, courierId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict, map: "DeliveryAssignment_company_courier_fk")
   assigner     CompanyMembership @relation("DeliveryAssignment_assigner", fields: [companyId, assignedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
 
   @@unique([companyId, id])
@@ -1108,7 +1108,7 @@ model Collection {
   updatedAt                         DateTime           @updatedAt @db.DateTime(3)
   company                           Company            @relation("Collection_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   delivery                          Delivery           @relation("Collection_delivery", fields: [companyId, deliveryId], references: [companyId, id], onDelete: Restrict, onUpdate: Restrict)
-  courier                           AgencyMembership   @relation("Collection_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  courier                           CompanyMembership   @relation("Collection_courier", fields: [companyId, courierId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict, map: "Collection_company_courier_fk")
   verifier                          CompanyMembership? @relation("Collection_verifier", fields: [companyId, verifiedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
   remittanceItem_collectionRecords  RemittanceItem[]   @relation("RemittanceItem_collection")
   collectionEvent_collectionRecords CollectionEvent[]  @relation("CollectionEvent_collection")
@@ -1143,7 +1143,7 @@ model Remittance {
   createdAt                         DateTime          @default(now()) @db.DateTime(3)
   updatedAt                         DateTime          @updatedAt @db.DateTime(3)
   company                           Company           @relation("Remittance_company", fields: [companyId], references: [id], onDelete: Restrict, onUpdate: Restrict)
-  courier                           AgencyMembership  @relation("Remittance_courier", fields: [companyId, agencyId, courierId], references: [companyId, agencyId, userId], onDelete: Restrict, onUpdate: Restrict)
+  courier                           CompanyMembership  @relation("Remittance_courier", fields: [companyId, courierId], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict, map: "Remittance_company_courier_fk")
   confirmer                         CompanyMembership? @relation("Remittance_confirmer", fields: [companyId, confirmedById], references: [companyId, userId], onDelete: Restrict, onUpdate: Restrict)
   remittanceItem_remittanceRecords  RemittanceItem[]  @relation("RemittanceItem_remittance")
   remittanceEvent_remittanceRecords RemittanceEvent[] @relation("RemittanceEvent_remittance")

@@ -63,7 +63,7 @@ export const staffInput = z
         .default([]),
 })
     .strict()
-    .refine((v) => v.role === "employee" || v.agencyIds.length > 0, "Sélectionnez au moins une agence.");
+    .refine((v) => ["employee", "courier"].includes(v.role) || v.agencyIds.length > 0, "Sélectionnez au moins une agence.");
 export const inviteInput = z
     .object({
     email,
@@ -72,7 +72,7 @@ export const inviteInput = z
     agencyIds: z.array(id).max(100).default([]),
 })
     .strict()
-    .refine((v) => v.role === "employee" || v.agencyIds.length > 0, "Sélectionnez au moins une agence.");
+    .refine((v) => ["employee", "courier"].includes(v.role) || v.agencyIds.length > 0, "Sélectionnez au moins une agence.");
 export const employeeInput = z
     .object({
     version,
@@ -81,7 +81,7 @@ export const employeeInput = z
     status: z.enum(["ACTIVE", "SUSPENDED", "INACTIVE"]),
 })
     .strict()
-    .refine((v) => v.role === "employee" || v.agencyIds.length > 0, "Sélectionnez au moins une agence.");
+    .refine((v) => ["employee", "courier"].includes(v.role) || v.agencyIds.length > 0, "Sélectionnez au moins une agence.");
 export const removalInput = z.object({ version, reason: text(500) }).strict();
 export const driverInput = z
     .object({

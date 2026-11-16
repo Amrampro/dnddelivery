@@ -346,7 +346,8 @@ export class DeliveryReads {
                     phase: p.phase,
                     createdAt: p.createdAt,
                     assignments: p.deliveryAssignment_deliveryRecords
-                        .filter((a) => a.courierId === c.actorId && a.agencyId === c.agencyId)
+                        .filter((a) => a.courierId === c.actorId &&
+                        (c.scope === "COMPANY" || a.agencyId === c.agencyId))
                         .map((a) => ({
                         createdAt: a.createdAt,
                         endedAt: a.endedAt,
@@ -467,21 +468,19 @@ export class DeliveryReads {
                 },
             })))
                 throw stockError("AGENCY_DENIED", "Agence non autorisée.", 403);
-            const members = await tx.agencyMembership.findMany({
+            const members = await tx.companyMembership.findMany({
                 where: {
                     companyId: c.companyId,
-                    agencyId,
                     active: true,
-                    role: { code: "courier" },
-                    membership: {
-                        active: true,
-                        organizationRole: "courier",
-                        user: { status: "ACTIVE", archivedAt: null },
-                    },
+                    organizationRole: "courier",
+                    employmentStatus: "ACTIVE",
+                    user: { status: "ACTIVE", archivedAt: null },
                 },
                 include: {
-                    membership: {
-                        include: { user: { select: { id: true, fullName: true } } },
+                    user: { select: { id: true, fullName: true } },
+                    agencyMembership_membershipRecords: {
+                        where: { agencyId, active: true, role: { code: "courier" } },
+                        select: { id: true },
                     },
                 },
             });
@@ -499,7 +498,8 @@ export class DeliveryReads {
                 });
                 return {
                     id: m.userId,
-                    fullName: m.membership.user.fullName,
+                    fullName: m.user.fullName,
+                    agencyLinked: m.agencyMembership_membershipRecords.length > 0,
                     availability: profile?.availability ?? "UNAVAILABLE",
                     status: profile?.status ?? "INACTIVE",
                     activeMissions,

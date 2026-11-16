@@ -344,7 +344,7 @@ export type DeliveryWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   agency?: Prisma.XOR<Prisma.AgencyScalarRelationFilter, Prisma.AgencyWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipNullableScalarRelationFilter, Prisma.AgencyMembershipWhereInput> | null
+  courier?: Prisma.XOR<Prisma.CompanyMembershipNullableScalarRelationFilter, Prisma.CompanyMembershipWhereInput> | null
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentListRelationFilter
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventListRelationFilter
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpListRelationFilter
@@ -381,7 +381,7 @@ export type DeliveryOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   order?: Prisma.OrderOrderByWithRelationInput
   agency?: Prisma.AgencyOrderByWithRelationInput
-  courier?: Prisma.AgencyMembershipOrderByWithRelationInput
+  courier?: Prisma.CompanyMembershipOrderByWithRelationInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentOrderByRelationAggregateInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventOrderByRelationAggregateInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpOrderByRelationAggregateInput
@@ -425,7 +425,7 @@ export type DeliveryWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   agency?: Prisma.XOR<Prisma.AgencyScalarRelationFilter, Prisma.AgencyWhereInput>
-  courier?: Prisma.XOR<Prisma.AgencyMembershipNullableScalarRelationFilter, Prisma.AgencyMembershipWhereInput> | null
+  courier?: Prisma.XOR<Prisma.CompanyMembershipNullableScalarRelationFilter, Prisma.CompanyMembershipWhereInput> | null
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentListRelationFilter
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventListRelationFilter
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpListRelationFilter
@@ -512,7 +512,7 @@ export type DeliveryCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -578,7 +578,7 @@ export type DeliveryUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -840,48 +840,6 @@ export type DeliveryUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.DeliveryScalarWhereInput | Prisma.DeliveryScalarWhereInput[]
 }
 
-export type DeliveryCreateNestedManyWithoutAgencyInput = {
-  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
-  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
-  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
-  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-}
-
-export type DeliveryUncheckedCreateNestedManyWithoutAgencyInput = {
-  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
-  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
-  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
-  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-}
-
-export type DeliveryUpdateManyWithoutAgencyNestedInput = {
-  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
-  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
-  upsert?: Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput[]
-  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
-  set?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  disconnect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  delete?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  update?: Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput[]
-  updateMany?: Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput | Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput[]
-  deleteMany?: Prisma.DeliveryScalarWhereInput | Prisma.DeliveryScalarWhereInput[]
-}
-
-export type DeliveryUncheckedUpdateManyWithoutAgencyNestedInput = {
-  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
-  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
-  upsert?: Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput[]
-  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
-  set?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  disconnect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  delete?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
-  update?: Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput[]
-  updateMany?: Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput | Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput[]
-  deleteMany?: Prisma.DeliveryScalarWhereInput | Prisma.DeliveryScalarWhereInput[]
-}
-
 export type DeliveryCreateNestedManyWithoutCourierInput = {
   create?: Prisma.XOR<Prisma.DeliveryCreateWithoutCourierInput, Prisma.DeliveryUncheckedCreateWithoutCourierInput> | Prisma.DeliveryCreateWithoutCourierInput[] | Prisma.DeliveryUncheckedCreateWithoutCourierInput[]
   connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutCourierInput | Prisma.DeliveryCreateOrConnectWithoutCourierInput[]
@@ -921,6 +879,48 @@ export type DeliveryUncheckedUpdateManyWithoutCourierNestedInput = {
   connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
   update?: Prisma.DeliveryUpdateWithWhereUniqueWithoutCourierInput | Prisma.DeliveryUpdateWithWhereUniqueWithoutCourierInput[]
   updateMany?: Prisma.DeliveryUpdateManyWithWhereWithoutCourierInput | Prisma.DeliveryUpdateManyWithWhereWithoutCourierInput[]
+  deleteMany?: Prisma.DeliveryScalarWhereInput | Prisma.DeliveryScalarWhereInput[]
+}
+
+export type DeliveryCreateNestedManyWithoutAgencyInput = {
+  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
+  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
+  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
+  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+}
+
+export type DeliveryUncheckedCreateNestedManyWithoutAgencyInput = {
+  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
+  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
+  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
+  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+}
+
+export type DeliveryUpdateManyWithoutAgencyNestedInput = {
+  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
+  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
+  upsert?: Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput[]
+  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
+  set?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  disconnect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  delete?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  update?: Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput[]
+  updateMany?: Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput | Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput[]
+  deleteMany?: Prisma.DeliveryScalarWhereInput | Prisma.DeliveryScalarWhereInput[]
+}
+
+export type DeliveryUncheckedUpdateManyWithoutAgencyNestedInput = {
+  create?: Prisma.XOR<Prisma.DeliveryCreateWithoutAgencyInput, Prisma.DeliveryUncheckedCreateWithoutAgencyInput> | Prisma.DeliveryCreateWithoutAgencyInput[] | Prisma.DeliveryUncheckedCreateWithoutAgencyInput[]
+  connectOrCreate?: Prisma.DeliveryCreateOrConnectWithoutAgencyInput | Prisma.DeliveryCreateOrConnectWithoutAgencyInput[]
+  upsert?: Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpsertWithWhereUniqueWithoutAgencyInput[]
+  createMany?: Prisma.DeliveryCreateManyAgencyInputEnvelope
+  set?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  disconnect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  delete?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  connect?: Prisma.DeliveryWhereUniqueInput | Prisma.DeliveryWhereUniqueInput[]
+  update?: Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput | Prisma.DeliveryUpdateWithWhereUniqueWithoutAgencyInput[]
+  updateMany?: Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput | Prisma.DeliveryUpdateManyWithWhereWithoutAgencyInput[]
   deleteMany?: Prisma.DeliveryScalarWhereInput | Prisma.DeliveryScalarWhereInput[]
 }
 
@@ -1134,7 +1134,7 @@ export type DeliveryCreateWithoutCompanyInput = {
   parcelReturn?: Prisma.DeliveryReturnCreateNestedOneWithoutDeliveryInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -1226,6 +1226,95 @@ export type DeliveryScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Delivery"> | Date | string
 }
 
+export type DeliveryCreateWithoutCourierInput = {
+  version?: number
+  parcelReference?: string | null
+  phase?: string | null
+  custodyType?: string | null
+  custodyAgencyId?: string | null
+  custodyUserId?: string | null
+  stockIssuedAt?: Date | string | null
+  id?: string
+  status?: $Enums.DeliveryStatus
+  assignedAt?: Date | string | null
+  pickedUpAt?: Date | string | null
+  closedAt?: Date | string | null
+  failureReason?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  legs?: Prisma.ParcelLegCreateNestedManyWithoutDeliveryInput
+  handovers?: Prisma.ParcelHandoverCreateNestedManyWithoutDeliveryInput
+  attempts?: Prisma.DeliveryAttemptCreateNestedManyWithoutDeliveryInput
+  incidents?: Prisma.DeliveryIncidentCreateNestedManyWithoutDeliveryInput
+  parcelReturn?: Prisma.DeliveryReturnCreateNestedOneWithoutDeliveryInput
+  company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
+  order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
+  agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
+  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
+  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
+  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
+  deliveryProof_deliveryRecords?: Prisma.DeliveryProofCreateNestedManyWithoutDeliveryInput
+  collection_deliveryRecords?: Prisma.CollectionCreateNestedManyWithoutDeliveryInput
+}
+
+export type DeliveryUncheckedCreateWithoutCourierInput = {
+  version?: number
+  parcelReference?: string | null
+  phase?: string | null
+  custodyType?: string | null
+  custodyAgencyId?: string | null
+  custodyUserId?: string | null
+  stockIssuedAt?: Date | string | null
+  id?: string
+  orderId: string
+  agencyId: string
+  status?: $Enums.DeliveryStatus
+  assignedAt?: Date | string | null
+  pickedUpAt?: Date | string | null
+  closedAt?: Date | string | null
+  failureReason?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  legs?: Prisma.ParcelLegUncheckedCreateNestedManyWithoutDeliveryInput
+  handovers?: Prisma.ParcelHandoverUncheckedCreateNestedManyWithoutDeliveryInput
+  attempts?: Prisma.DeliveryAttemptUncheckedCreateNestedManyWithoutDeliveryInput
+  incidents?: Prisma.DeliveryIncidentUncheckedCreateNestedManyWithoutDeliveryInput
+  parcelReturn?: Prisma.DeliveryReturnUncheckedCreateNestedOneWithoutDeliveryInput
+  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutDeliveryInput
+  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUncheckedCreateNestedManyWithoutDeliveryInput
+  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUncheckedCreateNestedManyWithoutDeliveryInput
+  deliveryProof_deliveryRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutDeliveryInput
+  collection_deliveryRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutDeliveryInput
+}
+
+export type DeliveryCreateOrConnectWithoutCourierInput = {
+  where: Prisma.DeliveryWhereUniqueInput
+  create: Prisma.XOR<Prisma.DeliveryCreateWithoutCourierInput, Prisma.DeliveryUncheckedCreateWithoutCourierInput>
+}
+
+export type DeliveryCreateManyCourierInputEnvelope = {
+  data: Prisma.DeliveryCreateManyCourierInput | Prisma.DeliveryCreateManyCourierInput[]
+  skipDuplicates?: boolean
+}
+
+export type DeliveryUpsertWithWhereUniqueWithoutCourierInput = {
+  where: Prisma.DeliveryWhereUniqueInput
+  update: Prisma.XOR<Prisma.DeliveryUpdateWithoutCourierInput, Prisma.DeliveryUncheckedUpdateWithoutCourierInput>
+  create: Prisma.XOR<Prisma.DeliveryCreateWithoutCourierInput, Prisma.DeliveryUncheckedCreateWithoutCourierInput>
+}
+
+export type DeliveryUpdateWithWhereUniqueWithoutCourierInput = {
+  where: Prisma.DeliveryWhereUniqueInput
+  data: Prisma.XOR<Prisma.DeliveryUpdateWithoutCourierInput, Prisma.DeliveryUncheckedUpdateWithoutCourierInput>
+}
+
+export type DeliveryUpdateManyWithWhereWithoutCourierInput = {
+  where: Prisma.DeliveryScalarWhereInput
+  data: Prisma.XOR<Prisma.DeliveryUpdateManyMutationInput, Prisma.DeliveryUncheckedUpdateManyWithoutCourierInput>
+}
+
 export type DeliveryCreateWithoutAgencyInput = {
   version?: number
   parcelReference?: string | null
@@ -1250,7 +1339,7 @@ export type DeliveryCreateWithoutAgencyInput = {
   parcelReturn?: Prisma.DeliveryReturnCreateNestedOneWithoutDeliveryInput
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -1315,94 +1404,6 @@ export type DeliveryUpdateManyWithWhereWithoutAgencyInput = {
   data: Prisma.XOR<Prisma.DeliveryUpdateManyMutationInput, Prisma.DeliveryUncheckedUpdateManyWithoutAgencyInput>
 }
 
-export type DeliveryCreateWithoutCourierInput = {
-  version?: number
-  parcelReference?: string | null
-  phase?: string | null
-  custodyType?: string | null
-  custodyAgencyId?: string | null
-  custodyUserId?: string | null
-  stockIssuedAt?: Date | string | null
-  id?: string
-  status?: $Enums.DeliveryStatus
-  assignedAt?: Date | string | null
-  pickedUpAt?: Date | string | null
-  closedAt?: Date | string | null
-  failureReason?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  legs?: Prisma.ParcelLegCreateNestedManyWithoutDeliveryInput
-  handovers?: Prisma.ParcelHandoverCreateNestedManyWithoutDeliveryInput
-  attempts?: Prisma.DeliveryAttemptCreateNestedManyWithoutDeliveryInput
-  incidents?: Prisma.DeliveryIncidentCreateNestedManyWithoutDeliveryInput
-  parcelReturn?: Prisma.DeliveryReturnCreateNestedOneWithoutDeliveryInput
-  company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
-  order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
-  agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
-  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
-  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
-  deliveryProof_deliveryRecords?: Prisma.DeliveryProofCreateNestedManyWithoutDeliveryInput
-  collection_deliveryRecords?: Prisma.CollectionCreateNestedManyWithoutDeliveryInput
-}
-
-export type DeliveryUncheckedCreateWithoutCourierInput = {
-  version?: number
-  parcelReference?: string | null
-  phase?: string | null
-  custodyType?: string | null
-  custodyAgencyId?: string | null
-  custodyUserId?: string | null
-  stockIssuedAt?: Date | string | null
-  id?: string
-  orderId: string
-  status?: $Enums.DeliveryStatus
-  assignedAt?: Date | string | null
-  pickedUpAt?: Date | string | null
-  closedAt?: Date | string | null
-  failureReason?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  legs?: Prisma.ParcelLegUncheckedCreateNestedManyWithoutDeliveryInput
-  handovers?: Prisma.ParcelHandoverUncheckedCreateNestedManyWithoutDeliveryInput
-  attempts?: Prisma.DeliveryAttemptUncheckedCreateNestedManyWithoutDeliveryInput
-  incidents?: Prisma.DeliveryIncidentUncheckedCreateNestedManyWithoutDeliveryInput
-  parcelReturn?: Prisma.DeliveryReturnUncheckedCreateNestedOneWithoutDeliveryInput
-  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutDeliveryInput
-  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUncheckedCreateNestedManyWithoutDeliveryInput
-  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUncheckedCreateNestedManyWithoutDeliveryInput
-  deliveryProof_deliveryRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutDeliveryInput
-  collection_deliveryRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutDeliveryInput
-}
-
-export type DeliveryCreateOrConnectWithoutCourierInput = {
-  where: Prisma.DeliveryWhereUniqueInput
-  create: Prisma.XOR<Prisma.DeliveryCreateWithoutCourierInput, Prisma.DeliveryUncheckedCreateWithoutCourierInput>
-}
-
-export type DeliveryCreateManyCourierInputEnvelope = {
-  data: Prisma.DeliveryCreateManyCourierInput | Prisma.DeliveryCreateManyCourierInput[]
-  skipDuplicates?: boolean
-}
-
-export type DeliveryUpsertWithWhereUniqueWithoutCourierInput = {
-  where: Prisma.DeliveryWhereUniqueInput
-  update: Prisma.XOR<Prisma.DeliveryUpdateWithoutCourierInput, Prisma.DeliveryUncheckedUpdateWithoutCourierInput>
-  create: Prisma.XOR<Prisma.DeliveryCreateWithoutCourierInput, Prisma.DeliveryUncheckedCreateWithoutCourierInput>
-}
-
-export type DeliveryUpdateWithWhereUniqueWithoutCourierInput = {
-  where: Prisma.DeliveryWhereUniqueInput
-  data: Prisma.XOR<Prisma.DeliveryUpdateWithoutCourierInput, Prisma.DeliveryUncheckedUpdateWithoutCourierInput>
-}
-
-export type DeliveryUpdateManyWithWhereWithoutCourierInput = {
-  where: Prisma.DeliveryScalarWhereInput
-  data: Prisma.XOR<Prisma.DeliveryUpdateManyMutationInput, Prisma.DeliveryUncheckedUpdateManyWithoutCourierInput>
-}
-
 export type DeliveryCreateWithoutOrderInput = {
   version?: number
   parcelReference?: string | null
@@ -1427,7 +1428,7 @@ export type DeliveryCreateWithoutOrderInput = {
   parcelReturn?: Prisma.DeliveryReturnCreateNestedOneWithoutDeliveryInput
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -1517,7 +1518,7 @@ export type DeliveryCreateWithoutDeliveryAssignment_deliveryRecordsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
   deliveryProof_deliveryRecords?: Prisma.DeliveryProofCreateNestedManyWithoutDeliveryInput
@@ -1597,7 +1598,7 @@ export type DeliveryUpdateWithoutDeliveryAssignment_deliveryRecordsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
   deliveryProof_deliveryRecords?: Prisma.DeliveryProofUpdateManyWithoutDeliveryNestedInput
@@ -1661,7 +1662,7 @@ export type DeliveryCreateWithoutDeliveryEvent_deliveryRecordsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
   deliveryProof_deliveryRecords?: Prisma.DeliveryProofCreateNestedManyWithoutDeliveryInput
@@ -1741,7 +1742,7 @@ export type DeliveryUpdateWithoutDeliveryEvent_deliveryRecordsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
   deliveryProof_deliveryRecords?: Prisma.DeliveryProofUpdateManyWithoutDeliveryNestedInput
@@ -1805,7 +1806,7 @@ export type DeliveryCreateWithoutDeliveryOtp_deliveryRecordsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryProof_deliveryRecords?: Prisma.DeliveryProofCreateNestedManyWithoutDeliveryInput
@@ -1885,7 +1886,7 @@ export type DeliveryUpdateWithoutDeliveryOtp_deliveryRecordsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryProof_deliveryRecords?: Prisma.DeliveryProofUpdateManyWithoutDeliveryNestedInput
@@ -1949,7 +1950,7 @@ export type DeliveryCreateWithoutDeliveryProof_deliveryRecordsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -2029,7 +2030,7 @@ export type DeliveryUpdateWithoutDeliveryProof_deliveryRecordsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -2093,7 +2094,7 @@ export type DeliveryCreateWithoutCollection_deliveryRecordsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -2173,7 +2174,7 @@ export type DeliveryUpdateWithoutCollection_deliveryRecordsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -2236,7 +2237,7 @@ export type DeliveryCreateWithoutLegsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -2316,7 +2317,7 @@ export type DeliveryUpdateWithoutLegsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -2380,7 +2381,7 @@ export type DeliveryCreateWithoutHandoversInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -2460,7 +2461,7 @@ export type DeliveryUpdateWithoutHandoversInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -2524,7 +2525,7 @@ export type DeliveryCreateWithoutAttemptsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -2604,7 +2605,7 @@ export type DeliveryUpdateWithoutAttemptsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -2668,7 +2669,7 @@ export type DeliveryCreateWithoutIncidentsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -2748,7 +2749,7 @@ export type DeliveryUpdateWithoutIncidentsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -2812,7 +2813,7 @@ export type DeliveryCreateWithoutParcelReturnInput = {
   company: Prisma.CompanyCreateNestedOneWithoutDelivery_companyRecordsInput
   order: Prisma.OrderCreateNestedOneWithoutDelivery_orderRecordsInput
   agency: Prisma.AgencyCreateNestedOneWithoutDelivery_agencyRecordsInput
-  courier?: Prisma.AgencyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
+  courier?: Prisma.CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutDeliveryInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventCreateNestedManyWithoutDeliveryInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutDeliveryInput
@@ -2892,7 +2893,7 @@ export type DeliveryUpdateWithoutParcelReturnInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -2978,7 +2979,7 @@ export type DeliveryUpdateWithoutCompanyInput = {
   parcelReturn?: Prisma.DeliveryReturnUpdateOneWithoutDeliveryNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -3040,6 +3041,111 @@ export type DeliveryUncheckedUpdateManyWithoutCompanyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type DeliveryCreateManyCourierInput = {
+  version?: number
+  parcelReference?: string | null
+  phase?: string | null
+  custodyType?: string | null
+  custodyAgencyId?: string | null
+  custodyUserId?: string | null
+  stockIssuedAt?: Date | string | null
+  id?: string
+  orderId: string
+  agencyId: string
+  status?: $Enums.DeliveryStatus
+  assignedAt?: Date | string | null
+  pickedUpAt?: Date | string | null
+  closedAt?: Date | string | null
+  failureReason?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DeliveryUpdateWithoutCourierInput = {
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  parcelReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyAgencyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stockIssuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDeliveryStatusFieldUpdateOperationsInput | $Enums.DeliveryStatus
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickedUpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  legs?: Prisma.ParcelLegUpdateManyWithoutDeliveryNestedInput
+  handovers?: Prisma.ParcelHandoverUpdateManyWithoutDeliveryNestedInput
+  attempts?: Prisma.DeliveryAttemptUpdateManyWithoutDeliveryNestedInput
+  incidents?: Prisma.DeliveryIncidentUpdateManyWithoutDeliveryNestedInput
+  parcelReturn?: Prisma.DeliveryReturnUpdateOneWithoutDeliveryNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
+  order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
+  agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
+  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
+  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
+  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
+  deliveryProof_deliveryRecords?: Prisma.DeliveryProofUpdateManyWithoutDeliveryNestedInput
+  collection_deliveryRecords?: Prisma.CollectionUpdateManyWithoutDeliveryNestedInput
+}
+
+export type DeliveryUncheckedUpdateWithoutCourierInput = {
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  parcelReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyAgencyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stockIssuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDeliveryStatusFieldUpdateOperationsInput | $Enums.DeliveryStatus
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickedUpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  legs?: Prisma.ParcelLegUncheckedUpdateManyWithoutDeliveryNestedInput
+  handovers?: Prisma.ParcelHandoverUncheckedUpdateManyWithoutDeliveryNestedInput
+  attempts?: Prisma.DeliveryAttemptUncheckedUpdateManyWithoutDeliveryNestedInput
+  incidents?: Prisma.DeliveryIncidentUncheckedUpdateManyWithoutDeliveryNestedInput
+  parcelReturn?: Prisma.DeliveryReturnUncheckedUpdateOneWithoutDeliveryNestedInput
+  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutDeliveryNestedInput
+  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUncheckedUpdateManyWithoutDeliveryNestedInput
+  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUncheckedUpdateManyWithoutDeliveryNestedInput
+  deliveryProof_deliveryRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutDeliveryNestedInput
+  collection_deliveryRecords?: Prisma.CollectionUncheckedUpdateManyWithoutDeliveryNestedInput
+}
+
+export type DeliveryUncheckedUpdateManyWithoutCourierInput = {
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  parcelReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyAgencyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  custodyUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stockIssuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  agencyId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDeliveryStatusFieldUpdateOperationsInput | $Enums.DeliveryStatus
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pickedUpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type DeliveryCreateManyAgencyInput = {
   version?: number
   parcelReference?: string | null
@@ -3085,7 +3191,7 @@ export type DeliveryUpdateWithoutAgencyInput = {
   parcelReturn?: Prisma.DeliveryReturnUpdateOneWithoutDeliveryNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -3145,108 +3251,6 @@ export type DeliveryUncheckedUpdateManyWithoutAgencyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type DeliveryCreateManyCourierInput = {
-  version?: number
-  parcelReference?: string | null
-  phase?: string | null
-  custodyType?: string | null
-  custodyAgencyId?: string | null
-  custodyUserId?: string | null
-  stockIssuedAt?: Date | string | null
-  id?: string
-  orderId: string
-  status?: $Enums.DeliveryStatus
-  assignedAt?: Date | string | null
-  pickedUpAt?: Date | string | null
-  closedAt?: Date | string | null
-  failureReason?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type DeliveryUpdateWithoutCourierInput = {
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  parcelReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyAgencyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  stockIssuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDeliveryStatusFieldUpdateOperationsInput | $Enums.DeliveryStatus
-  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pickedUpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  legs?: Prisma.ParcelLegUpdateManyWithoutDeliveryNestedInput
-  handovers?: Prisma.ParcelHandoverUpdateManyWithoutDeliveryNestedInput
-  attempts?: Prisma.DeliveryAttemptUpdateManyWithoutDeliveryNestedInput
-  incidents?: Prisma.DeliveryIncidentUpdateManyWithoutDeliveryNestedInput
-  parcelReturn?: Prisma.DeliveryReturnUpdateOneWithoutDeliveryNestedInput
-  company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
-  order?: Prisma.OrderUpdateOneRequiredWithoutDelivery_orderRecordsNestedInput
-  agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
-  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
-  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
-  deliveryProof_deliveryRecords?: Prisma.DeliveryProofUpdateManyWithoutDeliveryNestedInput
-  collection_deliveryRecords?: Prisma.CollectionUpdateManyWithoutDeliveryNestedInput
-}
-
-export type DeliveryUncheckedUpdateWithoutCourierInput = {
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  parcelReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyAgencyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  stockIssuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDeliveryStatusFieldUpdateOperationsInput | $Enums.DeliveryStatus
-  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pickedUpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  legs?: Prisma.ParcelLegUncheckedUpdateManyWithoutDeliveryNestedInput
-  handovers?: Prisma.ParcelHandoverUncheckedUpdateManyWithoutDeliveryNestedInput
-  attempts?: Prisma.DeliveryAttemptUncheckedUpdateManyWithoutDeliveryNestedInput
-  incidents?: Prisma.DeliveryIncidentUncheckedUpdateManyWithoutDeliveryNestedInput
-  parcelReturn?: Prisma.DeliveryReturnUncheckedUpdateOneWithoutDeliveryNestedInput
-  deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutDeliveryNestedInput
-  deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUncheckedUpdateManyWithoutDeliveryNestedInput
-  deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUncheckedUpdateManyWithoutDeliveryNestedInput
-  deliveryProof_deliveryRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutDeliveryNestedInput
-  collection_deliveryRecords?: Prisma.CollectionUncheckedUpdateManyWithoutDeliveryNestedInput
-}
-
-export type DeliveryUncheckedUpdateManyWithoutCourierInput = {
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  parcelReference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyAgencyId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  custodyUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  stockIssuedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  orderId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumDeliveryStatusFieldUpdateOperationsInput | $Enums.DeliveryStatus
-  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pickedUpAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type DeliveryCreateManyOrderInput = {
   version?: number
   parcelReference?: string | null
@@ -3292,7 +3296,7 @@ export type DeliveryUpdateWithoutOrderInput = {
   parcelReturn?: Prisma.DeliveryReturnUpdateOneWithoutDeliveryNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutDelivery_companyRecordsNestedInput
   agency?: Prisma.AgencyUpdateOneRequiredWithoutDelivery_agencyRecordsNestedInput
-  courier?: Prisma.AgencyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
+  courier?: Prisma.CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput
   deliveryAssignment_deliveryRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutDeliveryNestedInput
   deliveryEvent_deliveryRecords?: Prisma.DeliveryEventUpdateManyWithoutDeliveryNestedInput
   deliveryOtp_deliveryRecords?: Prisma.DeliveryOtpUpdateManyWithoutDeliveryNestedInput
@@ -3548,7 +3552,7 @@ export type $DeliveryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     company: Prisma.$CompanyPayload<ExtArgs>
     order: Prisma.$OrderPayload<ExtArgs>
     agency: Prisma.$AgencyPayload<ExtArgs>
-    courier: Prisma.$AgencyMembershipPayload<ExtArgs> | null
+    courier: Prisma.$CompanyMembershipPayload<ExtArgs> | null
     deliveryAssignment_deliveryRecords: Prisma.$DeliveryAssignmentPayload<ExtArgs>[]
     deliveryEvent_deliveryRecords: Prisma.$DeliveryEventPayload<ExtArgs>[]
     deliveryOtp_deliveryRecords: Prisma.$DeliveryOtpPayload<ExtArgs>[]
@@ -3924,7 +3928,7 @@ export interface Prisma__DeliveryClient<T, Null = never, ExtArgs extends runtime
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   order<T extends Prisma.OrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderDefaultArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   agency<T extends Prisma.AgencyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AgencyDefaultArgs<ExtArgs>>): Prisma.Prisma__AgencyClient<runtime.Types.Result.GetResult<Prisma.$AgencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  courier<T extends Prisma.Delivery$courierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Delivery$courierArgs<ExtArgs>>): Prisma.Prisma__AgencyMembershipClient<runtime.Types.Result.GetResult<Prisma.$AgencyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  courier<T extends Prisma.Delivery$courierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Delivery$courierArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   deliveryAssignment_deliveryRecords<T extends Prisma.Delivery$deliveryAssignment_deliveryRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Delivery$deliveryAssignment_deliveryRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeliveryAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deliveryEvent_deliveryRecords<T extends Prisma.Delivery$deliveryEvent_deliveryRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Delivery$deliveryEvent_deliveryRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeliveryEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deliveryOtp_deliveryRecords<T extends Prisma.Delivery$deliveryOtp_deliveryRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Delivery$deliveryOtp_deliveryRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeliveryOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4446,18 +4450,18 @@ export type Delivery$parcelReturnArgs<ExtArgs extends runtime.Types.Extensions.I
  */
 export type Delivery$courierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the AgencyMembership
+   * Select specific fields to fetch from the CompanyMembership
    */
-  select?: Prisma.AgencyMembershipSelect<ExtArgs> | null
+  select?: Prisma.CompanyMembershipSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the AgencyMembership
+   * Omit specific fields from the CompanyMembership
    */
-  omit?: Prisma.AgencyMembershipOmit<ExtArgs> | null
+  omit?: Prisma.CompanyMembershipOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AgencyMembershipInclude<ExtArgs> | null
-  where?: Prisma.AgencyMembershipWhereInput
+  include?: Prisma.CompanyMembershipInclude<ExtArgs> | null
+  where?: Prisma.CompanyMembershipWhereInput
 }
 
 /**

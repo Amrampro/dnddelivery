@@ -36,8 +36,6 @@ export async function access(tx, c) {
         ? "operator"
         : "driver";
     await authorizeTenant(store, selection(c), kind === "operator" ? "financial.supervise.read" : "collections.self.read");
-    if (kind === "driver" && c.scope !== "AGENCY")
-        throw stockError("AGENCY_REQUIRED", "Choisissez votre agence.", 403);
     return { kind, permissions };
 }
 export async function permission(tx, c, required) {

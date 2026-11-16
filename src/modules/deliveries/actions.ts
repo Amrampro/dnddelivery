@@ -27,7 +27,7 @@ export async function availableActions(
     driver =
       auth.kind === "driver" &&
       p.courierId === c.actorId &&
-      p.agencyId === c.agencyId;
+      (c.scope === "COMPANY" || p.agencyId === c.agencyId);
   const agency = auth.kind === "operator" && current,
     held = p.custodyType === "COURIER",
     inAgency = p.custodyType === "AGENCY",

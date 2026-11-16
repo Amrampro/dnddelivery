@@ -259,8 +259,9 @@ export class DeliveryCore extends DeliveryReads {
     }
     assigned(c, p) {
         if (c.actorId !== p.courierId ||
-            c.scope !== "AGENCY" ||
-            c.agencyId !== p.agencyId ||
+            c.companyId !== p.companyId ||
+            !["COMPANY", "AGENCY"].includes(c.scope) ||
+            (c.scope === "AGENCY" && c.agencyId !== p.agencyId) ||
             (p.custodyUserId && p.custodyUserId !== c.actorId))
             throw stockError("MISSION_NOT_ASSIGNED", "Cette mission ne vous est pas attribuée.", 403);
     }

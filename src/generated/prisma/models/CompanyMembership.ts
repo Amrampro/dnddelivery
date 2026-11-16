@@ -264,6 +264,10 @@ export type CompanyMembershipWhereInput = {
   active?: Prisma.BoolFilter<"CompanyMembership"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CompanyMembership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyMembership"> | Date | string
+  delivery_courierRecords?: Prisma.DeliveryListRelationFilter
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentListRelationFilter
+  collection_courierRecords?: Prisma.CollectionListRelationFilter
+  remittance_courierRecords?: Prisma.RemittanceListRelationFilter
   driverProfile?: Prisma.XOR<Prisma.DriverProfileNullableScalarRelationFilter, Prisma.DriverProfileWhereInput> | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -293,6 +297,10 @@ export type CompanyMembershipOrderByWithRelationInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  delivery_courierRecords?: Prisma.DeliveryOrderByRelationAggregateInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentOrderByRelationAggregateInput
+  collection_courierRecords?: Prisma.CollectionOrderByRelationAggregateInput
+  remittance_courierRecords?: Prisma.RemittanceOrderByRelationAggregateInput
   driverProfile?: Prisma.DriverProfileOrderByWithRelationInput
   company?: Prisma.CompanyOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -328,6 +336,10 @@ export type CompanyMembershipWhereUniqueInput = Prisma.AtLeast<{
   active?: Prisma.BoolFilter<"CompanyMembership"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CompanyMembership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompanyMembership"> | Date | string
+  delivery_courierRecords?: Prisma.DeliveryListRelationFilter
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentListRelationFilter
+  collection_courierRecords?: Prisma.CollectionListRelationFilter
+  remittance_courierRecords?: Prisma.RemittanceListRelationFilter
   driverProfile?: Prisma.XOR<Prisma.DriverProfileNullableScalarRelationFilter, Prisma.DriverProfileWhereInput> | null
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -389,6 +401,10 @@ export type CompanyMembershipCreateInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -418,6 +434,10 @@ export type CompanyMembershipUncheckedCreateInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -440,6 +460,10 @@ export type CompanyMembershipUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -469,6 +493,10 @@ export type CompanyMembershipUncheckedUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -805,10 +833,40 @@ export type CompanyMembershipUpdateOneRequiredWithoutTransferEvent_actorRecordsN
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutTransferEvent_actorRecordsInput, Prisma.CompanyMembershipUpdateWithoutTransferEvent_actorRecordsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutTransferEvent_actorRecordsInput>
 }
 
+export type CompanyMembershipCreateNestedOneWithoutDelivery_courierRecordsInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDelivery_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDelivery_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutDelivery_courierRecordsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
+export type CompanyMembershipUpdateOneWithoutDelivery_courierRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDelivery_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDelivery_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutDelivery_courierRecordsInput
+  upsert?: Prisma.CompanyMembershipUpsertWithoutDelivery_courierRecordsInput
+  disconnect?: Prisma.CompanyMembershipWhereInput | boolean
+  delete?: Prisma.CompanyMembershipWhereInput | boolean
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutDelivery_courierRecordsInput, Prisma.CompanyMembershipUpdateWithoutDelivery_courierRecordsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutDelivery_courierRecordsInput>
+}
+
+export type CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_courierRecordsInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDeliveryAssignment_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutDeliveryAssignment_courierRecordsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
 export type CompanyMembershipCreateNestedOneWithoutDeliveryAssignment_assignerRecordsInput = {
   create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDeliveryAssignment_assignerRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_assignerRecordsInput>
   connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutDeliveryAssignment_assignerRecordsInput
   connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
+export type CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_courierRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDeliveryAssignment_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutDeliveryAssignment_courierRecordsInput
+  upsert?: Prisma.CompanyMembershipUpsertWithoutDeliveryAssignment_courierRecordsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutDeliveryAssignment_courierRecordsInput, Prisma.CompanyMembershipUpdateWithoutDeliveryAssignment_courierRecordsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutDeliveryAssignment_courierRecordsInput>
 }
 
 export type CompanyMembershipUpdateOneRequiredWithoutDeliveryAssignment_assignerRecordsNestedInput = {
@@ -863,10 +921,24 @@ export type CompanyMembershipUpdateOneWithoutDeliveryProof_authorizerRecordsNest
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutDeliveryProof_authorizerRecordsInput, Prisma.CompanyMembershipUpdateWithoutDeliveryProof_authorizerRecordsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutDeliveryProof_authorizerRecordsInput>
 }
 
+export type CompanyMembershipCreateNestedOneWithoutCollection_courierRecordsInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutCollection_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutCollection_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutCollection_courierRecordsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
 export type CompanyMembershipCreateNestedOneWithoutCollection_verifierRecordsInput = {
   create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutCollection_verifierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutCollection_verifierRecordsInput>
   connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutCollection_verifierRecordsInput
   connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
+export type CompanyMembershipUpdateOneRequiredWithoutCollection_courierRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutCollection_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutCollection_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutCollection_courierRecordsInput
+  upsert?: Prisma.CompanyMembershipUpsertWithoutCollection_courierRecordsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutCollection_courierRecordsInput, Prisma.CompanyMembershipUpdateWithoutCollection_courierRecordsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutCollection_courierRecordsInput>
 }
 
 export type CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInput = {
@@ -879,10 +951,24 @@ export type CompanyMembershipUpdateOneWithoutCollection_verifierRecordsNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutCollection_verifierRecordsInput, Prisma.CompanyMembershipUpdateWithoutCollection_verifierRecordsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutCollection_verifierRecordsInput>
 }
 
+export type CompanyMembershipCreateNestedOneWithoutRemittance_courierRecordsInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutRemittance_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutRemittance_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutRemittance_courierRecordsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
 export type CompanyMembershipCreateNestedOneWithoutRemittance_confirmerRecordsInput = {
   create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutRemittance_confirmerRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutRemittance_confirmerRecordsInput>
   connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutRemittance_confirmerRecordsInput
   connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
+export type CompanyMembershipUpdateOneRequiredWithoutRemittance_courierRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutRemittance_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutRemittance_courierRecordsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutRemittance_courierRecordsInput
+  upsert?: Prisma.CompanyMembershipUpsertWithoutRemittance_courierRecordsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutRemittance_courierRecordsInput, Prisma.CompanyMembershipUpdateWithoutRemittance_courierRecordsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutRemittance_courierRecordsInput>
 }
 
 export type CompanyMembershipUpdateOneWithoutRemittance_confirmerRecordsNestedInput = {
@@ -917,6 +1003,10 @@ export type CompanyMembershipCreateWithoutUserInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   role: Prisma.RoleCreateNestedOneWithoutCompanyMembership_roleRecordsInput
@@ -944,6 +1034,10 @@ export type CompanyMembershipUncheckedCreateWithoutUserInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -1009,6 +1103,10 @@ export type CompanyMembershipCreateWithoutRoleInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1035,6 +1133,10 @@ export type CompanyMembershipUncheckedCreateWithoutRoleInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -1083,6 +1185,10 @@ export type CompanyMembershipCreateWithoutCompanyInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
   role: Prisma.RoleCreateNestedOneWithoutCompanyMembership_roleRecordsInput
@@ -1110,6 +1216,10 @@ export type CompanyMembershipUncheckedCreateWithoutCompanyInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -1158,6 +1268,10 @@ export type CompanyMembershipCreateWithoutAgencyMembership_membershipRecordsInpu
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1186,6 +1300,10 @@ export type CompanyMembershipUncheckedCreateWithoutAgencyMembership_membershipRe
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
   transfer_carrierRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutCarrierInput
@@ -1223,6 +1341,10 @@ export type CompanyMembershipUpdateWithoutAgencyMembership_membershipRecordsInpu
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -1251,6 +1373,10 @@ export type CompanyMembershipUncheckedUpdateWithoutAgencyMembership_membershipRe
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
   transfer_carrierRecords?: Prisma.TransferUncheckedUpdateManyWithoutCarrierNestedInput
@@ -1272,6 +1398,10 @@ export type CompanyMembershipCreateWithoutDriverProfileInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
   role: Prisma.RoleCreateNestedOneWithoutCompanyMembership_roleRecordsInput
@@ -1300,6 +1430,10 @@ export type CompanyMembershipUncheckedCreateWithoutDriverProfileInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
   transfer_carrierRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutCarrierInput
@@ -1337,6 +1471,10 @@ export type CompanyMembershipUpdateWithoutDriverProfileInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutCompanyMembership_roleRecordsNestedInput
@@ -1365,6 +1503,10 @@ export type CompanyMembershipUncheckedUpdateWithoutDriverProfileInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
   transfer_carrierRecords?: Prisma.TransferUncheckedUpdateManyWithoutCarrierNestedInput
@@ -1386,6 +1528,10 @@ export type CompanyMembershipCreateWithoutTransfer_initiatorRecordsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1414,6 +1560,10 @@ export type CompanyMembershipUncheckedCreateWithoutTransfer_initiatorRecordsInpu
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_carrierRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutCarrierInput
@@ -1440,6 +1590,10 @@ export type CompanyMembershipCreateWithoutTransfer_carrierRecordsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1468,6 +1622,10 @@ export type CompanyMembershipUncheckedCreateWithoutTransfer_carrierRecordsInput 
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -1505,6 +1663,10 @@ export type CompanyMembershipUpdateWithoutTransfer_initiatorRecordsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -1533,6 +1695,10 @@ export type CompanyMembershipUncheckedUpdateWithoutTransfer_initiatorRecordsInpu
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_carrierRecords?: Prisma.TransferUncheckedUpdateManyWithoutCarrierNestedInput
@@ -1565,6 +1731,10 @@ export type CompanyMembershipUpdateWithoutTransfer_carrierRecordsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -1593,6 +1763,10 @@ export type CompanyMembershipUncheckedUpdateWithoutTransfer_carrierRecordsInput 
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -1614,6 +1788,10 @@ export type CompanyMembershipCreateWithoutTransferEvent_actorRecordsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1642,6 +1820,10 @@ export type CompanyMembershipUncheckedCreateWithoutTransferEvent_actorRecordsInp
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -1679,6 +1861,10 @@ export type CompanyMembershipUpdateWithoutTransferEvent_actorRecordsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -1707,6 +1893,10 @@ export type CompanyMembershipUncheckedUpdateWithoutTransferEvent_actorRecordsInp
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -1720,6 +1910,198 @@ export type CompanyMembershipUncheckedUpdateWithoutTransferEvent_actorRecordsInp
   subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutDeclarerNestedInput
 }
 
+export type CompanyMembershipCreateWithoutDelivery_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
+  company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
+  user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
+  role: Prisma.RoleCreateNestedOneWithoutCompanyMembership_roleRecordsInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipUncheckedCreateWithoutDelivery_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  companyId: string
+  userId: string
+  roleId: string
+  roleScope?: $Enums.RoleScope
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipCreateOrConnectWithoutDelivery_courierRecordsInput = {
+  where: Prisma.CompanyMembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDelivery_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDelivery_courierRecordsInput>
+}
+
+export type CompanyMembershipUpsertWithoutDelivery_courierRecordsInput = {
+  update: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutDelivery_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutDelivery_courierRecordsInput>
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDelivery_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDelivery_courierRecordsInput>
+  where?: Prisma.CompanyMembershipWhereInput
+}
+
+export type CompanyMembershipUpdateToOneWithWhereWithoutDelivery_courierRecordsInput = {
+  where?: Prisma.CompanyMembershipWhereInput
+  data: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutDelivery_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutDelivery_courierRecordsInput>
+}
+
+export type CompanyMembershipUpdateWithoutDelivery_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutCompanyMembership_roleRecordsNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUpdateManyWithoutDeclarerNestedInput
+}
+
+export type CompanyMembershipUncheckedUpdateWithoutDelivery_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleScope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutDeclarerNestedInput
+}
+
+export type CompanyMembershipCreateWithoutDeliveryAssignment_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
+  company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
+  user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
+  role: Prisma.RoleCreateNestedOneWithoutCompanyMembership_roleRecordsInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  companyId: string
+  userId: string
+  roleId: string
+  roleScope?: $Enums.RoleScope
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipCreateOrConnectWithoutDeliveryAssignment_courierRecordsInput = {
+  where: Prisma.CompanyMembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDeliveryAssignment_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_courierRecordsInput>
+}
+
 export type CompanyMembershipCreateWithoutDeliveryAssignment_assignerRecordsInput = {
   organizationRole?: string
   employmentStatus?: string
@@ -1728,6 +2110,10 @@ export type CompanyMembershipCreateWithoutDeliveryAssignment_assignerRecordsInpu
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1756,6 +2142,10 @@ export type CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_assignerRe
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -1772,6 +2162,74 @@ export type CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_assignerRe
 export type CompanyMembershipCreateOrConnectWithoutDeliveryAssignment_assignerRecordsInput = {
   where: Prisma.CompanyMembershipWhereUniqueInput
   create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDeliveryAssignment_assignerRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_assignerRecordsInput>
+}
+
+export type CompanyMembershipUpsertWithoutDeliveryAssignment_courierRecordsInput = {
+  update: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutDeliveryAssignment_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutDeliveryAssignment_courierRecordsInput>
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutDeliveryAssignment_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutDeliveryAssignment_courierRecordsInput>
+  where?: Prisma.CompanyMembershipWhereInput
+}
+
+export type CompanyMembershipUpdateToOneWithWhereWithoutDeliveryAssignment_courierRecordsInput = {
+  where?: Prisma.CompanyMembershipWhereInput
+  data: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutDeliveryAssignment_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutDeliveryAssignment_courierRecordsInput>
+}
+
+export type CompanyMembershipUpdateWithoutDeliveryAssignment_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutCompanyMembership_roleRecordsNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUpdateManyWithoutDeclarerNestedInput
+}
+
+export type CompanyMembershipUncheckedUpdateWithoutDeliveryAssignment_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleScope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutDeclarerNestedInput
 }
 
 export type CompanyMembershipUpsertWithoutDeliveryAssignment_assignerRecordsInput = {
@@ -1793,6 +2251,10 @@ export type CompanyMembershipUpdateWithoutDeliveryAssignment_assignerRecordsInpu
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -1821,6 +2283,10 @@ export type CompanyMembershipUncheckedUpdateWithoutDeliveryAssignment_assignerRe
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -1842,6 +2308,10 @@ export type CompanyMembershipCreateWithoutDeliveryOtp_courierRecordsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1870,6 +2340,10 @@ export type CompanyMembershipUncheckedCreateWithoutDeliveryOtp_courierRecordsInp
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -1907,6 +2381,10 @@ export type CompanyMembershipUpdateWithoutDeliveryOtp_courierRecordsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -1935,6 +2413,10 @@ export type CompanyMembershipUncheckedUpdateWithoutDeliveryOtp_courierRecordsInp
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -1956,6 +2438,10 @@ export type CompanyMembershipCreateWithoutDeliveryProof_courierRecordsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -1984,6 +2470,10 @@ export type CompanyMembershipUncheckedCreateWithoutDeliveryProof_courierRecordsI
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -2010,6 +2500,10 @@ export type CompanyMembershipCreateWithoutDeliveryProof_authorizerRecordsInput =
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -2038,6 +2532,10 @@ export type CompanyMembershipUncheckedCreateWithoutDeliveryProof_authorizerRecor
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -2075,6 +2573,10 @@ export type CompanyMembershipUpdateWithoutDeliveryProof_courierRecordsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -2103,6 +2605,10 @@ export type CompanyMembershipUncheckedUpdateWithoutDeliveryProof_courierRecordsI
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2135,6 +2641,10 @@ export type CompanyMembershipUpdateWithoutDeliveryProof_authorizerRecordsInput =
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -2163,6 +2673,10 @@ export type CompanyMembershipUncheckedUpdateWithoutDeliveryProof_authorizerRecor
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2176,6 +2690,68 @@ export type CompanyMembershipUncheckedUpdateWithoutDeliveryProof_authorizerRecor
   subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutDeclarerNestedInput
 }
 
+export type CompanyMembershipCreateWithoutCollection_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
+  company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
+  user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
+  role: Prisma.RoleCreateNestedOneWithoutCompanyMembership_roleRecordsInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipUncheckedCreateWithoutCollection_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  companyId: string
+  userId: string
+  roleId: string
+  roleScope?: $Enums.RoleScope
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipCreateOrConnectWithoutCollection_courierRecordsInput = {
+  where: Prisma.CompanyMembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutCollection_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutCollection_courierRecordsInput>
+}
+
 export type CompanyMembershipCreateWithoutCollection_verifierRecordsInput = {
   organizationRole?: string
   employmentStatus?: string
@@ -2184,6 +2760,10 @@ export type CompanyMembershipCreateWithoutCollection_verifierRecordsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -2212,6 +2792,10 @@ export type CompanyMembershipUncheckedCreateWithoutCollection_verifierRecordsInp
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -2228,6 +2812,74 @@ export type CompanyMembershipUncheckedCreateWithoutCollection_verifierRecordsInp
 export type CompanyMembershipCreateOrConnectWithoutCollection_verifierRecordsInput = {
   where: Prisma.CompanyMembershipWhereUniqueInput
   create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutCollection_verifierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutCollection_verifierRecordsInput>
+}
+
+export type CompanyMembershipUpsertWithoutCollection_courierRecordsInput = {
+  update: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutCollection_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutCollection_courierRecordsInput>
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutCollection_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutCollection_courierRecordsInput>
+  where?: Prisma.CompanyMembershipWhereInput
+}
+
+export type CompanyMembershipUpdateToOneWithWhereWithoutCollection_courierRecordsInput = {
+  where?: Prisma.CompanyMembershipWhereInput
+  data: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutCollection_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutCollection_courierRecordsInput>
+}
+
+export type CompanyMembershipUpdateWithoutCollection_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutCompanyMembership_roleRecordsNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUpdateManyWithoutDeclarerNestedInput
+}
+
+export type CompanyMembershipUncheckedUpdateWithoutCollection_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleScope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutDeclarerNestedInput
 }
 
 export type CompanyMembershipUpsertWithoutCollection_verifierRecordsInput = {
@@ -2249,6 +2901,10 @@ export type CompanyMembershipUpdateWithoutCollection_verifierRecordsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -2277,6 +2933,10 @@ export type CompanyMembershipUncheckedUpdateWithoutCollection_verifierRecordsInp
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2290,6 +2950,68 @@ export type CompanyMembershipUncheckedUpdateWithoutCollection_verifierRecordsInp
   subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutDeclarerNestedInput
 }
 
+export type CompanyMembershipCreateWithoutRemittance_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
+  company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
+  user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
+  role: Prisma.RoleCreateNestedOneWithoutCompanyMembership_roleRecordsInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipUncheckedCreateWithoutRemittance_courierRecordsInput = {
+  organizationRole?: string
+  employmentStatus?: string
+  version?: number
+  id?: string
+  companyId: string
+  userId: string
+  roleId: string
+  roleScope?: $Enums.RoleScope
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutCarrierInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedCreateNestedManyWithoutActorInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutAssignerInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutCourierInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedCreateNestedManyWithoutAuthorizerInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutVerifierInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutConfirmerInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedCreateNestedManyWithoutDeclarerInput
+}
+
+export type CompanyMembershipCreateOrConnectWithoutRemittance_courierRecordsInput = {
+  where: Prisma.CompanyMembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutRemittance_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutRemittance_courierRecordsInput>
+}
+
 export type CompanyMembershipCreateWithoutRemittance_confirmerRecordsInput = {
   organizationRole?: string
   employmentStatus?: string
@@ -2298,6 +3020,10 @@ export type CompanyMembershipCreateWithoutRemittance_confirmerRecordsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -2326,6 +3052,10 @@ export type CompanyMembershipUncheckedCreateWithoutRemittance_confirmerRecordsIn
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -2342,6 +3072,74 @@ export type CompanyMembershipUncheckedCreateWithoutRemittance_confirmerRecordsIn
 export type CompanyMembershipCreateOrConnectWithoutRemittance_confirmerRecordsInput = {
   where: Prisma.CompanyMembershipWhereUniqueInput
   create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutRemittance_confirmerRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutRemittance_confirmerRecordsInput>
+}
+
+export type CompanyMembershipUpsertWithoutRemittance_courierRecordsInput = {
+  update: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutRemittance_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutRemittance_courierRecordsInput>
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutRemittance_courierRecordsInput, Prisma.CompanyMembershipUncheckedCreateWithoutRemittance_courierRecordsInput>
+  where?: Prisma.CompanyMembershipWhereInput
+}
+
+export type CompanyMembershipUpdateToOneWithWhereWithoutRemittance_courierRecordsInput = {
+  where?: Prisma.CompanyMembershipWhereInput
+  data: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutRemittance_courierRecordsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutRemittance_courierRecordsInput>
+}
+
+export type CompanyMembershipUpdateWithoutRemittance_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutCompanyMembership_roleRecordsNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUpdateManyWithoutDeclarerNestedInput
+}
+
+export type CompanyMembershipUncheckedUpdateWithoutRemittance_courierRecordsInput = {
+  organizationRole?: Prisma.StringFieldUpdateOperationsInput | string
+  employmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleScope?: Prisma.EnumRoleScopeFieldUpdateOperationsInput | $Enums.RoleScope
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
+  agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
+  transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
+  transfer_carrierRecords?: Prisma.TransferUncheckedUpdateManyWithoutCarrierNestedInput
+  transferEvent_actorRecords?: Prisma.TransferEventUncheckedUpdateManyWithoutActorNestedInput
+  deliveryAssignment_assignerRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutAssignerNestedInput
+  deliveryOtp_courierRecords?: Prisma.DeliveryOtpUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_courierRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryProof_authorizerRecords?: Prisma.DeliveryProofUncheckedUpdateManyWithoutAuthorizerNestedInput
+  collection_verifierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutVerifierNestedInput
+  remittance_confirmerRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutConfirmerNestedInput
+  subscriptionPayment_declarerRecords?: Prisma.SubscriptionPaymentUncheckedUpdateManyWithoutDeclarerNestedInput
 }
 
 export type CompanyMembershipUpsertWithoutRemittance_confirmerRecordsInput = {
@@ -2363,6 +3161,10 @@ export type CompanyMembershipUpdateWithoutRemittance_confirmerRecordsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -2391,6 +3193,10 @@ export type CompanyMembershipUncheckedUpdateWithoutRemittance_confirmerRecordsIn
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2412,6 +3218,10 @@ export type CompanyMembershipCreateWithoutSubscriptionPayment_declarerRecordsInp
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileCreateNestedOneWithoutMembershipInput
   company: Prisma.CompanyCreateNestedOneWithoutCompanyMembership_companyRecordsInput
   user: Prisma.UserCreateNestedOneWithoutCompanyMembership_userRecordsInput
@@ -2440,6 +3250,10 @@ export type CompanyMembershipUncheckedCreateWithoutSubscriptionPayment_declarerR
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedCreateNestedManyWithoutCourierInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedCreateNestedManyWithoutCourierInput
+  collection_courierRecords?: Prisma.CollectionUncheckedCreateNestedManyWithoutCourierInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedCreateNestedManyWithoutCourierInput
   driverProfile?: Prisma.DriverProfileUncheckedCreateNestedOneWithoutMembershipInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedCreateNestedManyWithoutMembershipInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedCreateNestedManyWithoutInitiatorInput
@@ -2477,6 +3291,10 @@ export type CompanyMembershipUpdateWithoutSubscriptionPayment_declarerRecordsInp
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -2505,6 +3323,10 @@ export type CompanyMembershipUncheckedUpdateWithoutSubscriptionPayment_declarerR
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2539,6 +3361,10 @@ export type CompanyMembershipUpdateWithoutUserInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutCompanyMembership_roleRecordsNestedInput
@@ -2566,6 +3392,10 @@ export type CompanyMembershipUncheckedUpdateWithoutUserInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2613,6 +3443,10 @@ export type CompanyMembershipUpdateWithoutRoleInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutCompanyMembership_companyRecordsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
@@ -2639,6 +3473,10 @@ export type CompanyMembershipUncheckedUpdateWithoutRoleInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2686,6 +3524,10 @@ export type CompanyMembershipUpdateWithoutCompanyInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUpdateOneWithoutMembershipNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCompanyMembership_userRecordsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutCompanyMembership_roleRecordsNestedInput
@@ -2713,6 +3555,10 @@ export type CompanyMembershipUncheckedUpdateWithoutCompanyInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  delivery_courierRecords?: Prisma.DeliveryUncheckedUpdateManyWithoutCourierNestedInput
+  deliveryAssignment_courierRecords?: Prisma.DeliveryAssignmentUncheckedUpdateManyWithoutCourierNestedInput
+  collection_courierRecords?: Prisma.CollectionUncheckedUpdateManyWithoutCourierNestedInput
+  remittance_courierRecords?: Prisma.RemittanceUncheckedUpdateManyWithoutCourierNestedInput
   driverProfile?: Prisma.DriverProfileUncheckedUpdateOneWithoutMembershipNestedInput
   agencyMembership_membershipRecords?: Prisma.AgencyMembershipUncheckedUpdateManyWithoutMembershipNestedInput
   transfer_initiatorRecords?: Prisma.TransferUncheckedUpdateManyWithoutInitiatorNestedInput
@@ -2746,6 +3592,10 @@ export type CompanyMembershipUncheckedUpdateManyWithoutCompanyInput = {
  */
 
 export type CompanyMembershipCountOutputType = {
+  delivery_courierRecords: number
+  deliveryAssignment_courierRecords: number
+  collection_courierRecords: number
+  remittance_courierRecords: number
   agencyMembership_membershipRecords: number
   transfer_initiatorRecords: number
   transfer_carrierRecords: number
@@ -2760,6 +3610,10 @@ export type CompanyMembershipCountOutputType = {
 }
 
 export type CompanyMembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  delivery_courierRecords?: boolean | CompanyMembershipCountOutputTypeCountDelivery_courierRecordsArgs
+  deliveryAssignment_courierRecords?: boolean | CompanyMembershipCountOutputTypeCountDeliveryAssignment_courierRecordsArgs
+  collection_courierRecords?: boolean | CompanyMembershipCountOutputTypeCountCollection_courierRecordsArgs
+  remittance_courierRecords?: boolean | CompanyMembershipCountOutputTypeCountRemittance_courierRecordsArgs
   agencyMembership_membershipRecords?: boolean | CompanyMembershipCountOutputTypeCountAgencyMembership_membershipRecordsArgs
   transfer_initiatorRecords?: boolean | CompanyMembershipCountOutputTypeCountTransfer_initiatorRecordsArgs
   transfer_carrierRecords?: boolean | CompanyMembershipCountOutputTypeCountTransfer_carrierRecordsArgs
@@ -2781,6 +3635,34 @@ export type CompanyMembershipCountOutputTypeDefaultArgs<ExtArgs extends runtime.
    * Select specific fields to fetch from the CompanyMembershipCountOutputType
    */
   select?: Prisma.CompanyMembershipCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CompanyMembershipCountOutputType without action
+ */
+export type CompanyMembershipCountOutputTypeCountDelivery_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeliveryWhereInput
+}
+
+/**
+ * CompanyMembershipCountOutputType without action
+ */
+export type CompanyMembershipCountOutputTypeCountDeliveryAssignment_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeliveryAssignmentWhereInput
+}
+
+/**
+ * CompanyMembershipCountOutputType without action
+ */
+export type CompanyMembershipCountOutputTypeCountCollection_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CollectionWhereInput
+}
+
+/**
+ * CompanyMembershipCountOutputType without action
+ */
+export type CompanyMembershipCountOutputTypeCountRemittance_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RemittanceWhereInput
 }
 
 /**
@@ -2873,6 +3755,10 @@ export type CompanyMembershipSelect<ExtArgs extends runtime.Types.Extensions.Int
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  delivery_courierRecords?: boolean | Prisma.CompanyMembership$delivery_courierRecordsArgs<ExtArgs>
+  deliveryAssignment_courierRecords?: boolean | Prisma.CompanyMembership$deliveryAssignment_courierRecordsArgs<ExtArgs>
+  collection_courierRecords?: boolean | Prisma.CompanyMembership$collection_courierRecordsArgs<ExtArgs>
+  remittance_courierRecords?: boolean | Prisma.CompanyMembership$remittance_courierRecordsArgs<ExtArgs>
   driverProfile?: boolean | Prisma.CompanyMembership$driverProfileArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2909,6 +3795,10 @@ export type CompanyMembershipSelectScalar = {
 
 export type CompanyMembershipOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"organizationRole" | "employmentStatus" | "version" | "id" | "companyId" | "userId" | "roleId" | "roleScope" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["companyMembership"]>
 export type CompanyMembershipInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  delivery_courierRecords?: boolean | Prisma.CompanyMembership$delivery_courierRecordsArgs<ExtArgs>
+  deliveryAssignment_courierRecords?: boolean | Prisma.CompanyMembership$deliveryAssignment_courierRecordsArgs<ExtArgs>
+  collection_courierRecords?: boolean | Prisma.CompanyMembership$collection_courierRecordsArgs<ExtArgs>
+  remittance_courierRecords?: boolean | Prisma.CompanyMembership$remittance_courierRecordsArgs<ExtArgs>
   driverProfile?: boolean | Prisma.CompanyMembership$driverProfileArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -2930,6 +3820,10 @@ export type CompanyMembershipInclude<ExtArgs extends runtime.Types.Extensions.In
 export type $CompanyMembershipPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CompanyMembership"
   objects: {
+    delivery_courierRecords: Prisma.$DeliveryPayload<ExtArgs>[]
+    deliveryAssignment_courierRecords: Prisma.$DeliveryAssignmentPayload<ExtArgs>[]
+    collection_courierRecords: Prisma.$CollectionPayload<ExtArgs>[]
+    remittance_courierRecords: Prisma.$RemittancePayload<ExtArgs>[]
     driverProfile: Prisma.$DriverProfilePayload<ExtArgs> | null
     company: Prisma.$CompanyPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
@@ -3298,6 +4192,10 @@ readonly fields: CompanyMembershipFieldRefs;
  */
 export interface Prisma__CompanyMembershipClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  delivery_courierRecords<T extends Prisma.CompanyMembership$delivery_courierRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembership$delivery_courierRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deliveryAssignment_courierRecords<T extends Prisma.CompanyMembership$deliveryAssignment_courierRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembership$deliveryAssignment_courierRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeliveryAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  collection_courierRecords<T extends Prisma.CompanyMembership$collection_courierRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembership$collection_courierRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CollectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  remittance_courierRecords<T extends Prisma.CompanyMembership$remittance_courierRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembership$remittance_courierRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RemittancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   driverProfile<T extends Prisma.CompanyMembership$driverProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembership$driverProfileArgs<ExtArgs>>): Prisma.Prisma__DriverProfileClient<runtime.Types.Result.GetResult<Prisma.$DriverProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -3698,6 +4596,102 @@ export type CompanyMembershipDeleteManyArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many CompanyMemberships to delete.
    */
   limit?: number
+}
+
+/**
+ * CompanyMembership.delivery_courierRecords
+ */
+export type CompanyMembership$delivery_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Delivery
+   */
+  select?: Prisma.DeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Delivery
+   */
+  omit?: Prisma.DeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeliveryInclude<ExtArgs> | null
+  where?: Prisma.DeliveryWhereInput
+  orderBy?: Prisma.DeliveryOrderByWithRelationInput | Prisma.DeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.DeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeliveryScalarFieldEnum | Prisma.DeliveryScalarFieldEnum[]
+}
+
+/**
+ * CompanyMembership.deliveryAssignment_courierRecords
+ */
+export type CompanyMembership$deliveryAssignment_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeliveryAssignment
+   */
+  select?: Prisma.DeliveryAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeliveryAssignment
+   */
+  omit?: Prisma.DeliveryAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeliveryAssignmentInclude<ExtArgs> | null
+  where?: Prisma.DeliveryAssignmentWhereInput
+  orderBy?: Prisma.DeliveryAssignmentOrderByWithRelationInput | Prisma.DeliveryAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.DeliveryAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeliveryAssignmentScalarFieldEnum | Prisma.DeliveryAssignmentScalarFieldEnum[]
+}
+
+/**
+ * CompanyMembership.collection_courierRecords
+ */
+export type CompanyMembership$collection_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Collection
+   */
+  select?: Prisma.CollectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Collection
+   */
+  omit?: Prisma.CollectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CollectionInclude<ExtArgs> | null
+  where?: Prisma.CollectionWhereInput
+  orderBy?: Prisma.CollectionOrderByWithRelationInput | Prisma.CollectionOrderByWithRelationInput[]
+  cursor?: Prisma.CollectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CollectionScalarFieldEnum | Prisma.CollectionScalarFieldEnum[]
+}
+
+/**
+ * CompanyMembership.remittance_courierRecords
+ */
+export type CompanyMembership$remittance_courierRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Remittance
+   */
+  select?: Prisma.RemittanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Remittance
+   */
+  omit?: Prisma.RemittanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RemittanceInclude<ExtArgs> | null
+  where?: Prisma.RemittanceWhereInput
+  orderBy?: Prisma.RemittanceOrderByWithRelationInput | Prisma.RemittanceOrderByWithRelationInput[]
+  cursor?: Prisma.RemittanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RemittanceScalarFieldEnum | Prisma.RemittanceScalarFieldEnum[]
 }
 
 /**

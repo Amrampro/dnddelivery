@@ -58,12 +58,27 @@ export function authorizationStore(
       !!(await db.company.findFirst({
         where: { id, status: "ACTIVE", archivedAt: null },
       })),
-    companyGrant: async (userId, companyId) =>
-      grant(
-        await db.companyMembership.findUnique({
+    companyGrant: async (userId, companyId) => {
+      const membership = await db.companyMembership.findUnique({
+        where: { companyId_userId: { companyId, userId } },
+        include: { role: { select: { code: true } } },
+      });
+      const value = await grant(membership);
+      if (value && membership?.role.code === "company_courier") {
+        value.active =
+          value.active &&
+          membership.organizationRole === "courier" &&
+          membership.employmentStatus === "ACTIVE";
+        const profile = await db.driverProfile.findUnique({
           where: { companyId_userId: { companyId, userId } },
-        }),
-      ),
+        });
+        if (profile?.status !== "ACTIVE")
+          value.permissions = restrictedCourierPermissions([
+            ...value.permissions,
+          ]);
+      }
+      return value;
+    },
     agencyActive: async (id, companyId) =>
       !!(await db.agency.findFirst({
         where: { id, companyId, status: "ACTIVE", archivedAt: null },
@@ -95,7 +110,9 @@ export function authorizationStore(
         },
       })),
     shopIdentityActive: async (shopId) =>
-      !!(await db.shop.findFirst({where:{id:shopId,status:"ACTIVE",archivedAt:null}})),
+      !!(await db.shop.findFirst({
+        where: { id: shopId, status: "ACTIVE", archivedAt: null },
+      })),
     shopGrant: async (userId, shopId) =>
       grant(
         await db.shopMembership.findUnique({

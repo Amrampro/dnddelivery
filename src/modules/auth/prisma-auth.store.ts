@@ -1,7 +1,7 @@
 import { Prisma, type PrismaClient } from "../../generated/prisma/client.js";
 import { serializable } from "../../database/transaction.js";
 import { authorizationStore } from "../../repositories/authorization.repository.js";
-import { loadWorkspaces } from "./workspaces.js";
+import { loadWorkspaces, loadUnavailableOrganizations } from "./workspaces.js";
 import type { AuthStore, NewSession, ResetToken } from "./types.js";
 export function prismaAuthStore(
   db: PrismaClient | Prisma.TransactionClient,
@@ -96,6 +96,7 @@ export function prismaAuthStore(
       await db.authEvent.create({ data: { userId, type, metadata } });
     },
     workspaces: (userId) => loadWorkspaces(db, userId),
+    unavailableOrganizations: (userId) => loadUnavailableOrganizations(db, userId),
     authorization: () => authorizationStore(db),
   };
   return store;

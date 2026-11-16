@@ -1,5 +1,19 @@
 import { effectiveStatus } from "../subscriptions/rules.js";
 import { restrictedCourierPermissions } from "../organization/permissions.js";
+/** Diagnostic only: these records never grant a selectable workspace or permissions. */
+export async function loadUnavailableOrganizations(db, userId) {
+    const unavailable = { OR: [{ status: { not: "ACTIVE" } }, { archivedAt: { not: null } }] };
+    const [companies, shops] = await Promise.all([
+        db.companyMembership.findMany({ where: { userId, active: true, company: unavailable },
+            select: { company: { select: { name: true, status: true, archivedAt: true } } }, orderBy: { createdAt: "asc" } }),
+        db.shopMembership.findMany({ where: { userId, active: true, shop: unavailable },
+            select: { shop: { select: { name: true, status: true, archivedAt: true } } }, orderBy: { createdAt: "asc" } }),
+    ]);
+    const record = (kind, org) => ({
+        kind, name: org.name, status: org.archivedAt || org.status === "ARCHIVED" ? "ARCHIVED" : org.status === "SUSPENDED" ? "SUSPENDED" : "INACTIVE",
+    });
+    return [...companies.map(m => record("COMPANY", m.company)), ...shops.map(m => record("SHOP", m.shop))];
+}
 export async function loadWorkspaces(db, userId) {
     const result = [];
     const permissions = async (roleId) => (await db.rolePermission.findMany({

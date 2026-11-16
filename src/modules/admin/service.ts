@@ -13,6 +13,7 @@ import {
   invitationSelect,
 } from "./repository.js";
 import type { CreateCompany, UpdateCompany } from "./validation.js";
+import { changeShopStatus } from "./shops.js";
 export interface InvitationMailer {
   available(): boolean;
   send(to: string, link: string, company: string): Promise<void>;
@@ -72,6 +73,9 @@ export class AdminService {
         "Les données ont changé. Rechargez la fiche avant de réessayer.",
       );
     return company;
+  }
+  async shopStatus(actor: string, id: string, input: Parameters<typeof changeShopStatus>[3]) {
+    return this.write(actor, tx => changeShopStatus(tx, actor, id, input));
   }
   audit(
     tx: Tx,

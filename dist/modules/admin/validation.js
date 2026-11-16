@@ -35,7 +35,7 @@ export const adminChoice = z.discriminatedUnion("mode", [
 ]);
 export const createCompany = companyFields
     .extend({
-    status: z.enum(["ACTIVE", "INACTIVE"]).default("INACTIVE"),
+    status: z.enum(["ACTIVE", "INACTIVE"]).default("ACTIVE"),
     administrator: adminChoice,
 })
     .strict();

@@ -37,6 +37,8 @@ export const invitationSelect = {
   createdAt: true,
 } as const satisfies Prisma.CompanyInvitationSelect;
 export const adminActions = [
+  "PLATFORM_SHOP_ARCHIVED",
+  "PLATFORM_SHOP_STATUS_CHANGED",
   "COMPANY_CREATED",
   "COMPANY_UPDATED",
   "COMPANY_ACTIVATED",

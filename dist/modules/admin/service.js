@@ -7,6 +7,7 @@ import { hashPassword, opaqueToken, tokenHash } from "../auth/crypto.js";
 import { OrganizationService } from "../organization/service.js";
 import { withdrawAgencyLinks } from '../organization/access.js';
 import { AdminRepository, companySelect, companyDto, invitationSelect, } from "./repository.js";
+import { changeShopStatus } from "./shops.js";
 export class AdminService {
     db;
     mailer;
@@ -47,6 +48,9 @@ export class AdminService {
         if (version !== undefined && company.version !== version)
             throw new AuthError(409, "VERSION_CONFLICT", "Les données ont changé. Rechargez la fiche avant de réessayer.");
         return company;
+    }
+    async shopStatus(actor, id, input) {
+        return this.write(actor, tx => changeShopStatus(tx, actor, id, input));
     }
     audit(tx, actorId, companyId, action, metadata = {}, entityId = companyId) {
         return tx.auditLog.create({

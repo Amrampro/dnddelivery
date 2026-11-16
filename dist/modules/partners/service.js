@@ -243,19 +243,8 @@ export class PartnerService {
             if (!m)
                 throw fail("MEMBER_NOT_FOUND", "Affiliation introuvable.", 404);
             version(m.version, input.version);
-            if (m.active &&
-                m.role.code === "shop_owner" &&
-                (!input.active || input.role !== "shop_owner") &&
-                (await tx.shopMembership.count({
-                    where: {
-                        shopId: c.shopId,
-                        active: true,
-                        userId: { not: userId },
-                        role: { code: "shop_owner" },
-                        user: { status: "ACTIVE", archivedAt: null },
-                    },
-                })) === 0)
-                throw fail("LAST_OWNER", "La boutique doit conserver un propriétaire actif.", 409);
+            if (m.role.code === "shop_owner")
+                throw fail("OWNER_PROTECTED", "Le propriétaire de la boutique ne peut pas être modifié, suspendu ou retiré.", 409);
             const role = await tx.role.findUniqueOrThrow({
                 where: { code: input.role },
             });
@@ -573,6 +562,8 @@ export class PartnerService {
                     where: { shopId_userId: { shopId, userId: user.id } },
                     include: { role: true },
                 });
+                if (current?.role.code === "shop_owner")
+                    throw fail("OWNER_PROTECTED", "L'affiliation du propriétaire ne peut pas être remplacée par une invitation.", 409);
                 if (current?.active)
                     throw fail("MEMBER_EXISTS", "Cette personne est déjà affiliée.", 409);
                 await tx.shopMembership.upsert({

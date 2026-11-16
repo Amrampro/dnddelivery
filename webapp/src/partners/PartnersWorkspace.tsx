@@ -1352,7 +1352,7 @@ function ShopUsers({ context }: { context: Workspace }) {
                 <Badge tone={m.active ? "success" : "neutral"}>
                   {m.active ? "Active" : "Inactive"}
                 </Badge>,
-                can ? (
+                can && m.role !== "shop_owner" ? (
                   <div className="ds-actions">
                     <Button
                       variant="ghost"
@@ -1370,7 +1370,7 @@ function ShopUsers({ context }: { context: Workspace }) {
                           setAction({
                             title: "Retirer cette affiliation ?",
                             description:
-                              "Le compte et les accès à ses autres boutiques sont conservés. Le dernier propriétaire actif est protégé.",
+                              "Le compte et les accès à ses autres boutiques sont conservés.",
                             reason: true,
                             submit: (reason) =>
                               api(`/partners/users/${m.userId}`, {
@@ -1388,7 +1388,7 @@ function ShopUsers({ context }: { context: Workspace }) {
                     )}
                   </div>
                 ) : (
-                  "—"
+                  m.role === "shop_owner" ? "Propriétaire protégé" : "-"
                 ),
               ])}
             />

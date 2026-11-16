@@ -19,7 +19,7 @@ Les valeurs de :role sont les portails fournis par le serveur : super-admin, ent
 
 `shared/workspace.ts` décrit les intitulés, icônes et permissions nécessaires. Il n’attribue aucun droit à un rôle. `navigation(context)` ne construit que les éléments dont les permissions effectives existent. `moduleAccess` applique le même catalogue lors d’une navigation directe. Les utilisateurs sans workspace.access n’ont aucun menu professionnel.
 
-`GET /api/auth/workspace?permission=orders.read` vérifie d’abord workspace.access, puis la permission demandée, avec les affiliations actuelles côté serveur. Le paramètre optionnel est strictement validé ; ce n’est ni un rôle ni une permission accordée par le client. Une permission absente retourne 403. Le schéma de données et les migrations sont inchangés. Les futurs endpoints métier devront appliquer leurs propres filtres companyId/agencyId/shopId : cet endpoint d’interface ne les remplace pas.
+Le portail Web charge `GET /api/auth/workspace` sans paramètre de permission : certains pare-feu d'hébergement bloquent les valeurs comme `shop.profile.read` dans l'URL. L'API vérifie `workspace.access` et renvoie les affiliations et permissions actuelles. Le portail applique ensuite `moduleAccess` à cette réponse fraîche avant de rendre le module. Chaque endpoint métier conserve son propre contrôle serveur et ses filtres companyId/agencyId/shopId. Le paramètre optionnel `permission` de l'API reste disponible pour les autres clients et retourne 403 si la permission demandée est absente. Le schéma de données et les migrations sont inchangés.
 
 ## Permissions du catalogue
 

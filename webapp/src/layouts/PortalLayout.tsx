@@ -130,14 +130,14 @@ export function PortalLayout() {
     [logout, setLogout] = useState(false),
     [busy, setBusy] = useState(false),
     [logoutError, setLogoutError] = useState("");
-  const request = `${auth.profile?.user.id}:${key}:${moduleId}:${retry}:${JSON.stringify(auth.profile?.activeContext)}`,
-    initial = auth.profile?.activeContext;
-  const permission = initial && moduleAccess(initial, moduleId)?.permission;
+  const request = `${auth.profile?.user.id}:${key}:${moduleId}:${retry}:${JSON.stringify(auth.profile?.activeContext)}`;
   useEffect(() => {
     let disposed = false;
     if (key)
       api<{ context: Workspace }>(
-        `/auth/workspace${permission ? `?permission=${encodeURIComponent(permission)}` : ""}`,
+        // Revalidate the workspace, then check the module against its fresh rights.
+        // Dotted permission names in URLs can be rejected by hosting firewalls.
+        "/auth/workspace",
       )
         .then((v) => {
           if (!disposed) setResult({ request, context: v.context });
@@ -148,7 +148,7 @@ export function PortalLayout() {
     return () => {
       disposed = true;
     };
-  }, [key, request, permission, location.key]);
+  }, [key, request, location.key]);
   if (!key) return <Navigate to="/organisations" replace />;
   if (result?.request === request && result.error)
     return (

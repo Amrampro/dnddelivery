@@ -14,7 +14,7 @@ Une entreprise peut préparer une inscription par e-mail. Après vérification, 
 
 Le profil contient référence serveur, nom commercial, raison sociale et description facultatives, coordonnées professionnelles, pays/ville/quartier/adresse, logo privé, statut et version. La référence et le statut ne sont pas modifiables dans le formulaire commercial. Le logo réutilise le stockage privé et le décodage/réencodage sécurisé du Bloc 5. Aucun logo officiel n'est remplacé.
 
-Le propriétaire peut inviter un compte existant ou nouveau et attribuer propriétaire, gestionnaire ou employé. Aucun droit avant acceptation authentifiée/vérifiée; l'autorité actuelle de l'émetteur est revérifiée. Le propriétaire peut changer rôle/activité ou retirer une affiliation avec motif. La dernière personne propriétaire active est protégée. Les comptes globaux, autres boutiques et historiques sont conservés. La gestion complexe des utilisateurs reste sur le Web; Expo consulte l'équipe selon permissions.
+Le propriétaire peut inviter un compte existant ou nouveau et attribuer propriétaire, gestionnaire ou employé. Aucun droit avant acceptation authentifiée/vérifiée; l'autorité actuelle de l'émetteur est revérifiée. Le propriétaire peut changer rôle/activité ou retirer une affiliation non propriétaire avec motif. Toute affiliation propriétaire est immuable dans ce module : aucun changement, suspension ou retrait, même avec plusieurs propriétaires. Une invitation ne peut pas remplacer une affiliation propriétaire existante. Les comptes globaux, autres boutiques et historiques sont conservés. La gestion complexe des utilisateurs reste sur le Web; Expo consulte l'équipe selon permissions.
 
 ## API
 

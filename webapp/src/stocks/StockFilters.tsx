@@ -41,7 +41,7 @@ export function StockFilterBar({
               })
             }
           >
-            <option value="">Tous mes transporteurs</option>
+            <option value="">Toutes mes agences de livraison</option>
             {options.companies.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -66,7 +66,7 @@ export function StockFilterBar({
             .map((a) => (
               <option key={a.id} value={a.id}>
                 {context.scope === "SHOP" && !filters.companyId
-                  ? `${options.companies.find((c) => c.id === a.companyId)?.name ?? "Transporteur"} · ${a.name}`
+                  ? `${options.companies.find((c) => c.id === a.companyId)?.name ?? "Agence de livraison"} · ${a.name}`
                   : a.name}
               </option>
             ))}

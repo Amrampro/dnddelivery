@@ -27,9 +27,9 @@ export function ContextPicker({ context }: { context: Workspace }) {
         if(target)void select(target.key);
       }}>{environments.map(w=><option key={environmentKey(w)} value={environmentKey(w)}>{w.scope==='SHOP'?w.shopName:w.companyName}</option>)}</select>
     </div>
-    {context.scope==='SHOP' && <div className="ws-agency-select"><label htmlFor="ws-carrier">TRANSPORTEUR</label>
+    {context.scope==='SHOP' && <div className="ws-agency-select"><label htmlFor="ws-carrier">AGENCE DE LIVRAISON</label>
       <select id="ws-carrier" value={context.key} disabled={busy} onChange={e=>void select(e.target.value)}>
-        {carriers.map(w=><option key={w.key} value={w.key}>{w.companyId?`${w.companyName}${w.subscriptionAccess?.valid===false?' · accès limité':''}`:'Ma boutique · sans transporteur'}</option>)}
+        {carriers.map(w=><option key={w.key} value={w.key}>{w.companyId?`${w.companyName}${w.subscriptionAccess?.valid===false?' · accès limité':''}`:'Ma boutique · sans agence de livraison'}</option>)}
       </select>
     </div>}
     {context.scope!=='SHOP' && agencies.length>0 && <div className="ws-agency-select"><label htmlFor="ws-agency">AGENCE</label>

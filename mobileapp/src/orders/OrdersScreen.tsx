@@ -422,7 +422,7 @@ export function OrdersScreen({
         onChange={(v) => change("type", v)}
       />
       <Selector
-        label="Transporteur"
+        label="Agence de livraison"
         value={filter.companyId ?? ""}
         options={[
           { id: "", label: "Tous ceux du contexte" },

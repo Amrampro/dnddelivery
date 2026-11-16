@@ -319,7 +319,7 @@ export function DeliveriesScreen({
           />
           {context.scope === "SHOP" && (
             <Selector
-              label="Transporteur"
+              label="Agence de livraison"
               value={filter.companyId ?? ""}
               options={[
                 { id: "", label: "Tous ceux du contexte" },
@@ -493,7 +493,7 @@ export function OrderDeliveryProgress({
           </>
         ) : (
           <Text style={ui.body}>
-            La mission sera visible après organisation par le transporteur.
+            La mission sera visible après organisation par l’agence de livraison.
           </Text>
         )}
       </View>

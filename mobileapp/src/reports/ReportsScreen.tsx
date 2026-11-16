@@ -15,7 +15,7 @@ export function ReportsScreen({context,onNavigate,defaultKind="overview"}:{conte
     <Card><Text style={ui.label}>Rapport</Text><View style={{flexDirection:"row",flexWrap:"wrap",gap:8}}>{kinds.map(k=><Button key={k} secondary={kind!==k} title={reportLabels[k]} onPress={()=>choose(k)}/>)}</View></Card>
     <Card><Text style={ui.label}>Période</Text><View style={{flexDirection:"row",flexWrap:"wrap",gap:8}}>{[["today","Aujourd’hui"],["yesterday","Hier"],["7d","7 jours"],["30d","30 jours"],["week","Semaine"],["month","Ce mois"],["previous-month","Mois précédent"],["custom","Dates"]].map(([v,l])=><Button key={v} title={l!} secondary={preset!==v} onPress={()=>setPreset(v!)}/>)}</View>
       {preset==="custom"&&<><Input label="Du (AAAA-MM-JJ)" value={from} onChangeText={setFrom}/><Input label="Au inclus (AAAA-MM-JJ)" value={to} onChangeText={setTo}/></>}
-      {context.scope==="SHOP"&&<Selector label="Transporteur" value={company} onChange={setCompany} options={[{id:"",label:"Tous mes transporteurs"},...(options.data?.companies??[]).map(x=>({id:x.id,label:x.name}))]}/>}
+      {context.scope==="SHOP"&&<Selector label="Agence de livraison" value={company} onChange={setCompany} options={[{id:"",label:"Toutes mes agences de livraison"},...(options.data?.companies??[]).map(x=>({id:x.id,label:x.name}))]}/>}
       <Button title="Appliquer" onPress={()=>{const p=new URLSearchParams({preset});if(preset==="custom"){p.set("from",from);p.set("to",to);}if(context.scope==="SHOP"&&company)p.set("companyId",company);setQuery(p.toString());setPage(1);}}/>
     </Card>
     {options.error&&<ErrorMessage message={options.error} retry={options.reload}/>}

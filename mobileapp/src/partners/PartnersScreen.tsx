@@ -306,20 +306,20 @@ function CarrierSelector({ context }: { context: Workspace }) {
   return (
     <Card>
       <Text role="heading" style={ui.sectionTitle}>
-        Mon transporteur
+        Mon agence de livraison
       </Text>
       <Text style={ui.body}>
         Choisissez parmi les collaborations autorisées de cette boutique.
       </Text>
       <Selector
-        label="Transporteur sélectionné"
+        label="Agence de livraison sélectionnée"
         value={context.key}
         disabled={busy}
         options={options.map((c) => ({
           id: c.key,
           label: c.companyId
             ? c.companyName
-            : "Ma boutique · sans transporteur",
+            : "Ma boutique · sans agence de livraison",
           description:
             c.subscriptionAccess?.valid === false
               ? "Abonnement non valide · consultation seulement"
@@ -513,7 +513,7 @@ function CollaborationDetail({
           {action === "request"
             ? "Une nouvelle demande sera envoyée. La collaboration restera en attente de l’accord de l’autre partie."
             : action === "terminate"
-              ? "Les historiques sont conservés. Les nouvelles opérations seront bloquées pour ce transporteur."
+              ? "Les historiques sont conservés. Les nouvelles opérations seront bloquées pour cette agence de livraison."
               : "Cette décision sera enregistrée et communiquée à l’autre partie."}
         </Text>
         {action === "terminate" &&
@@ -690,7 +690,7 @@ function Collaborations({
       <Card>
         <Input
           label={
-            company ? "Rechercher une boutique" : "Rechercher un transporteur"
+            company ? "Rechercher une boutique" : "Rechercher une agence de livraison"
           }
           value={q}
           onChangeText={setQ}
@@ -940,7 +940,7 @@ function ShopSettings({ context }: { context: Workspace }) {
         />
         <ListRow
           title="Mes environnements"
-          description="Choisir une boutique ou un transporteur autorisé"
+          description="Choisir une boutique ou une agence de livraison autorisée"
           icon="home"
           onPress={() => router.push("/organisations")}
         />
@@ -975,7 +975,7 @@ function ShopHome({ context }: { context: Workspace }) {
           }
         />
         <ListRow
-          title="Mes transporteurs"
+          title="Mes agences de livraison"
           icon="truck"
           onPress={() =>
             router.push({
@@ -999,9 +999,9 @@ function ShopHome({ context }: { context: Workspace }) {
       {context.subscriptionAccess?.valid === false && (
         <Card>
           <Text style={ui.body}>
-            L’abonnement de ce transporteur n’est pas valide. Les nouvelles
-            opérations sont bloquées pour lui. Vous pouvez consulter vos
-            collaborations et choisir un autre transporteur actif.
+            L’abonnement de cette agence de livraison n’est pas valide. Les nouvelles
+            opérations sont bloquées pour elle. Vous pouvez consulter vos
+            collaborations et choisir une autre agence de livraison active.
           </Text>
         </Card>
       )}
@@ -1018,7 +1018,7 @@ export function PartnersScreen({
   const titles: Record<string, string> = {
     accueil: "Ma boutique",
     "profil-boutique": "Profil commercial",
-    transporteurs: "Entreprises partenaires",
+    transporteurs: "Agences de livraison partenaires",
     "demandes-collaboration": "Demandes de collaboration",
     "invitations-boutique": "Invitations utilisateurs",
     "utilisateurs-boutique": "Utilisateurs de la boutique",

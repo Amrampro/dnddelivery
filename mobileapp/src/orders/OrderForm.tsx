@@ -168,7 +168,7 @@ export function OrderForm({
         <Card>
           <View style={ui.stack}>
             <Selector
-              label="Transporteur"
+              label="Agence de livraison"
               value={x.companyId}
               disabled={!!initial || !!context.companyId}
               options={Array.from(

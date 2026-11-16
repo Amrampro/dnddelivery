@@ -109,7 +109,7 @@ export function DeliveryDetail({
             Livreur affecté :{" "}
             {m.courier?.fullName ??
               (m.kind === "shop"
-                ? "Suivi assuré par le transporteur"
+                ? "Suivi assuré par l’agence de livraison"
                 : "Aucune affectation active")}
           </p>
           <p>Prise en charge : {date(m.pickedUpAt)}</p>
@@ -277,7 +277,7 @@ export function DeliveryDetail({
             columns={["Trajet", "Transport", "État", "Départ", "Réception"]}
             rows={m.legs.map((l) => [
               `${l.originName} → ${l.destinationName}${l.returnedToOrigin ? " · Retour à l’origine" : ""}`,
-              l.transporterName ?? "Transporteur",
+              l.transporterName ?? "Agence de livraison",
               l.status === "DRAFT"
                 ? "Préparé"
                 : l.status === "IN_TRANSIT"

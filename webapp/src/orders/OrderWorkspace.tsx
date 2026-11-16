@@ -421,7 +421,7 @@ export function OrderWorkspace({
             <option value="FROM_STOCK">Depuis stock</option>
           </Select>
           <Select
-            label="Transporteur"
+            label="Agence de livraison"
             value={filter.companyId ?? ""}
             onChange={(e) => {
               change("companyId", e.target.value);

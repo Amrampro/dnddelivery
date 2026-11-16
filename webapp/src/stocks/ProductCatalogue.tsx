@@ -266,7 +266,7 @@ function ProductList({ context, can }: { context: Workspace; can: boolean }) {
           </h1>
           <p>
             Une référence commerciale, utilisable auprès de plusieurs
-            transporteurs.
+            agences de livraison.
           </p>
         </div>
         {can && (

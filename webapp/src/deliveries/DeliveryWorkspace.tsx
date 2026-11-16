@@ -273,7 +273,7 @@ export function DeliveryWorkspace({
               </Select>
               {context.scope === "SHOP" && (
                 <Select
-                  label="Transporteur"
+                  label="Agence de livraison"
                   value={filter.companyId ?? ""}
                   onChange={(e) => {
                     change("companyId", e.target.value);
@@ -506,7 +506,7 @@ export function OrderDeliveryProgress({
           </Link>
         </>
       ) : (
-        <p>La mission sera visible après organisation par le transporteur.</p>
+        <p>La mission sera visible après organisation par l’agence de livraison.</p>
       )}
     </Card>
   );

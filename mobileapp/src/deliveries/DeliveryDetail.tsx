@@ -177,7 +177,7 @@ export function DeliveryDetail({
             Livreur affecté :{" "}
             {m.courier?.fullName ??
               (m.kind === "shop"
-                ? "Suivi assuré par le transporteur"
+                ? "Suivi assuré par l’agence de livraison"
                 : "Aucune affectation active")}
           </Text>
           <Text style={ui.body}>Prise en charge : {date(m.pickedUpAt)}</Text>

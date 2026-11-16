@@ -274,7 +274,7 @@ function Content({ moduleId }: { moduleId: string }) {
               <Text style={ui.kicker}>
                 {context.scope === "SHOP"
                   ? context.companyId
-                    ? "TRANSPORTEUR ACTIF"
+                    ? "AGENCE DE LIVRAISON ACTIVE"
                     : "MA BOUTIQUE"
                   : "ENVIRONNEMENT ACTIF"}
               </Text>
@@ -391,7 +391,7 @@ function Content({ moduleId }: { moduleId: string }) {
                   {moduleId === "transporteurs" && (
                     <Button
                       secondary
-                      title="Choisir un transporteur autorisé"
+                      title="Choisir une agence de livraison autorisée"
                       onPress={() => router.push("/organisations")}
                     />
                   )}

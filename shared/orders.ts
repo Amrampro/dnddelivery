@@ -289,7 +289,7 @@ export function orderValidation(x: OrderContent, step?: number) {
     (step === undefined || step === 0) &&
     (!x.companyId || !x.shopId || !x.agencyId)
   )
-    return "Choisissez un transporteur, une boutique et une agence autorisés.";
+    return "Choisissez une agence de livraison, une boutique et une agence responsable autorisées.";
   const r = x.recipient;
   if (step === undefined || step === 1) {
     if (

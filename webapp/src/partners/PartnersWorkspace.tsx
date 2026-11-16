@@ -280,7 +280,7 @@ function CarrierPicker({ context }: { context: Workspace }) {
     }
   }
   return (
-    <Card title="Votre transporteur">
+    <Card title="Votre agence de livraison">
       <Select
         label="Contexte de travail"
         value={context.key}
@@ -291,13 +291,13 @@ function CarrierPicker({ context }: { context: Workspace }) {
           <option key={o.key} value={o.key}>
             {o.companyId
               ? `${o.companyName}${o.subscriptionAccess?.valid === false ? " · accès limité" : ""}`
-              : "Ma boutique · sans transporteur"}
+              : "Ma boutique · sans agence de livraison"}
           </option>
         ))}
       </Select>
       <p className="partner-help">
         Seules les collaborations autorisées sont proposées. Vous pouvez gérer
-        votre boutique sans sélectionner de transporteur.
+        votre boutique sans sélectionner d’agence de livraison.
       </p>
       <Feedback error={error} />
     </Card>
@@ -544,18 +544,18 @@ function CollaborationList({
       <div className="ws-page-heading">
         <div>
           <span className="eyebrow">
-            {shop ? "MES TRANSPORTEURS" : "RÉSEAU PARTENAIRE"}
+            {shop ? "MES AGENCES DE LIVRAISON" : "RÉSEAU PARTENAIRE"}
           </span>
           <h1>
             {incoming
               ? "Demandes de collaboration"
               : shop
-                ? "Entreprises partenaires"
+                ? "Agences de livraison partenaires"
                 : "Boutiques partenaires"}
           </h1>
           <p>
             {shop
-              ? "Gérez chaque relation indépendamment et choisissez votre transporteur."
+              ? "Gérez chaque relation indépendamment et choisissez votre agence de livraison."
               : "Retrouvez les boutiques et demandes de votre entreprise."}
           </p>
         </div>

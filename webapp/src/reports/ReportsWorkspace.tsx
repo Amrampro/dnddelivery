@@ -42,7 +42,7 @@ export function ReportsWorkspace({context,dashboard=false,defaultKind="overview"
         </div>
         <details><summary>Filtres avancés</summary><div className="ds-form-grid">
           {([
-            ["companyId","Entreprise / transporteur",options.data?.companies],
+            ["companyId","Agence de livraison",options.data?.companies],
             ["agencyId","Agence",options.data?.agencies],
             ...(!audit?[["shopId","Boutique",options.data?.shops],["courierId","Livreur",options.data?.couriers]]:[]),
           ] as [string,string,{id:string;name:string}[]|undefined][]).filter(([key,,items])=>items?.length&&!(audit&&key==="companyId")).map(([key,label,items])=><Select key={key} label={label} value={draft[key]??""} onChange={e=>setDraft({...draft,[key]:e.target.value})}><option value="">Tout le périmètre autorisé</option>{items?.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</Select>)}

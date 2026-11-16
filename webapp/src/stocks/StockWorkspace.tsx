@@ -79,7 +79,7 @@ function Balances({
             {alerts
               ? "Alertes de stock"
               : context.scope === "SHOP"
-                ? "Mes stocks chez les transporteurs"
+                ? "Mes stocks chez les agences de livraison"
                 : "Vue des stocks"}
           </h1>
           <p>

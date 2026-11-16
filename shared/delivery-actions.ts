@@ -126,7 +126,7 @@ export const deliveryActionDefinitions: Record<
   TRANSFER_DISPATCH: {
     title: "Confirmer le départ inter-agences",
     description:
-      "Confirmez après remise physique à l’agent de transport. La responsabilité passe au transporteur de cette étape.",
+      "Confirmez après remise physique à l’agent de transport. La responsabilité passe à l’agence de livraison de cette étape.",
   },
   TRANSFER_RECEIVE: {
     title: "Réceptionner le trajet inter-agences",

@@ -160,7 +160,7 @@ export function OrderForm({
           <h1>
             {
               [
-                "Transporteur et prise en charge",
+                "Agence de livraison et prise en charge",
                 "Destinataire",
                 "Colis et encaissement",
                 "Vérifier la commande",
@@ -190,7 +190,7 @@ export function OrderForm({
         {step === 0 && (
           <div className="order-grid">
             <Select
-              label="Transporteur"
+              label="Agence de livraison"
               value={x.companyId}
               disabled={!!initial || !!context.companyId}
               onChange={(e) =>
@@ -202,7 +202,7 @@ export function OrderForm({
                 })
               }
             >
-              <option value="">Choisir un transporteur</option>
+              <option value="">Choisir une agence de livraison</option>
               {Array.from(
                 new Map(
                   options.pairs.map((p) => [p.companyId, p.company]),

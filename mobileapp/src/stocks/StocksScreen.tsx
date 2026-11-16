@@ -93,7 +93,7 @@ function SearchFilters({
           label="Entreprise de conservation"
           value={filters.companyId}
           options={[
-            { id: "", label: "Tous mes transporteurs" },
+            { id: "", label: "Toutes mes agences de livraison" },
             ...options.companies.map((c) => ({ id: c.id, label: c.name })),
           ]}
           onChange={(companyId) => onChange({ companyId, agencyId: "" })}
@@ -116,7 +116,7 @@ function SearchFilters({
               id: a.id,
               label:
                 context.scope === "SHOP" && !filters.companyId
-                  ? `${options.companies.find((c) => c.id === a.companyId)?.name ?? "Transporteur"} · ${a.name}`
+                  ? `${options.companies.find((c) => c.id === a.companyId)?.name ?? "Agence de livraison"} · ${a.name}`
                   : a.name,
             })),
         ]}

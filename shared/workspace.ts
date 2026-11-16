@@ -440,10 +440,10 @@ export const workspaces: Record<
       item("brouillons", "Mes brouillons", "shop.orders.read", "clipboard"),
       item(
         "transporteurs",
-        "Mes transporteurs",
+        "Mes agences de livraison",
         "shop.collaborations.read",
         "truck",
-        "Changez de transporteur parmi vos collaborations autorisées depuis le sélecteur d’environnement.",
+        "Changez d’agence de livraison parmi vos collaborations autorisées depuis le sélecteur d’environnement.",
       ),
       item("produits", "Mon catalogue", "shop.products.read", "box"),
       item("stocks", "Mes marchandises", "shop.stocks.read", "layers"),

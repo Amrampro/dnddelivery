@@ -578,10 +578,10 @@ export function FinanceScreen({
           )}
           {shop && !context.companyId && (
             <Selector
-              label="Transporteur"
+              label="Agence de livraison"
               value={filters.companyId ?? ""}
               options={[
-                { id: "", label: "Tous mes transporteurs" },
+                { id: "", label: "Toutes mes agences de livraison" },
                 ...(options.data?.companies ?? []).map((x) => ({
                   id: x.id,
                   label: x.name,

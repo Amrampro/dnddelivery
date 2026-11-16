@@ -42,7 +42,7 @@ export function ModulePage({ module }: { module: Module }) {
                 </Link>
               ) : module.id === "transporteurs" ? (
                 <Link className="ds-button ds-secondary" to="/organisations">
-                  Choisir un transporteur autorisé
+                  Choisir une agence de livraison autorisée
                 </Link>
               ) : undefined
             }

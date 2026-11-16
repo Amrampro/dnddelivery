@@ -14,13 +14,13 @@ function Conditions() {
         En demandant cette inscription, vous confirmez être autorisé à
         représenter la boutique, fournir des coordonnées exactes et utiliser DND
         Delivery pour vos activités professionnelles. Les accès aux
-        transporteurs nécessitent leur accord. Vous restez responsable des accès
+        agences de livraison nécessitent leur accord. Vous restez responsable des accès
         confiés à votre équipe.
       </p>
       <p>
         Les informations commerciales sont communiquées aux partenaires
         autorisés pour organiser vos collaborations. Les conditions commerciales
-        de livraison sont convenues avec chaque transporteur.
+        de livraison sont convenues avec chaque agence de livraison.
       </p>
     </div>
   );
@@ -69,7 +69,7 @@ export function PartnerRegistration() {
     <AccountLayout>
       <section className="entry-card partner-subscribe">
         <span className="eyebrow">BOUTIQUE PARTENAIRE</span>
-        <h1>Un compte pour tous vos transporteurs.</h1>
+        <h1>Un compte pour toutes vos agences de livraison.</h1>
         <p>
           Créez votre identité commerciale et choisissez ensuite les entreprises
           avec lesquelles collaborer.

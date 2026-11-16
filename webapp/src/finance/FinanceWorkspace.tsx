@@ -552,11 +552,11 @@ export function FinanceWorkspace({
               )}
               {shop && !context.companyId && (
                 <Select
-                  label="Transporteur"
+                  label="Agence de livraison"
                   value={filters.companyId ?? ""}
                   onChange={(e) => updateFilter("companyId", e.target.value)}
                 >
-                  <option value="">Tous mes transporteurs</option>
+                  <option value="">Toutes mes agences de livraison</option>
                   {options.data?.companies.map((a) => (
                     <option key={a.id} value={a.id}>
                       {a.name}

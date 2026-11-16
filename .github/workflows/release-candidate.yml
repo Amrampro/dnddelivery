@@ -1,0 +1,53 @@
+name: Préparer un candidat DND Delivery
+on:
+  workflow_dispatch:
+    inputs:
+      api_url:
+        description: URL publique HTTPS de l'API, terminée par /api
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+  package:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+          cache: npm
+          cache-dependency-path: |
+            api/package-lock.json
+            webapp/package-lock.json
+      - name: Build API
+        working-directory: api
+        run: |
+          npm ci
+          npm run build
+      - name: Build Web
+        working-directory: webapp
+        env:
+          VITE_API_URL: ${{ inputs.api_url }}
+        run: |
+          node -e 'const u = new URL(process.env.VITE_API_URL); if (u.protocol !== "https:" || u.username || u.password || u.search || u.hash || u.pathname !== "/api" || process.env.VITE_API_URL !== u.origin + "/api") throw Error("Expected an HTTPS API origin followed by /api");'
+          npm ci
+          npm run build
+      - name: Package allowlisted files and checksums
+        run: |
+          mkdir candidate
+          tar -C api -czf candidate/api.tar.gz dist src tsconfig.json package.json package-lock.json prisma prisma.config.ts scripts/bootstrap-super-admin.ts scripts/migrate-deploy.ts scripts/migration-files.ts .env.example
+          tar -C webapp/dist -czf candidate/web.tar.gz .
+          cd candidate
+          sha256sum api.tar.gz web.tar.gz > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dnd-delivery-candidate-${{ github.sha }}
+          path: candidate/
+          if-no-files-found: error
+          retention-days: 14

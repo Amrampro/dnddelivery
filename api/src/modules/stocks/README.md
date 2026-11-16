@@ -1,0 +1,15 @@
+# Moteur de stock — Bloc 9
+
+Les routes d'exploitation utilisent StockService, StockReads et les gardes de access.ts. Le routeur est monté sous /api et filtre ses préfixes avant l'authentification afin de préserver les routes publiques et autres modules.
+
+Les écritures sont sérialisées par entreprise et transactionnelles; chaque changement de quantité génère StockMovement immuable. Le stock physique inclut le réservé; disponible = physique − réservé. Le transit sort du physique au départ et entre progressivement à destination. Les quantités sont des entiers; aucun ajustement de quantité n'est exposé directement. Les seuils ont une route dédiée sans changement de quantité.
+
+Les collaborations actives et agences explicitement partagées sont obligatoires pour de nouveaux dépôts, réservations, transferts et inventaires. NULL/[] ne donne aucune agence. Une restitution de marchandises déjà détenues, une libération de réservation et la réception/résolution d'un transfert déjà en transit peuvent clore une collaboration devenue inactive; l'entreprise, l'utilisateur, son agence et l'abonnement doivent rester valides. Une résolution restaurant physiquement des articles exige le contexte de cette agence, sauf administrateur en contexte entreprise. Les pertes de transit exigent stocks.approve et conservent l'incident, son auteur, la décision et l'événement; elles ne simulent pas de mouvement physique en entrepôt.
+
+Les incidents ouverts isolent leurs quantités : une autre déclaration ou une réception ordinaire ne peut les consommer. Une restitution à l'origine utilise returnedQuantity, distinct de lostQuantity. Le statut terminal RECEIVED signifie que chaque unité est réceptionnée, retournée ou perdue avec autorisation et qu'aucun incident n'est ouvert. L'interface distingue les clôtures avec incident.
+
+L'inventaire fige quantité physique, réservée et version. Une validation refuse tout changement intervenu après cette photographie, toute réduction sous les réservations et tout rejeu. La session peut être rejetée puis recommencée. Une session est limitée explicitement à 500 lignes : filtrer par boutique si nécessaire. Les listes métier sont paginées et ordonnées par date puis identifiant. Les alertes sont calculées sur les quantités réelles; leurs lectures ne créent aucune notification répétée.
+
+Le fichier reserve-stock.ts reste le primitif interne du Bloc 2, conservé pour compatibilité et tests historiques, sans nouvelle route. Le futur Bloc 10 doit passer par le nouveau moteur et ses gardes de collaboration/agence et ne doit pas exposer ce primitif historique sans les intégrer. Aucune commande, livraison, affectation de livreur, preuve ou encaissement n'est créé ici.
+
+Les contraintes contextuelles des tables ajoutées et les normalisations des états anciens sont documentées dans les nouvelles migrations. Les clés étrangères scalaires ajoutées en SQL doivent être préservées lors des évolutions Prisma. Les migrations ne modifient ni les quantités anciennes ni les mouvements et ne remettent pas la base à zéro.

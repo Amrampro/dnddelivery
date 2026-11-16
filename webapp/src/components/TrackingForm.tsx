@@ -1,14 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { Search, Info } from "lucide-react";
 export function TrackingForm() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   return (
     <form
       className="tracking-form"
       onSubmit={(e) => {
         e.preventDefault();
-        const form=new FormData(e.currentTarget);
-        navigate("/suivi?reference="+encodeURIComponent(String(form.get("reference")??"").trim().toUpperCase()));
+        const form = new FormData(e.currentTarget);
+        navigate(
+          "/suivi?reference=" +
+            encodeURIComponent(
+              String(form.get("reference") ?? "")
+                .trim()
+                .toUpperCase(),
+            ),
+        );
       }}
     >
       <label htmlFor="reference">Référence de votre colis</label>
@@ -27,7 +34,8 @@ export function TrackingForm() {
         </button>
       </div>
       <p className="form-note">
-        <Info size={14} /> Un lien personnel envoyé à l’adresse enregistrée protège votre suivi.
+        <Info size={14} /> Votre référence et l'e-mail du destinataire
+        permettent de consulter l'avancement.
       </p>
     </form>
   );

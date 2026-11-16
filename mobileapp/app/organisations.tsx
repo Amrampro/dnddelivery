@@ -7,7 +7,16 @@ import { Screen } from "../src/components/Screen";
 import { Action } from "../src/components/Action";
 import { form } from "../src/auth/FormFields";
 import { Selector } from "../src/design/ui";
-const environmentKey = (w: {scope:string;shopId?:string;companyId?:string}) => w.scope === "SHOP" ? `shop:${w.shopId}` : w.companyId ? `company:${w.companyId}` : "global";
+const environmentKey = (w: {
+  scope: string;
+  shopId?: string;
+  companyId?: string;
+}) =>
+  w.scope === "SHOP"
+    ? `shop:${w.shopId}`
+    : w.companyId
+      ? `company:${w.companyId}`
+      : "global";
 export default function Organizations() {
   return (
     <Guard>
@@ -42,6 +51,12 @@ function Content() {
   }
   return (
     <Screen>
+      {auth.profile?.user.customerEnabled && (
+        <Action
+          title="Mon espace client · Mes commandes"
+          onPress={() => router.push("/mes-commandes")}
+        />
+      )}
       <Text style={form.title}>Votre environnement de travail.</Text>
       <Text style={form.text}>Choisissez parmi vos accès autorisés.</Text>
       {!!error && (
@@ -58,14 +73,15 @@ function Content() {
           { id: "all", label: "Tous mes environnements" },
           ...companies.map((c) => ({
             id: environmentKey(c),
-            label: c.scope === "SHOP" ? c.shopName ?? "Ma boutique" : c.companyName,
+            label:
+              c.scope === "SHOP"
+                ? (c.shopName ?? "Ma boutique")
+                : c.companyName,
           })),
         ]}
       />
       {organizations
-        .filter(
-          (c) => company === "all" || environmentKey(c) === company,
-        )
+        .filter((c) => company === "all" || environmentKey(c) === company)
         .map((context) => (
           <Pressable
             key={context.key}
@@ -76,7 +92,9 @@ function Content() {
             style={[form.card, busy === context.key && { opacity: 0.6 }]}
           >
             <Text style={{ fontSize: 17, fontWeight: "600", color: "#033173" }}>
-              {context.scope === "SHOP" && !context.companyId ? context.shopName : context.companyName}
+              {context.scope === "SHOP" && !context.companyId
+                ? context.shopName
+                : context.companyName}
             </Text>
             <Text style={form.text}>
               {context.agencyName ?? context.shopName ?? context.roleName}

@@ -168,6 +168,8 @@ enum Visibility {
 }
 
 model User {
+  customerEnabled Boolean @default(false)
+  customerOrders Order[] @relation("Order_customer")
   id                            String              @id @default(uuid()) @db.Char(36)
   email                         String              @unique @db.VarChar(254)
   passwordHash                  String              @db.VarChar(255)
@@ -737,6 +739,10 @@ model Recipient {
 }
 
 model Order {
+  customerUserId String? @db.Char(36)
+  customer User? @relation("Order_customer", fields: [customerUserId], references: [id], onDelete: Restrict)
+  @@index([customerUserId, isDraft, createdAt])
+  @@index([recipientEmail, customerUserId, isDraft])
   trackingVersion Int @default(1) @db.UnsignedInt
   isDraft                 Boolean @default(false)
   version                 Int @default(1)
@@ -1796,3 +1802,15 @@ model FinancialEvent {
   @@index([companyId,orderId,createdAt])
 }
 
+
+model CustomerRegistration {
+  id String @id @default(uuid()) @db.Char(36)
+  tokenHash String @unique @db.Char(64)
+  email String @db.VarChar(254)
+  fullName String @db.VarChar(160)
+  phone String @db.VarChar(32)
+  expiresAt DateTime @db.DateTime(3)
+  usedAt DateTime? @db.DateTime(3)
+  createdAt DateTime @default(now()) @db.DateTime(3)
+  @@index([email, createdAt])
+}

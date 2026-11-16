@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { UserDirectory } from "./UserDirectory";
 import { Link } from "react-router-dom";
 import {
   Badge,
@@ -135,7 +136,7 @@ export function GlobalUsers() {
       <header className="ws-page-title">
         <div>
           <span className="ws-eyebrow">UTILISATEURS ET ACCÈS</span>
-          <h1>Retrouvez un compte existant.</h1>
+          <h1>Les utilisateurs de la plateforme.</h1>
           <p>
             Les comptes peuvent administrer plusieurs entreprises sans être
             dupliqués.
@@ -152,6 +153,7 @@ export function GlobalUsers() {
           Ouvrir les entreprises
         </Link>
       </Card>
+      <UserDirectory />
     </>
   );
 }

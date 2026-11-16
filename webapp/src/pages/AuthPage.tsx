@@ -35,7 +35,9 @@ export function AuthPage() {
         to={
           auth.profile?.activeContext
             ? `/portail/${auth.profile.activeContext.portal}`
-            : "/organisations"
+            : auth.profile?.user.customerEnabled
+              ? "/mes-commandes"
+              : "/organisations"
         }
         replace
       />
@@ -85,16 +87,19 @@ export function AuthPage() {
             ? "Retrouvez votre accès."
             : reset
               ? "Un nouveau départ."
-              : "Votre activité vous attend."}
+              : "Votre espace vous attend."}
         </h1>
         <p>
           {forgot
-            ? "Indiquez l’adresse e-mail de votre compte professionnel."
+            ? "Indiquez l'adresse e-mail de votre compte DND Delivery."
             : reset
               ? "Choisissez un mot de passe d’au moins 12 caractères."
-              : "Connectez-vous pour retrouver votre environnement de travail."}
+              : "Connectez-vous pour retrouver vos commandes ou votre espace professionnel."}
         </p>
         <form className="auth-form" onSubmit={submit}>
+          {!forgot && !reset && (
+            <Link to="/inscription-client">Créer un compte utilisateur</Link>
+          )}
           {!reset && (
             <label className="auth-field" htmlFor="email">
               Adresse e-mail

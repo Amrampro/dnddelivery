@@ -36,6 +36,14 @@ export function createTrackingRouter() {
     legacyHeaders: false,
   });
   r.use(limit);
+  r.post("/status", async (q, s) =>
+    s.json(
+      await getTrackingService().publicStatus(
+        v.lookup.parse(q.body),
+        q.ip ?? "unknown",
+      ),
+    ),
+  );
   r.post("/lookup", async (q, s) =>
     s
       .status(202)
@@ -229,7 +237,7 @@ export function createConfirmationRouter() {
     ),
   );
   r.get("/delivery-evidence/:id/file", async (q, s) => {
-    const bytes=await getConfirmationService().file(c(s), uuid(q.params.id));
+    const bytes = await getConfirmationService().file(c(s), uuid(q.params.id));
     s.set({
       "Content-Type": "image/webp",
       "Content-Disposition": "inline; filename=preuve.webp",

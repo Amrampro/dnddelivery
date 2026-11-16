@@ -25,6 +25,18 @@ export default function Layout() {
           />
           <Stack.Screen name="profil" options={{ title: "Mon compte" }} />
           <Stack.Screen
+            name="mes-commandes"
+            options={{ title: "Mes commandes" }}
+          />
+          <Stack.Screen
+            name="inscription-client"
+            options={{ title: "Créer mon compte utilisateur" }}
+          />
+          <Stack.Screen
+            name="inscription-boutique"
+            options={{ title: "Créer ma boutique" }}
+          />
+          <Stack.Screen
             name="mot-de-passe-oublie"
             options={{ title: "Retrouver mon acc�s" }}
           />

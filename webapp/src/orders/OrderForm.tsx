@@ -51,6 +51,44 @@ export function OrderForm({
     [recipientPage, setRecipientPage] = useState(1);
   const key = useRef(crypto.randomUUID()),
     pending = useRef(false);
+  const [customerMessage, setCustomerMessage] = useState("");
+  async function findCustomer() {
+    setBusy(true);
+    setCustomerMessage("");
+    try {
+      const r = await api<{
+        customer: {
+          fullName: string;
+          email: string;
+          phone: string | null;
+        } | null;
+      }>("/orders/customer-lookup", {
+        method: "POST",
+        body: JSON.stringify({ email: x.recipient.email.trim().toLowerCase() }),
+      });
+      if (r.customer) {
+        setX((old) => ({
+          ...old,
+          recipient: {
+            ...old.recipient,
+            name: r.customer!.fullName,
+            email: r.customer!.email,
+            phone: r.customer!.phone ?? old.recipient.phone,
+          },
+        }));
+        setCustomerMessage(
+          "Compte client sélectionné. Complétez l'adresse de cette livraison.",
+        );
+      } else
+        setCustomerMessage(
+          "Aucun compte client vérifié. Vous pouvez continuer avec un destinataire sans compte.",
+        );
+    } catch (e) {
+      setCustomerMessage((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
   const set = (patch: Partial<OrderContent>) =>
     setX((old) => ({ ...old, ...patch }));
   const pairs = options.pairs.filter(
@@ -268,6 +306,20 @@ export function OrderForm({
             <div className="order-grid">
               {field("Nom du destinataire", "name", "text", true)}
               {field("Adresse e-mail", "email", "email", true)}
+              <div className="order-wide">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={busy || !x.recipient.email}
+                  onClick={() => void findCustomer()}
+                >
+                  Rechercher le compte client par e-mail
+                </Button>
+                <p role="status">
+                  {customerMessage ||
+                    "Le compte client est facultatif. Une commande sera rattachée au compte dont l'e-mail est vérifié."}
+                </p>
+              </div>
               {field("Téléphone international", "phone", "tel", true)}
               {field("Pays", "country", "text", true)}
               {field("Ville", "city", "text", true)}

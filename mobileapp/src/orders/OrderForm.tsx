@@ -41,6 +41,7 @@ export function OrderForm({
   onBack: () => void;
   scrollToTop: () => void;
 }) {
+  const [customerMessage, setCustomerMessage] = useState("");
   const [x, setX] = useState<OrderContent>(() =>
       initial
         ? orderForm(initial)
@@ -234,6 +235,55 @@ export function OrderForm({
             <View style={ui.stack}>
               {field("Nom du destinataire", "name")}
               {field("Adresse e-mail", "email", "email-address")}
+              <Button
+                title="Rechercher le compte client par e-mail"
+                secondary
+                busy={busy}
+                disabled={!x.recipient.email}
+                onPress={async () => {
+                  setBusy(true);
+                  setCustomerMessage("");
+                  try {
+                    const r = await api<{
+                      customer: {
+                        fullName: string;
+                        email: string;
+                        phone: string | null;
+                      } | null;
+                    }>("/orders/customer-lookup", {
+                      method: "POST",
+                      body: JSON.stringify({
+                        email: x.recipient.email.trim().toLowerCase(),
+                      }),
+                    });
+                    if (r.customer) {
+                      setX((old) => ({
+                        ...old,
+                        recipient: {
+                          ...old.recipient,
+                          name: r.customer!.fullName,
+                          email: r.customer!.email,
+                          phone: r.customer!.phone ?? old.recipient.phone,
+                        },
+                      }));
+                      setCustomerMessage(
+                        "Compte client sélectionné. Complétez l'adresse de livraison.",
+                      );
+                    } else
+                      setCustomerMessage(
+                        "Aucun compte client vérifié. Vous pouvez continuer avec un destinataire sans compte.",
+                      );
+                  } catch (e) {
+                    setCustomerMessage((e as Error).message);
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+              />
+              <Text style={ui.body}>
+                {customerMessage ||
+                  "Le compte client est facultatif. Les commandes sont rattachées à l'e-mail vérifié."}
+              </Text>
               {field("Téléphone international", "phone", "phone-pad")}
               {field("Pays", "country")}
               {field("Ville", "city")}

@@ -175,9 +175,16 @@ export function ProfilePage() {
         >
           Déconnecter tous les appareils
         </button>
-        <Link className="text-link" to="/organisations">
-          Choisir mon environnement
-        </Link>
+        {!!auth.profile?.organizations.length && (
+          <Link className="text-link" to="/organisations">
+            Choisir mon environnement
+          </Link>
+        )}
+        {auth.profile?.user.customerEnabled && (
+          <Link className="text-link" to="/mes-commandes">
+            Mes commandes personnelles
+          </Link>
+        )}
         <button
           className="text-link"
           disabled={busy}

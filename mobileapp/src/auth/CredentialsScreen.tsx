@@ -40,7 +40,13 @@ export function CredentialsScreen({
   if (mode === "login" && auth.state === "authenticated")
     return (
       <Redirect
-        href={auth.profile?.activeContext ? "/espace" : "/organisations"}
+        href={
+          auth.profile?.activeContext
+            ? "/espace"
+            : auth.profile?.user.customerEnabled
+              ? "/mes-commandes"
+              : "/organisations"
+        }
       />
     );
   async function submit() {
@@ -105,7 +111,7 @@ export function CredentialsScreen({
       </Text>
       <Text style={form.text}>
         {mode === "login"
-          ? "Connectez-vous à votre compte professionnel."
+          ? "Retrouvez vos commandes ou votre espace professionnel."
           : mode === "forgot"
             ? "Recevez un lien personnel pour retrouver votre compte."
             : "Choisissez un mot de passe d’au moins 12 caractères."}
@@ -154,9 +160,9 @@ export function CredentialsScreen({
           autoCapitalize="none"
         />
       )}
-      {!!(error || (auth.state==='error' ? auth.error : '')) && (
+      {!!(error || (auth.state === "error" ? auth.error : "")) && (
         <Text role="alert" style={form.error}>
-          {error || (auth.state==='error' ? auth.error : '')}
+          {error || (auth.state === "error" ? auth.error : "")}
         </Text>
       )}
       {!!message && (
@@ -189,6 +195,16 @@ export function CredentialsScreen({
       <Link href="/" style={form.link}>
         Retour à l’accueil
       </Link>
+      {mode === "login" && (
+        <>
+          <Link href="/inscription-client" style={form.link}>
+            Créer un compte utilisateur
+          </Link>
+          <Link href="/inscription-boutique" style={form.link}>
+            Créer un compte de boutique
+          </Link>
+        </>
+      )}
     </Screen>
   );
 }

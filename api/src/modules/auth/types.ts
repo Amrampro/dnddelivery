@@ -6,6 +6,7 @@ export interface UnavailableOrganization {
   status: "INACTIVE" | "SUSPENDED" | "ARCHIVED";
 }
 export interface AuthUser {
+  customerEnabled?: boolean;
   id: string;
   email: string;
   passwordHash: string;
@@ -39,7 +40,11 @@ export interface ResetToken {
   usedAt: Date | null;
 }
 export interface Workspace {
-  subscriptionAccess?: {valid:boolean;status:string;expiresAt:string|null};
+  subscriptionAccess?: {
+    valid: boolean;
+    status: string;
+    expiresAt: string | null;
+  };
   key: string;
   scope: "GLOBAL" | "COMPANY" | "AGENCY" | "SHOP";
   companyId?: string;

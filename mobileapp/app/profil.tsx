@@ -180,12 +180,21 @@ function Content() {
           })
         }
       />
-      <Link href="/organisations" style={form.link}>
-        Choisir mon environnement
-      </Link>
-      <Link href="/espace" style={form.link}>
-        Mon espace professionnel
-      </Link>
+      {!!auth.profile?.organizations.length && (
+        <Link href="/organisations" style={form.link}>
+          Choisir mon environnement
+        </Link>
+      )}
+      {auth.profile?.user.customerEnabled && (
+        <Link href="/mes-commandes" style={form.link}>
+          Mes commandes personnelles
+        </Link>
+      )}
+      {!!auth.profile?.organizations.length && (
+        <Link href="/espace" style={form.link}>
+          Mon espace professionnel
+        </Link>
+      )}
       <Link href="/parametres" style={form.link}>
         Paramètres personnels
       </Link>

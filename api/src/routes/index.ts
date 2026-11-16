@@ -1,4 +1,5 @@
 import { createAuthRouter } from "../modules/auth/auth.routes.js";
+import { createCustomerRouter } from "../modules/customers/routes.js";
 import {
   createAdminRouter,
   createInvitationRouter,
@@ -19,8 +20,12 @@ import { createStockRouter } from "../modules/stocks/routes.js";
 import { createOrderRouter } from "../modules/orders/routes.js";
 import { createDeliveryRouter } from "../modules/deliveries/routes.js";
 import { createFinancialRouter } from "../modules/collections/routes.js";
-import { createTrackingRouter, createConfirmationRouter } from "../modules/confirmation/routes.js";
+import {
+  createTrackingRouter,
+  createConfirmationRouter,
+} from "../modules/confirmation/routes.js";
 export const routes = Router();
+routes.use("/customers", createCustomerRouter());
 routes.use("/company-access-requests", createCompanyAccessRequestRouter());
 routes.get("/health", health);
 routes.get("/ready", readiness);

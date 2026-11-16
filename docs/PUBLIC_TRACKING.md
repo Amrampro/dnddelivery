@@ -1,8 +1,10 @@
 # Suivi destinataire — Bloc 13
 
+> Mise à jour : le suivi simple par référence et e-mail utilise désormais `POST /api/tracking/status` et affiche uniquement le statut et la chronologie publique, sans code ni données personnelles. Le compte client et le parcours mobile sont décrits dans [CUSTOMER_ACCOUNTS.md](CUSTOMER_ACCOUNTS.md). Les sections ci-dessous décrivent le parcours sécurisé par lien personnel, qui reste disponible pour les destinataires sans compte.
+
 Le suivi personnel se trouve sur `/suivi`, intégré au site existant. Le formulaire de la page d’accueil y conduit. Une référence n’est jamais un secret d’accès.
 
-## Accès
+## Accès par lien personnel
 
 1. Le destinataire saisit la référence et l’e-mail enregistré sur la commande.
 2. `POST /api/tracking/lookup` répond toujours 202 avec le même message pour une demande bien formée, même si la paire est inconnue. L’envoi éventuel va exclusivement à l’adresse enregistrée ; aucune adresse n’est divulguée.

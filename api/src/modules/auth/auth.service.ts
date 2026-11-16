@@ -45,6 +45,7 @@ export class AuthService {
   ) {}
   private publicUser(user: AuthUser) {
     return {
+      customerEnabled: user.customerEnabled === true,
       id: user.id,
       email: user.email,
       fullName: user.fullName,
@@ -239,7 +240,9 @@ export class AuthService {
     return {
       user: this.publicUser(p.user),
       organizations: choices,
-      unavailableOrganizations: await this.store.unavailableOrganizations(p.user.id),
+      unavailableOrganizations: await this.store.unavailableOrganizations(
+        p.user.id,
+      ),
       activeContext: choices.find((v) => v.key === key) ?? null,
       csrfToken:
         p.session.clientType === "WEB"
@@ -288,9 +291,18 @@ export class AuthService {
       );
     if (value.scope === "GLOBAL")
       await authorizeGlobal(this.store.authorization(), p.user.id, permission);
-    else if (value.scope === "SHOP" && value.shopId &&
-      (permission.startsWith("shop.") || (!value.companyId && permission === "workspace.access")))
-      await authorizeShop(this.store.authorization(), p.user.id, value.shopId, permission);
+    else if (
+      value.scope === "SHOP" &&
+      value.shopId &&
+      (permission.startsWith("shop.") ||
+        (!value.companyId && permission === "workspace.access"))
+    )
+      await authorizeShop(
+        this.store.authorization(),
+        p.user.id,
+        value.shopId,
+        permission,
+      );
     else if (value.companyId)
       await authorizeTenant(
         this.store.authorization(),

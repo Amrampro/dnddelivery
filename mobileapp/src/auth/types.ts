@@ -18,7 +18,13 @@ export interface Workspace {
   portal: string;
 }
 export interface Profile {
-  user: { id: string; email: string; fullName: string; phone: string | null };
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+    phone: string | null;
+    customerEnabled?: boolean;
+  };
   organizations: Workspace[];
   activeContext: Workspace | null;
   csrfToken: string | null;

@@ -34,6 +34,11 @@ export function Organizations() {
           {error}
         </p>
         <div className="organization-list">
+          {auth.profile?.user.customerEnabled && (
+            <Link className="organization-option" to="/mes-commandes">
+              Mon espace client · Mes commandes <ArrowUpRight size={19} />
+            </Link>
+          )}
           {auth.profile?.organizations.map((context) => (
             <button
               className="organization-option"
@@ -64,19 +69,34 @@ export function Organizations() {
           <section aria-label="Espaces indisponibles">
             <h2>Vos espaces indisponibles</h2>
             {auth.profile.unavailableOrganizations.map((org, index) => (
-              <p key={`${org.kind}:${index}`}><strong>{org.name}</strong> — {
-                org.status === "INACTIVE" ? "désactivée : l'administrateur global doit activer cet espace."
-                  : org.status === "SUSPENDED" ? "suspendue : contactez l'administrateur global."
-                  : "archivée : cet espace n'est plus accessible."
-              }</p>
+              <p key={`${org.kind}:${index}`}>
+                <strong>{org.name}</strong> —{" "}
+                {org.status === "INACTIVE"
+                  ? "désactivée : l'administrateur global doit activer cet espace."
+                  : org.status === "SUSPENDED"
+                    ? "suspendue : contactez l'administrateur global."
+                    : "archivée : cet espace n'est plus accessible."}
+              </p>
             ))}
           </section>
         )}
-        <button className="text-link" disabled={!!busy} onClick={async () => {
-          setBusy("refresh"); setError("");
-          try { await auth.reload(); } catch { setError("Impossible d'actualiser vos accès."); }
-          finally { setBusy(""); }
-        }}>Actualiser mes accès</button>
+        <button
+          className="text-link"
+          disabled={!!busy}
+          onClick={async () => {
+            setBusy("refresh");
+            setError("");
+            try {
+              await auth.reload();
+            } catch {
+              setError("Impossible d'actualiser vos accès.");
+            } finally {
+              setBusy("");
+            }
+          }}
+        >
+          Actualiser mes accès
+        </button>
         <Link className="text-link" to="/profil">
           Mon profil et mes sessions
         </Link>

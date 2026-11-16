@@ -26,14 +26,24 @@ export default function Welcome() {
         <Text style={s.name}>DND Delivery</Text>
       </View>
       <View style={s.main}>
-        <WelcomeMotion compact={height < 740} />
+        <WelcomeMotion compact={height < 950} />
         <View style={s.actions}>
           <Action
             title="Accéder à mon espace"
             onPress={() => router.push("/connexion")}
           />
           <Action
-            title="Suivre un colis"
+            title="Créer un compte de boutique"
+            secondary
+            onPress={() => router.push("/inscription-boutique")}
+          />
+          <Action
+            title="Créer un compte d’utilisateur"
+            secondary
+            onPress={() => router.push("/inscription-client")}
+          />
+          <Action
+            title="Suivre mon colis"
             secondary
             onPress={() => router.push("/suivi")}
           />

@@ -39,6 +39,7 @@ for (const args of [
     "tests/database/deliveries.database.test.ts",
     "tests/database/collections.database.test.ts",
     "tests/database/confirmation.database.test.ts",
+    "tests/database/customers.database.test.ts",
     "tests/database/mobile.database.test.ts",
     "tests/database/security.database.test.ts",
     "tests/database/penetration.database.test.ts",

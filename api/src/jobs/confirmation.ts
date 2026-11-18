@@ -1,3 +1,4 @@
+import { reportJobResult, reportJobFailure } from "../utils/job-log.js";
 import "dotenv/config";
 import { getDatabase, disconnectDatabase } from "../database/client.js";
 import { OrderService } from "../modules/orders/service.js";
@@ -17,7 +18,7 @@ try {
     mailer = subscriptionMailer(),
     push =
       process.env.DELIVERY_PUSH_ENABLED === "true" ? expoPush(db) : undefined;
-  console.log({
+  await reportJobResult({
     orders: await new OrderNotifications(new OrderService(db)).run(
       mailer,
       limit,
@@ -43,6 +44,7 @@ try {
     ),
   });
 } catch (e) {
+  await reportJobFailure(e);
   console.error(e instanceof Error ? e.name : "DeliveryCommunicationError");
   process.exitCode = 1;
 } finally {

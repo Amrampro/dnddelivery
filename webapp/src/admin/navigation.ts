@@ -12,6 +12,7 @@ export const adminModuleIds = [
   "utilisateurs",
   "invitations",
   "activite",
+  "logs",
 ];
 /** Global invitations are a Web-only administration module. No native business screen is added. */
 export function navigation(context: Context): Module[] {
@@ -30,6 +31,13 @@ export function navigation(context: Context): Module[] {
           description: "Demandes d’inscription des entreprises de livraison.",
         },
         ...modules.slice(2),
+        {
+          id: "logs",
+          label: "Logs",
+          permission: "platform.manage",
+          icon: "activity",
+          description: "Connexions, sécurité et fonctionnement technique.",
+        },
         {
           id: "invitations",
           label: "Invitations",

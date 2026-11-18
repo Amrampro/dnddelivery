@@ -8,6 +8,8 @@
   },
   "scripts": {
     "ops:preflight": "node dist/jobs/preflight.js",
+    "ops:record": "node dist/jobs/record-operation.js",
+    "ops:monitor": "node dist/jobs/monitor.js",
     "confirmation:notifications": "node dist/jobs/confirmation.js",
     "confirmation:cleanup": "node dist/jobs/proof-cleanup.js",
     "collections:notifications": "node dist/jobs/collections.js",
@@ -21,7 +23,7 @@
     "build": "prisma generate && tsc",
     "start": "node dist/server.js",
     "lint": "eslint .",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "node scripts/test-unit.mjs",
     "typecheck": "prisma generate && tsc --noEmit && tsc -p tsconfig.tests.json",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",

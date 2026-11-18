@@ -28,7 +28,7 @@ test("security: unauthenticated access is denied across all protected modules", 
   const h = await serve(app);
   const id = "00000000-0000-4000-8000-000000000001";
   try {
-    for (const path of ["auth/me", "auth/sessions", "admin/dashboard", "admin/companies",
+    for (const path of ["auth/me", "auth/sessions", "admin/dashboard", "admin/logs", "admin/companies",
       "admin/subscriptions", "company/profile", "company/employees", "company/agencies",
       "company/subscription", "company/partners", "partners/profile", "products", "stocks",
       "stock-deposits", "stock-withdrawals", "stock-transfers", "inventories", "orders", "recipients",

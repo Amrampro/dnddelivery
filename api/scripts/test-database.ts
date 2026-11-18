@@ -44,6 +44,7 @@ for (const args of [
     "tests/database/security.database.test.ts",
     "tests/database/penetration.database.test.ts",
     "tests/database/reports.database.test.ts",
+    "tests/database/admin-logs.database.test.ts",
   ],
   ["--import", "tsx", "prisma/seed.ts"],
   ["--import", "tsx", "--test", "tests/database/lifecycle.database.test.ts"],

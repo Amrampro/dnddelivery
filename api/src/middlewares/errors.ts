@@ -3,12 +3,27 @@ import { ZodError } from "zod";
 import { AuthError } from "../modules/auth/errors.js";
 import { AccessDenied } from "../modules/authorization/tenant-access.js";
 import { logger } from "../utils/logger.js";
+import { recordTechnical } from "../utils/technical-log.js";
 export const notFound: RequestHandler = (_req, res) => {
   res
     .status(404)
     .json({ error: { code: "NOT_FOUND", message: "Route introuvable." } });
 };
-export const errors: ErrorRequestHandler = (err, _req, res, _next) => {
+export const errors: ErrorRequestHandler = async (err, _req, res, _next) => {
+  res.locals.technicalErrorType = err instanceof Error && /^[a-zA-Z0-9_]{1,80}$/.test(err.name) ? err.name : "ServerError";
+  res.locals.technicalErrorCode = err && typeof err.code === "string" && /^[a-zA-Z0-9_]{1,40}$/.test(err.code) ? err.code : undefined;
+  const denied = (err instanceof AuthError && [401, 403].includes(err.status)) || err instanceof AccessDenied;
+  if (denied && res.locals.securityEvent && !(err instanceof AuthError && err.code === "INVALID_CREDENTIALS")) {
+    const userId = res.locals.principal?.user?.id ?? null;
+    const metadata = { reason: "access_denied", method: _req.method,
+      path: _req.path.slice(0, 250), status: String(err instanceof AuthError ? err.status : 403),
+      requestId: String(_req.id ?? "").slice(0, 100) };
+    try {
+      await res.locals.securityEvent(userId, metadata);
+    } catch {
+      recordTechnical({ action: "SECURITY_LOG_UNAVAILABLE", result: "FAILURE", actorId: userId, entityId: "MySQL" });
+    }
+  }
   if (err instanceof AuthError) {
     res
       .status(err.status)

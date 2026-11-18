@@ -559,3 +559,20 @@ Le lanceur Windows surveille désormais le fichier .env existant au démarrage. 
 
 Suite MySQL complète avec 302 tests et une recette intégrée supplémentaire. Les 48 tests Web et 35 tests Expo réussissent. Doctor 21/21 et exports Android, iOS et Web terminés. Les audits npm API et Web sont à zéro. L’audit mobile conserve trois entrées associées au décodeur URI patché. Les sorties de recette sont conservées dans .local-preserved/recheck.
 Suite API finale, 71 tests réussis, lint, vérification des types et compilation réussis.
+
+
+## Journaux de l’administration globale — 18 novembre 2026
+
+Ajout du module Web Logs, accessible dans le portail super administrateur à /portail/super-admin/logs. Le serveur impose une session valide, le contexte GLOBAL et la permission platform.manage. Deux catégories couvrent Connexions et sécurité et Fonctionnement technique. Recherche, période, résultat, pagination et détails sont disponibles.
+
+Le journal de sécurité réutilise AuthEvent et restitue les événements existants. Les nouvelles connexions enregistrent le compte, le résultat et la session. Les échecs identifient l’adresse tentée et le compte associé lorsqu’il existe. Les déconnexions et révocations ciblées précisent leur session. Les refus d’accès enregistrent l’auteur authentifié lorsqu’il est connu, la ressource et la requête. L’affichage ne restitue que les champs autorisés et exclut les secrets. Le nom affiché est le nom actuel du compte.
+
+Les événements techniques sont stockés dans des fichiers JSONL privés répartis par jour UTC, configurables via TECHNICAL_LOG_DIR. Ils couvrent le démarrage et l’arrêt normal du processus, les transitions observées des dépendances, les réponses 5xx, les résultats et les échecs des tâches. Les erreurs affichent leur type et leur code lorsqu’ils sont disponibles. Le script de sauvegarde existant enregistre son résultat. Les outils supplémentaires peuvent déclarer leurs résultats avec ops:record. Une surveillance indépendante est disponible avec ops:monitor et doit être planifiée sur la cible pour détecter une API arrêtée. Les chemins publics et les fichiers symboliques sont refusés. Une panne MySQL laisse possible l’écriture du journal technique. Sa consultation authentifiée reprend après le rétablissement du service.
+
+Vérification sur compte fictif et MySQL de recette. Navigation vers Logs, connexion réussie avec nom, e-mail, UUID et identifiant de session, recherche et détails contrôlés dans le navigateur. Un contrôle sur un port fermé puis sur l’API de recette a produit l’indisponibilité et la disponibilité attendues. Refus d’accès 401 et 403 contrôlés, identité de l’auteur d’un refus vérifiée. Les écritures excluent les champs secrets même si un appelant transmet un champ supplémentaire.
+
+Les 89 tests API et 49 tests Web ont réussi. Les trois cas ciblés des journaux, le cas MySQL global, la suite MySQL d’authentification et les 13 vérifications HTTP d’intrusion ont réussi. Les types, le lint et les compilations API et Web passent. Les échecs de sauvegarde et de worker ont été provoqués avec des paramètres de recette invalides et enregistrés dans le journal privé de test.
+
+La recette a révélé une dépendance des tests unitaires au fichier privé de développement. Le lanceur de tests isole désormais leur environnement et leur clé de confirmation. Le fallback du Web intégré a été corrigé pour servir son fichier index public depuis une release placée sous un dossier caché. Les chemins privés restent refusés par les tests existants.
+
+Aucune migration Prisma supplémentaire. Documentation dans docs/ADMINISTRATION_LOGS.md et traces de recette dans .local-preserved/admin-logs. La surveillance périodique et les outils externes de sauvegarde/restauration sont à raccorder au planificateur de la cible.

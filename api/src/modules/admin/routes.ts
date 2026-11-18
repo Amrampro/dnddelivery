@@ -17,6 +17,7 @@ import { adminController } from "./controller.js";
 import { acceptInvitation, inspectInvitation } from "./validation.js";
 import { OrganizationService } from "../organization/service.js";
 import { listShops, shopDetail } from "./shops.js";
+import { administrationLogs, logsQuery } from "./logs.js";
 import {
   idSchema,
   listQuery,
@@ -86,6 +87,9 @@ export function createAdminRouter(
       : next(),
   );
   router.get("/dashboard", controller.dashboard);
+  router.get("/logs", async (req, res) => {
+    res.json(await administrationLogs(service().db, logsQuery.parse(req.query)));
+  });
   router.get("/access-requests", async (req, res) => {
     res.json(
       await listAccessRequests(service(), accessRequestQuery.parse(req.query)),

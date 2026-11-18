@@ -8,8 +8,10 @@ import { CompanyDetail } from "./CompanyDetail";
 import { GlobalHistory, GlobalInvitations, GlobalUsers } from "./GlobalPages";
 import { EmptyState } from "../design/ui";
 import "./admin.css";
+import { AdministrationLogs } from "./Logs";
 export function AdminWorkspace({ moduleId }: { moduleId: string }) {
   const { entityId, action } = useParams();
+  if (moduleId === "logs") return <AdministrationLogs />;
   if (moduleId === "accueil") return <AdminDashboard />;
   if (moduleId === "demandes-acces") return <AccessRequests />;
   if (moduleId === "activite") return <GlobalHistory />;

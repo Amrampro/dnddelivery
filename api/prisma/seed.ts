@@ -206,7 +206,7 @@ try {
         });
       }
     }
-  });
+  }, { timeout: 60_000 });
   console.log(
     "Seed completed: reference roles only; no user account or password created. Existing prices preserved.",
   );

@@ -82,15 +82,23 @@ jobs:
       - run: npm test
         env:
           LOG_LEVEL: silent
-      - if: matrix.app == 'mobileapp'
-        run: |
-          npm run typecheck:tests
-          npm run check:dependencies
-          npm run doctor
+      - name: Check mobile test types
+        if: matrix.app == 'mobileapp'
+        run: npm run typecheck:tests
+      - name: Check Expo dependency compatibility
+        if: matrix.app == 'mobileapp'
+        run: npm run check:dependencies
+        env:
+          CI: 'true'
+      - name: Run Expo Doctor
+        if: matrix.app == 'mobileapp'
+        run: npm run doctor
         env:
           CI: 'true'
       - if: matrix.app != 'mobileapp'
-        run: npm audit --audit-level=high
+        run: |
+          npm run test:dependency-security
+          npm run audit:security
 
   database:
     runs-on: ubuntu-latest

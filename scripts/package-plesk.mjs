@@ -14,7 +14,7 @@ for (const path of ['dist', 'src', 'prisma', 'prisma.config.ts', 'package.json',
   cpSync(join(root, 'api', path), join(output, path), { recursive: true });
 }
 mkdirSync(join(output, 'scripts'));
-for (const path of ['migrate-deploy.ts', 'migration-files.ts', 'bootstrap-super-admin.ts', 'plesk-deploy.sh', 'backup-database.mjs']) {
+for (const path of ['migrate-deploy.ts', 'migration-files.ts', 'bootstrap-super-admin.ts', 'plesk-deploy.sh', 'backup-database.mjs', 'picomatch-security.mjs']) {
   cpSync(join(root, 'api/scripts', path), join(output, 'scripts', path));
 }
 cpSync(join(root, 'webapp/dist'), join(output, 'public'), { recursive: true });

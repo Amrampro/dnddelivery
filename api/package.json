@@ -32,7 +32,10 @@
     "db:migrate:status": "prisma migrate status",
     "db:seed": "prisma db seed",
     "test:db": "tsx scripts/test-database.ts",
-    "auth:bootstrap": "tsx scripts/bootstrap-super-admin.ts"
+    "auth:bootstrap": "tsx scripts/bootstrap-super-admin.ts",
+    "postinstall": "node scripts/picomatch-security.mjs install",
+    "audit:security": "node scripts/picomatch-security.mjs audit",
+    "test:dependency-security": "node --test ../shared/picomatch-security.test.mjs"
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",

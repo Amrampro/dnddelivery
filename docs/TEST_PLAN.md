@@ -6,10 +6,10 @@ Utiliser Node 22.23.4 et les lockfiles, puis `npm ci` dans chaque application. S
 
 | Surface | Vérifications |
 | --- | --- |
-| API | `npm run lint`, `npm run typecheck`, `npm run build`, `npm run db:validate`, `npm test`, `npm audit` |
-| Web | `npm run lint`, `npm run build`, `npm test`, `npm audit` |
+| API | `npm run lint`, `npm run typecheck`, `npm run build`, `npm run db:validate`, `npm test`, `npm run test:dependency-security`, `npm run audit:security` |
+| Web | `npm run lint`, `npm run build`, `npm test`, `npm run test:dependency-security`, `npm run audit:security` |
 | Mobile | `npm run lint`, `npm run typecheck`, `npm run typecheck:tests`, `npm test`, `npm run check:dependencies`, `npm run doctor`, `npm run build` |
-| MySQL 8.4 | `npm run test:db` dans `api` avec `NODE_ENV=test`, `TEST_DATABASE_URL` sur une base isolée `dnd_delivery*_test`, `DELIVERY_SECRET` aléatoire et, si nécessaire, clé RSA publique MySQL épinglée. |
+| MySQL 8.4 | `npm run test:db` dans `api` avec `NODE_ENV=test`, `TEST_DATABASE_URL` sur une base isolée `dnd_delivery*_test`, les clés de test générées automatiquement par le lanceur et, si nécessaire, clé RSA publique MySQL épinglée. |
 
 La recette `api/tests/database/lifecycle.database.test.ts` relie invitations via SMTP local, abonnement déclaré et approuvé, agences, gestionnaire et livreur, boutique, collaboration, dépôt, commande sur stock, affectation, OTP, photo privée et suivi, encaissement, remise rejouée, export et rejet interentreprises. Une commande ponctuelle est prélevée directement en boutique et passe en distribution sans mouvement de stock ni encaissement. Les tests spécialisés complètent ce parcours avec plusieurs statuts, annulations et retours, les accès administrateurs et les tentatives sur les routes HTTP.
 

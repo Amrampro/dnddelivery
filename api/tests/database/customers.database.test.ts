@@ -14,6 +14,7 @@ import cookieParser from "cookie-parser";
 import { createCustomerRouter } from "../../src/modules/customers/routes.js";
 import { createAdminRouter } from "../../src/modules/admin/routes.js";
 import { errors } from "../../src/middlewares/errors.js";
+import { disconnectDatabase } from "../../src/database/client.js";
 
 test("customer registration, ownership and public/private tracking boundaries", async (t) => {
   const f = await confirmationFixture(true);
@@ -221,16 +222,19 @@ test("customer registration, ownership and public/private tracking boundaries", 
         app.use("/api/customers", createCustomerRouter());
         app.use("/api/admin", createAdminRouter());
         app.use(errors);
-        const server = app.listen(0, "127.0.0.1");
-        await new Promise<void>((resolve) => server.once("listening", resolve));
-        const address = server.address();
-        assert.ok(address && typeof address !== "string");
-        const base = `http://127.0.0.1:${address.port}/api`;
         const auth = new AuthService(prismaAuthStore(f.db), getAuthSettings(), {
           available: () => false,
           send: async () => {},
         });
+        const server = app.listen(0, "127.0.0.1");
         try {
+          await new Promise<void>((resolve, reject) => {
+            server.once("listening", resolve);
+            server.once("error", reject);
+          });
+          const address = server.address();
+          assert.ok(address && typeof address !== "string");
+          const base = `http://127.0.0.1:${address.port}/api`;
           assert.equal((await fetch(base + "/customers/orders")).status, 401);
           const mobile = await auth.login(order.recipientEmail, password, {
             client: "MOBILE",
@@ -304,9 +308,7 @@ test("customer registration, ownership and public/private tracking boundaries", 
         } finally {
           server.closeAllConnections();
           await new Promise<void>((resolve) => server.close(() => resolve()));
-          await (
-            await import("../../src/database/client.js")
-          ).disconnectDatabase();
+          await disconnectDatabase();
         }
       },
     );
@@ -375,6 +377,6 @@ test("customer registration, ownership and public/private tracking boundaries", 
       },
     );
   } finally {
-    await f.db.$disconnect();
+    await Promise.all([f.db.$disconnect(), disconnectDatabase()]);
   }
 });

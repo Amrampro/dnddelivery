@@ -679,6 +679,15 @@ test("MySQL SaaS subscriptions: exact payments, isolation, concurrency, expiry a
           where: { companyId: company.id },
         });
         assert.ok(before > 0);
+        // Put this fixture first without changing unrelated historical messages.
+        await db.notification.updateMany({
+          where: {
+            companyId: company.id,
+            sourceEvent: { startsWith: "SUBSCRIPTION_" },
+            status: "PENDING",
+          },
+          data: { availableAt: new Date(0) },
+        });
         const failed = await jobs.notifications(
           {
             send: async () => {
@@ -688,22 +697,38 @@ test("MySQL SaaS subscriptions: exact payments, isolation, concurrency, expiry a
           100,
         );
         assert.ok(failed.failed > 0);
+        assert.ok(await db.notification.count({
+          where: { companyId: company.id, status: "FAILED" },
+        }));
         const ready = new Date(now.getTime() + 6 * 60000);
         now = ready;
         const messages: string[] = [];
         const smtp = await localSmtp((message) => messages.push(message));
         try {
-          const result = await jobs.notifications(
-            subscriptionMailer({
-              NODE_ENV: "test",
-              SMTP_HOST: "127.0.0.1",
-              SMTP_PORT: smtp.port,
-              SMTP_FROM: "saas@example.invalid",
-              SMTP_SECURE: "false",
-            }),
-            100,
-          );
-          assert.ok(result.sent > 0);
+          const mailer = subscriptionMailer({
+            NODE_ENV: "test",
+            SMTP_HOST: "127.0.0.1",
+            SMTP_PORT: smtp.port,
+            SMTP_FROM: "saas@example.invalid",
+            SMTP_SECURE: "false",
+          });
+          // The worker is global and each call is bounded. Reused databases and
+          // earlier modules can leave more than one batch of eligible messages.
+          // With a frozen clock and no concurrent producer, this finite bound
+          // covers every initial row, including cancelled/obsolete messages.
+          const queued = await db.notification.count({
+            where: { sourceEvent: { startsWith: "SUBSCRIPTION_" } },
+          });
+          let sent = 0;
+          for (let batch = 0; batch <= Math.ceil(queued / 100); batch++) {
+            const result = await jobs.notifications(mailer, 100);
+            assert.equal(result.failed, 0);
+            sent += result.sent;
+          }
+          assert.ok(sent > 0);
+          assert.ok(await db.notification.count({
+            where: { companyId: company.id, status: "SENT" },
+          }));
           assert.ok(messages.some((v) => v.includes("DND Delivery")));
           const again = await jobs.notifications(
             {

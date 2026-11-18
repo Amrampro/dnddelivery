@@ -121,7 +121,8 @@ export const ModelName = {
   OtpException: 'OtpException',
   DeliveryEvidence: 'DeliveryEvidence',
   NotificationAttempt: 'NotificationAttempt',
-  FinancialEvent: 'FinancialEvent'
+  FinancialEvent: 'FinancialEvent',
+  CustomerRegistration: 'CustomerRegistration'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -141,6 +142,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 
 export const UserScalarFieldEnum = {
+  customerEnabled: 'customerEnabled',
   id: 'id',
   email: 'email',
   passwordHash: 'passwordHash',
@@ -575,6 +577,7 @@ export type RecipientScalarFieldEnum = (typeof RecipientScalarFieldEnum)[keyof t
 
 
 export const OrderScalarFieldEnum = {
+  customerUserId: 'customerUserId',
   trackingVersion: 'trackingVersion',
   isDraft: 'isDraft',
   version: 'version',
@@ -1500,6 +1503,20 @@ export const FinancialEventScalarFieldEnum = {
 export type FinancialEventScalarFieldEnum = (typeof FinancialEventScalarFieldEnum)[keyof typeof FinancialEventScalarFieldEnum]
 
 
+export const CustomerRegistrationScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  email: 'email',
+  fullName: 'fullName',
+  phone: 'phone',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CustomerRegistrationScalarFieldEnum = (typeof CustomerRegistrationScalarFieldEnum)[keyof typeof CustomerRegistrationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1862,6 +1879,7 @@ export type RecipientOrderByRelevanceFieldEnum = (typeof RecipientOrderByRelevan
 
 
 export const OrderOrderByRelevanceFieldEnum = {
+  customerUserId: 'customerUserId',
   clientKey: 'clientKey',
   requestHash: 'requestHash',
   recipientCountry: 'recipientCountry',
@@ -2561,4 +2579,15 @@ export const FinancialEventOrderByRelevanceFieldEnum = {
 } as const
 
 export type FinancialEventOrderByRelevanceFieldEnum = (typeof FinancialEventOrderByRelevanceFieldEnum)[keyof typeof FinancialEventOrderByRelevanceFieldEnum]
+
+
+export const CustomerRegistrationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  email: 'email',
+  fullName: 'fullName',
+  phone: 'phone'
+} as const
+
+export type CustomerRegistrationOrderByRelevanceFieldEnum = (typeof CustomerRegistrationOrderByRelevanceFieldEnum)[keyof typeof CustomerRegistrationOrderByRelevanceFieldEnum]
 

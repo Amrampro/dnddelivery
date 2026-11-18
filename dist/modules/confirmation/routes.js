@@ -26,6 +26,7 @@ export function createTrackingRouter() {
         legacyHeaders: false,
     });
     r.use(limit);
+    r.post("/status", async (q, s) => s.json(await getTrackingService().publicStatus(v.lookup.parse(q.body), q.ip ?? "unknown")));
     r.post("/lookup", async (q, s) => s
         .status(202)
         .json(await getTrackingService().lookup(v.lookup.parse(q.body), q.ip ?? "unknown")));

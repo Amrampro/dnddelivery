@@ -10,6 +10,7 @@ export function serveWeb(app: Express, publicRoot: string) {
         req.path.split("/").some(part => part.startsWith(".")) ||
         (extname(req.path) && req.path !== "/index.html")) return next();
     res.setHeader("Cache-Control", "no-cache");
-    res.sendFile(join(publicRoot, "index.html"));
+    // Only this fixed public file may live below a hidden release directory.
+    res.sendFile(join(publicRoot, "index.html"), { dotfiles: "allow" });
   });
 }

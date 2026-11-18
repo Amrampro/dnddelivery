@@ -25,6 +25,7 @@ export type AggregateUser = {
 }
 
 export type UserMinAggregateOutputType = {
+  customerEnabled: boolean | null
   id: string | null
   email: string | null
   passwordHash: string | null
@@ -38,6 +39,7 @@ export type UserMinAggregateOutputType = {
 }
 
 export type UserMaxAggregateOutputType = {
+  customerEnabled: boolean | null
   id: string | null
   email: string | null
   passwordHash: string | null
@@ -51,6 +53,7 @@ export type UserMaxAggregateOutputType = {
 }
 
 export type UserCountAggregateOutputType = {
+  customerEnabled: number
   id: number
   email: number
   passwordHash: number
@@ -66,6 +69,7 @@ export type UserCountAggregateOutputType = {
 
 
 export type UserMinAggregateInputType = {
+  customerEnabled?: true
   id?: true
   email?: true
   passwordHash?: true
@@ -79,6 +83,7 @@ export type UserMinAggregateInputType = {
 }
 
 export type UserMaxAggregateInputType = {
+  customerEnabled?: true
   id?: true
   email?: true
   passwordHash?: true
@@ -92,6 +97,7 @@ export type UserMaxAggregateInputType = {
 }
 
 export type UserCountAggregateInputType = {
+  customerEnabled?: true
   id?: true
   email?: true
   passwordHash?: true
@@ -178,6 +184,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 export type UserGroupByOutputType = {
+  customerEnabled: boolean
   id: string
   email: string
   passwordHash: string
@@ -212,6 +219,7 @@ export type UserWhereInput = {
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  customerEnabled?: Prisma.BoolFilter<"User"> | boolean
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   passwordHash?: Prisma.StringFilter<"User"> | string
@@ -222,6 +230,7 @@ export type UserWhereInput = {
   archivedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  customerOrders?: Prisma.OrderListRelationFilter
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantListRelationFilter
   companyMembership_userRecords?: Prisma.CompanyMembershipListRelationFilter
   shopMembership_userRecords?: Prisma.ShopMembershipListRelationFilter
@@ -241,6 +250,7 @@ export type UserWhereInput = {
 }
 
 export type UserOrderByWithRelationInput = {
+  customerEnabled?: Prisma.SortOrder
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -251,6 +261,7 @@ export type UserOrderByWithRelationInput = {
   archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  customerOrders?: Prisma.OrderOrderByRelationAggregateInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantOrderByRelationAggregateInput
   companyMembership_userRecords?: Prisma.CompanyMembershipOrderByRelationAggregateInput
   shopMembership_userRecords?: Prisma.ShopMembershipOrderByRelationAggregateInput
@@ -276,6 +287,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  customerEnabled?: Prisma.BoolFilter<"User"> | boolean
   passwordHash?: Prisma.StringFilter<"User"> | string
   fullName?: Prisma.StringFilter<"User"> | string
   phone?: Prisma.StringNullableFilter<"User"> | string | null
@@ -284,6 +296,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   archivedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  customerOrders?: Prisma.OrderListRelationFilter
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantListRelationFilter
   companyMembership_userRecords?: Prisma.CompanyMembershipListRelationFilter
   shopMembership_userRecords?: Prisma.ShopMembershipListRelationFilter
@@ -303,6 +316,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
+  customerEnabled?: Prisma.SortOrder
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -322,6 +336,7 @@ export type UserScalarWhereWithAggregatesInput = {
   AND?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
+  customerEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   passwordHash?: Prisma.StringWithAggregatesFilter<"User"> | string
@@ -335,6 +350,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -345,6 +361,7 @@ export type UserCreateInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -364,6 +381,7 @@ export type UserCreateInput = {
 }
 
 export type UserUncheckedCreateInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -374,6 +392,7 @@ export type UserUncheckedCreateInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -393,6 +412,7 @@ export type UserUncheckedCreateInput = {
 }
 
 export type UserUpdateInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -403,6 +423,7 @@ export type UserUpdateInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -422,6 +443,7 @@ export type UserUpdateInput = {
 }
 
 export type UserUncheckedUpdateInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -432,6 +454,7 @@ export type UserUncheckedUpdateInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -451,6 +474,7 @@ export type UserUncheckedUpdateInput = {
 }
 
 export type UserCreateManyInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -464,6 +488,7 @@ export type UserCreateManyInput = {
 }
 
 export type UserUpdateManyMutationInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -477,6 +502,7 @@ export type UserUpdateManyMutationInput = {
 }
 
 export type UserUncheckedUpdateManyInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -496,6 +522,7 @@ export type UserOrderByRelevanceInput = {
 }
 
 export type UserCountOrderByAggregateInput = {
+  customerEnabled?: Prisma.SortOrder
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -509,6 +536,7 @@ export type UserCountOrderByAggregateInput = {
 }
 
 export type UserMaxOrderByAggregateInput = {
+  customerEnabled?: Prisma.SortOrder
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -522,6 +550,7 @@ export type UserMaxOrderByAggregateInput = {
 }
 
 export type UserMinOrderByAggregateInput = {
+  customerEnabled?: Prisma.SortOrder
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   passwordHash?: Prisma.SortOrder
@@ -542,6 +571,10 @@ export type UserScalarRelationFilter = {
 export type UserNullableScalarRelationFilter = {
   is?: Prisma.UserWhereInput | null
   isNot?: Prisma.UserWhereInput | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -650,10 +683,26 @@ export type UserUpdateOneWithoutAuthEvent_userRecordsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthEvent_userRecordsInput, Prisma.UserUpdateWithoutAuthEvent_userRecordsInput>, Prisma.UserUncheckedUpdateWithoutAuthEvent_userRecordsInput>
 }
 
+export type UserCreateNestedOneWithoutCustomerOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerOrdersInput, Prisma.UserUncheckedCreateWithoutCustomerOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserCreateNestedOneWithoutOrder_creatorRecordsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutOrder_creatorRecordsInput, Prisma.UserUncheckedCreateWithoutOrder_creatorRecordsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrder_creatorRecordsInput
   connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCustomerOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCustomerOrdersInput, Prisma.UserUncheckedCreateWithoutCustomerOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomerOrdersInput
+  upsert?: Prisma.UserUpsertWithoutCustomerOrdersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCustomerOrdersInput, Prisma.UserUpdateWithoutCustomerOrdersInput>, Prisma.UserUncheckedUpdateWithoutCustomerOrdersInput>
 }
 
 export type UserUpdateOneRequiredWithoutOrder_creatorRecordsNestedInput = {
@@ -795,6 +844,7 @@ export type UserUpdateOneWithoutAuditLog_actorRecordsNestedInput = {
 }
 
 export type UserCreateWithoutGlobalRoleGrant_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -805,6 +855,7 @@ export type UserCreateWithoutGlobalRoleGrant_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
   session_userRecords?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -823,6 +874,7 @@ export type UserCreateWithoutGlobalRoleGrant_userRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutGlobalRoleGrant_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -833,6 +885,7 @@ export type UserUncheckedCreateWithoutGlobalRoleGrant_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
   session_userRecords?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -867,6 +920,7 @@ export type UserUpdateToOneWithWhereWithoutGlobalRoleGrant_userRecordsInput = {
 }
 
 export type UserUpdateWithoutGlobalRoleGrant_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -877,6 +931,7 @@ export type UserUpdateWithoutGlobalRoleGrant_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
   session_userRecords?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -895,6 +950,7 @@ export type UserUpdateWithoutGlobalRoleGrant_userRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutGlobalRoleGrant_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -905,6 +961,7 @@ export type UserUncheckedUpdateWithoutGlobalRoleGrant_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
   session_userRecords?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -923,6 +980,7 @@ export type UserUncheckedUpdateWithoutGlobalRoleGrant_userRecordsInput = {
 }
 
 export type UserCreateWithoutCompanyMembership_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -933,6 +991,7 @@ export type UserCreateWithoutCompanyMembership_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
   session_userRecords?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -951,6 +1010,7 @@ export type UserCreateWithoutCompanyMembership_userRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutCompanyMembership_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -961,6 +1021,7 @@ export type UserUncheckedCreateWithoutCompanyMembership_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
   session_userRecords?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -995,6 +1056,7 @@ export type UserUpdateToOneWithWhereWithoutCompanyMembership_userRecordsInput = 
 }
 
 export type UserUpdateWithoutCompanyMembership_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1005,6 +1067,7 @@ export type UserUpdateWithoutCompanyMembership_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
   session_userRecords?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1023,6 +1086,7 @@ export type UserUpdateWithoutCompanyMembership_userRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCompanyMembership_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1033,6 +1097,7 @@ export type UserUncheckedUpdateWithoutCompanyMembership_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
   session_userRecords?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1051,6 +1116,7 @@ export type UserUncheckedUpdateWithoutCompanyMembership_userRecordsInput = {
 }
 
 export type UserCreateWithoutShopMembership_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1061,6 +1127,7 @@ export type UserCreateWithoutShopMembership_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   session_userRecords?: Prisma.SessionCreateNestedManyWithoutUserInput
@@ -1079,6 +1146,7 @@ export type UserCreateWithoutShopMembership_userRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutShopMembership_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1089,6 +1157,7 @@ export type UserUncheckedCreateWithoutShopMembership_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   session_userRecords?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
@@ -1123,6 +1192,7 @@ export type UserUpdateToOneWithWhereWithoutShopMembership_userRecordsInput = {
 }
 
 export type UserUpdateWithoutShopMembership_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1133,6 +1203,7 @@ export type UserUpdateWithoutShopMembership_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   session_userRecords?: Prisma.SessionUpdateManyWithoutUserNestedInput
@@ -1151,6 +1222,7 @@ export type UserUpdateWithoutShopMembership_userRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutShopMembership_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1161,6 +1233,7 @@ export type UserUncheckedUpdateWithoutShopMembership_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   session_userRecords?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1179,6 +1252,7 @@ export type UserUncheckedUpdateWithoutShopMembership_userRecordsInput = {
 }
 
 export type UserCreateWithoutSession_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1189,6 +1263,7 @@ export type UserCreateWithoutSession_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -1207,6 +1282,7 @@ export type UserCreateWithoutSession_userRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutSession_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1217,6 +1293,7 @@ export type UserUncheckedCreateWithoutSession_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -1251,6 +1328,7 @@ export type UserUpdateToOneWithWhereWithoutSession_userRecordsInput = {
 }
 
 export type UserUpdateWithoutSession_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1261,6 +1339,7 @@ export type UserUpdateWithoutSession_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -1279,6 +1358,7 @@ export type UserUpdateWithoutSession_userRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutSession_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1289,6 +1369,7 @@ export type UserUncheckedUpdateWithoutSession_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -1307,6 +1388,7 @@ export type UserUncheckedUpdateWithoutSession_userRecordsInput = {
 }
 
 export type UserCreateWithoutAccountToken_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1317,6 +1399,7 @@ export type UserCreateWithoutAccountToken_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -1335,6 +1418,7 @@ export type UserCreateWithoutAccountToken_userRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutAccountToken_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1345,6 +1429,7 @@ export type UserUncheckedCreateWithoutAccountToken_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -1379,6 +1464,7 @@ export type UserUpdateToOneWithWhereWithoutAccountToken_userRecordsInput = {
 }
 
 export type UserUpdateWithoutAccountToken_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1389,6 +1475,7 @@ export type UserUpdateWithoutAccountToken_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -1407,6 +1494,7 @@ export type UserUpdateWithoutAccountToken_userRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutAccountToken_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1417,6 +1505,7 @@ export type UserUncheckedUpdateWithoutAccountToken_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -1435,6 +1524,7 @@ export type UserUncheckedUpdateWithoutAccountToken_userRecordsInput = {
 }
 
 export type UserCreateWithoutAuthEvent_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1445,6 +1535,7 @@ export type UserCreateWithoutAuthEvent_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -1463,6 +1554,7 @@ export type UserCreateWithoutAuthEvent_userRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutAuthEvent_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1473,6 +1565,7 @@ export type UserUncheckedCreateWithoutAuthEvent_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -1507,6 +1600,7 @@ export type UserUpdateToOneWithWhereWithoutAuthEvent_userRecordsInput = {
 }
 
 export type UserUpdateWithoutAuthEvent_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1517,6 +1611,7 @@ export type UserUpdateWithoutAuthEvent_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -1535,6 +1630,7 @@ export type UserUpdateWithoutAuthEvent_userRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutAuthEvent_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1545,6 +1641,7 @@ export type UserUncheckedUpdateWithoutAuthEvent_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -1562,7 +1659,8 @@ export type UserUncheckedUpdateWithoutAuthEvent_userRecordsInput = {
   auditLog_actorRecords?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
 }
 
-export type UserCreateWithoutOrder_creatorRecordsInput = {
+export type UserCreateWithoutCustomerOrdersInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1573,6 +1671,72 @@ export type UserCreateWithoutOrder_creatorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
+  companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
+  session_userRecords?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accountToken_userRecords?: Prisma.AccountTokenCreateNestedManyWithoutUserInput
+  authEvent_userRecords?: Prisma.AuthEventCreateNestedManyWithoutUserInput
+  order_creatorRecords?: Prisma.OrderCreateNestedManyWithoutCreatorInput
+  stockMovement_actorRecords?: Prisma.StockMovementCreateNestedManyWithoutActorInput
+  orderEvent_actorRecords?: Prisma.OrderEventCreateNestedManyWithoutActorInput
+  deliveryEvent_actorRecords?: Prisma.DeliveryEventCreateNestedManyWithoutActorInput
+  fileAsset_uploaderRecords?: Prisma.FileAssetCreateNestedManyWithoutUploaderInput
+  collectionEvent_actorRecords?: Prisma.CollectionEventCreateNestedManyWithoutActorInput
+  remittanceEvent_actorRecords?: Prisma.RemittanceEventCreateNestedManyWithoutActorInput
+  userDevice_userRecords?: Prisma.UserDeviceCreateNestedManyWithoutUserInput
+  notification_recipientRecords?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  auditLog_actorRecords?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutCustomerOrdersInput = {
+  customerEnabled?: boolean
+  id?: string
+  email: string
+  passwordHash: string
+  fullName: string
+  phone?: string | null
+  status?: $Enums.AccountStatus
+  emailVerifiedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
+  companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
+  session_userRecords?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accountToken_userRecords?: Prisma.AccountTokenUncheckedCreateNestedManyWithoutUserInput
+  authEvent_userRecords?: Prisma.AuthEventUncheckedCreateNestedManyWithoutUserInput
+  order_creatorRecords?: Prisma.OrderUncheckedCreateNestedManyWithoutCreatorInput
+  stockMovement_actorRecords?: Prisma.StockMovementUncheckedCreateNestedManyWithoutActorInput
+  orderEvent_actorRecords?: Prisma.OrderEventUncheckedCreateNestedManyWithoutActorInput
+  deliveryEvent_actorRecords?: Prisma.DeliveryEventUncheckedCreateNestedManyWithoutActorInput
+  fileAsset_uploaderRecords?: Prisma.FileAssetUncheckedCreateNestedManyWithoutUploaderInput
+  collectionEvent_actorRecords?: Prisma.CollectionEventUncheckedCreateNestedManyWithoutActorInput
+  remittanceEvent_actorRecords?: Prisma.RemittanceEventUncheckedCreateNestedManyWithoutActorInput
+  userDevice_userRecords?: Prisma.UserDeviceUncheckedCreateNestedManyWithoutUserInput
+  notification_recipientRecords?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  auditLog_actorRecords?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutCustomerOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerOrdersInput, Prisma.UserUncheckedCreateWithoutCustomerOrdersInput>
+}
+
+export type UserCreateWithoutOrder_creatorRecordsInput = {
+  customerEnabled?: boolean
+  id?: string
+  email: string
+  passwordHash: string
+  fullName: string
+  phone?: string | null
+  status?: $Enums.AccountStatus
+  emailVerifiedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -1591,6 +1755,7 @@ export type UserCreateWithoutOrder_creatorRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutOrder_creatorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1601,6 +1766,7 @@ export type UserUncheckedCreateWithoutOrder_creatorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -1623,6 +1789,77 @@ export type UserCreateOrConnectWithoutOrder_creatorRecordsInput = {
   create: Prisma.XOR<Prisma.UserCreateWithoutOrder_creatorRecordsInput, Prisma.UserUncheckedCreateWithoutOrder_creatorRecordsInput>
 }
 
+export type UserUpsertWithoutCustomerOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCustomerOrdersInput, Prisma.UserUncheckedUpdateWithoutCustomerOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCustomerOrdersInput, Prisma.UserUncheckedCreateWithoutCustomerOrdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCustomerOrdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCustomerOrdersInput, Prisma.UserUncheckedUpdateWithoutCustomerOrdersInput>
+}
+
+export type UserUpdateWithoutCustomerOrdersInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
+  companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
+  session_userRecords?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accountToken_userRecords?: Prisma.AccountTokenUpdateManyWithoutUserNestedInput
+  authEvent_userRecords?: Prisma.AuthEventUpdateManyWithoutUserNestedInput
+  order_creatorRecords?: Prisma.OrderUpdateManyWithoutCreatorNestedInput
+  stockMovement_actorRecords?: Prisma.StockMovementUpdateManyWithoutActorNestedInput
+  orderEvent_actorRecords?: Prisma.OrderEventUpdateManyWithoutActorNestedInput
+  deliveryEvent_actorRecords?: Prisma.DeliveryEventUpdateManyWithoutActorNestedInput
+  fileAsset_uploaderRecords?: Prisma.FileAssetUpdateManyWithoutUploaderNestedInput
+  collectionEvent_actorRecords?: Prisma.CollectionEventUpdateManyWithoutActorNestedInput
+  remittanceEvent_actorRecords?: Prisma.RemittanceEventUpdateManyWithoutActorNestedInput
+  userDevice_userRecords?: Prisma.UserDeviceUpdateManyWithoutUserNestedInput
+  notification_recipientRecords?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  auditLog_actorRecords?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCustomerOrdersInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
+  companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
+  session_userRecords?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accountToken_userRecords?: Prisma.AccountTokenUncheckedUpdateManyWithoutUserNestedInput
+  authEvent_userRecords?: Prisma.AuthEventUncheckedUpdateManyWithoutUserNestedInput
+  order_creatorRecords?: Prisma.OrderUncheckedUpdateManyWithoutCreatorNestedInput
+  stockMovement_actorRecords?: Prisma.StockMovementUncheckedUpdateManyWithoutActorNestedInput
+  orderEvent_actorRecords?: Prisma.OrderEventUncheckedUpdateManyWithoutActorNestedInput
+  deliveryEvent_actorRecords?: Prisma.DeliveryEventUncheckedUpdateManyWithoutActorNestedInput
+  fileAsset_uploaderRecords?: Prisma.FileAssetUncheckedUpdateManyWithoutUploaderNestedInput
+  collectionEvent_actorRecords?: Prisma.CollectionEventUncheckedUpdateManyWithoutActorNestedInput
+  remittanceEvent_actorRecords?: Prisma.RemittanceEventUncheckedUpdateManyWithoutActorNestedInput
+  userDevice_userRecords?: Prisma.UserDeviceUncheckedUpdateManyWithoutUserNestedInput
+  notification_recipientRecords?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  auditLog_actorRecords?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+}
+
 export type UserUpsertWithoutOrder_creatorRecordsInput = {
   update: Prisma.XOR<Prisma.UserUpdateWithoutOrder_creatorRecordsInput, Prisma.UserUncheckedUpdateWithoutOrder_creatorRecordsInput>
   create: Prisma.XOR<Prisma.UserCreateWithoutOrder_creatorRecordsInput, Prisma.UserUncheckedCreateWithoutOrder_creatorRecordsInput>
@@ -1635,6 +1872,7 @@ export type UserUpdateToOneWithWhereWithoutOrder_creatorRecordsInput = {
 }
 
 export type UserUpdateWithoutOrder_creatorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1645,6 +1883,7 @@ export type UserUpdateWithoutOrder_creatorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -1663,6 +1902,7 @@ export type UserUpdateWithoutOrder_creatorRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutOrder_creatorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1673,6 +1913,7 @@ export type UserUncheckedUpdateWithoutOrder_creatorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -1691,6 +1932,7 @@ export type UserUncheckedUpdateWithoutOrder_creatorRecordsInput = {
 }
 
 export type UserCreateWithoutStockMovement_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1701,6 +1943,7 @@ export type UserCreateWithoutStockMovement_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -1719,6 +1962,7 @@ export type UserCreateWithoutStockMovement_actorRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutStockMovement_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1729,6 +1973,7 @@ export type UserUncheckedCreateWithoutStockMovement_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -1763,6 +2008,7 @@ export type UserUpdateToOneWithWhereWithoutStockMovement_actorRecordsInput = {
 }
 
 export type UserUpdateWithoutStockMovement_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1773,6 +2019,7 @@ export type UserUpdateWithoutStockMovement_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -1791,6 +2038,7 @@ export type UserUpdateWithoutStockMovement_actorRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutStockMovement_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1801,6 +2049,7 @@ export type UserUncheckedUpdateWithoutStockMovement_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -1819,6 +2068,7 @@ export type UserUncheckedUpdateWithoutStockMovement_actorRecordsInput = {
 }
 
 export type UserCreateWithoutOrderEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1829,6 +2079,7 @@ export type UserCreateWithoutOrderEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -1847,6 +2098,7 @@ export type UserCreateWithoutOrderEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutOrderEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1857,6 +2109,7 @@ export type UserUncheckedCreateWithoutOrderEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -1891,6 +2144,7 @@ export type UserUpdateToOneWithWhereWithoutOrderEvent_actorRecordsInput = {
 }
 
 export type UserUpdateWithoutOrderEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1901,6 +2155,7 @@ export type UserUpdateWithoutOrderEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -1919,6 +2174,7 @@ export type UserUpdateWithoutOrderEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutOrderEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1929,6 +2185,7 @@ export type UserUncheckedUpdateWithoutOrderEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -1947,6 +2204,7 @@ export type UserUncheckedUpdateWithoutOrderEvent_actorRecordsInput = {
 }
 
 export type UserCreateWithoutDeliveryEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1957,6 +2215,7 @@ export type UserCreateWithoutDeliveryEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -1975,6 +2234,7 @@ export type UserCreateWithoutDeliveryEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutDeliveryEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -1985,6 +2245,7 @@ export type UserUncheckedCreateWithoutDeliveryEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -2019,6 +2280,7 @@ export type UserUpdateToOneWithWhereWithoutDeliveryEvent_actorRecordsInput = {
 }
 
 export type UserUpdateWithoutDeliveryEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2029,6 +2291,7 @@ export type UserUpdateWithoutDeliveryEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -2047,6 +2310,7 @@ export type UserUpdateWithoutDeliveryEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutDeliveryEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2057,6 +2321,7 @@ export type UserUncheckedUpdateWithoutDeliveryEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -2075,6 +2340,7 @@ export type UserUncheckedUpdateWithoutDeliveryEvent_actorRecordsInput = {
 }
 
 export type UserCreateWithoutFileAsset_uploaderRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2085,6 +2351,7 @@ export type UserCreateWithoutFileAsset_uploaderRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -2103,6 +2370,7 @@ export type UserCreateWithoutFileAsset_uploaderRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutFileAsset_uploaderRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2113,6 +2381,7 @@ export type UserUncheckedCreateWithoutFileAsset_uploaderRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -2147,6 +2416,7 @@ export type UserUpdateToOneWithWhereWithoutFileAsset_uploaderRecordsInput = {
 }
 
 export type UserUpdateWithoutFileAsset_uploaderRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2157,6 +2427,7 @@ export type UserUpdateWithoutFileAsset_uploaderRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -2175,6 +2446,7 @@ export type UserUpdateWithoutFileAsset_uploaderRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutFileAsset_uploaderRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2185,6 +2457,7 @@ export type UserUncheckedUpdateWithoutFileAsset_uploaderRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -2203,6 +2476,7 @@ export type UserUncheckedUpdateWithoutFileAsset_uploaderRecordsInput = {
 }
 
 export type UserCreateWithoutCollectionEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2213,6 +2487,7 @@ export type UserCreateWithoutCollectionEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -2231,6 +2506,7 @@ export type UserCreateWithoutCollectionEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutCollectionEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2241,6 +2517,7 @@ export type UserUncheckedCreateWithoutCollectionEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -2275,6 +2552,7 @@ export type UserUpdateToOneWithWhereWithoutCollectionEvent_actorRecordsInput = {
 }
 
 export type UserUpdateWithoutCollectionEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2285,6 +2563,7 @@ export type UserUpdateWithoutCollectionEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -2303,6 +2582,7 @@ export type UserUpdateWithoutCollectionEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutCollectionEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2313,6 +2593,7 @@ export type UserUncheckedUpdateWithoutCollectionEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -2331,6 +2612,7 @@ export type UserUncheckedUpdateWithoutCollectionEvent_actorRecordsInput = {
 }
 
 export type UserCreateWithoutRemittanceEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2341,6 +2623,7 @@ export type UserCreateWithoutRemittanceEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -2359,6 +2642,7 @@ export type UserCreateWithoutRemittanceEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutRemittanceEvent_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2369,6 +2653,7 @@ export type UserUncheckedCreateWithoutRemittanceEvent_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -2403,6 +2688,7 @@ export type UserUpdateToOneWithWhereWithoutRemittanceEvent_actorRecordsInput = {
 }
 
 export type UserUpdateWithoutRemittanceEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2413,6 +2699,7 @@ export type UserUpdateWithoutRemittanceEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -2431,6 +2718,7 @@ export type UserUpdateWithoutRemittanceEvent_actorRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutRemittanceEvent_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2441,6 +2729,7 @@ export type UserUncheckedUpdateWithoutRemittanceEvent_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -2459,6 +2748,7 @@ export type UserUncheckedUpdateWithoutRemittanceEvent_actorRecordsInput = {
 }
 
 export type UserCreateWithoutUserDevice_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2469,6 +2759,7 @@ export type UserCreateWithoutUserDevice_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -2487,6 +2778,7 @@ export type UserCreateWithoutUserDevice_userRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutUserDevice_userRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2497,6 +2789,7 @@ export type UserUncheckedCreateWithoutUserDevice_userRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -2531,6 +2824,7 @@ export type UserUpdateToOneWithWhereWithoutUserDevice_userRecordsInput = {
 }
 
 export type UserUpdateWithoutUserDevice_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2541,6 +2835,7 @@ export type UserUpdateWithoutUserDevice_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -2559,6 +2854,7 @@ export type UserUpdateWithoutUserDevice_userRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutUserDevice_userRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2569,6 +2865,7 @@ export type UserUncheckedUpdateWithoutUserDevice_userRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -2587,6 +2884,7 @@ export type UserUncheckedUpdateWithoutUserDevice_userRecordsInput = {
 }
 
 export type UserCreateWithoutNotification_recipientRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2597,6 +2895,7 @@ export type UserCreateWithoutNotification_recipientRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -2615,6 +2914,7 @@ export type UserCreateWithoutNotification_recipientRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutNotification_recipientRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2625,6 +2925,7 @@ export type UserUncheckedCreateWithoutNotification_recipientRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -2659,6 +2960,7 @@ export type UserUpdateToOneWithWhereWithoutNotification_recipientRecordsInput = 
 }
 
 export type UserUpdateWithoutNotification_recipientRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2669,6 +2971,7 @@ export type UserUpdateWithoutNotification_recipientRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -2687,6 +2990,7 @@ export type UserUpdateWithoutNotification_recipientRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutNotification_recipientRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2697,6 +3001,7 @@ export type UserUncheckedUpdateWithoutNotification_recipientRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -2715,6 +3020,7 @@ export type UserUncheckedUpdateWithoutNotification_recipientRecordsInput = {
 }
 
 export type UserCreateWithoutAuditLog_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2725,6 +3031,7 @@ export type UserCreateWithoutAuditLog_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipCreateNestedManyWithoutUserInput
@@ -2743,6 +3050,7 @@ export type UserCreateWithoutAuditLog_actorRecordsInput = {
 }
 
 export type UserUncheckedCreateWithoutAuditLog_actorRecordsInput = {
+  customerEnabled?: boolean
   id?: string
   email: string
   passwordHash: string
@@ -2753,6 +3061,7 @@ export type UserUncheckedCreateWithoutAuditLog_actorRecordsInput = {
   archivedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerOrders?: Prisma.OrderUncheckedCreateNestedManyWithoutCustomerInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedCreateNestedManyWithoutUserInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedCreateNestedManyWithoutUserInput
@@ -2787,6 +3096,7 @@ export type UserUpdateToOneWithWhereWithoutAuditLog_actorRecordsInput = {
 }
 
 export type UserUpdateWithoutAuditLog_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2797,6 +3107,7 @@ export type UserUpdateWithoutAuditLog_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUpdateManyWithoutUserNestedInput
@@ -2815,6 +3126,7 @@ export type UserUpdateWithoutAuditLog_actorRecordsInput = {
 }
 
 export type UserUncheckedUpdateWithoutAuditLog_actorRecordsInput = {
+  customerEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2825,6 +3137,7 @@ export type UserUncheckedUpdateWithoutAuditLog_actorRecordsInput = {
   archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerOrders?: Prisma.OrderUncheckedUpdateManyWithoutCustomerNestedInput
   globalRoleGrant_userRecords?: Prisma.GlobalRoleGrantUncheckedUpdateManyWithoutUserNestedInput
   companyMembership_userRecords?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
   shopMembership_userRecords?: Prisma.ShopMembershipUncheckedUpdateManyWithoutUserNestedInput
@@ -2848,6 +3161,7 @@ export type UserUncheckedUpdateWithoutAuditLog_actorRecordsInput = {
  */
 
 export type UserCountOutputType = {
+  customerOrders: number
   globalRoleGrant_userRecords: number
   companyMembership_userRecords: number
   shopMembership_userRecords: number
@@ -2867,6 +3181,7 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  customerOrders?: boolean | UserCountOutputTypeCountCustomerOrdersArgs
   globalRoleGrant_userRecords?: boolean | UserCountOutputTypeCountGlobalRoleGrant_userRecordsArgs
   companyMembership_userRecords?: boolean | UserCountOutputTypeCountCompanyMembership_userRecordsArgs
   shopMembership_userRecords?: boolean | UserCountOutputTypeCountShopMembership_userRecordsArgs
@@ -2893,6 +3208,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCustomerOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderWhereInput
 }
 
 /**
@@ -3009,6 +3331,7 @@ export type UserCountOutputTypeCountAuditLog_actorRecordsArgs<ExtArgs extends ru
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  customerEnabled?: boolean
   id?: boolean
   email?: boolean
   passwordHash?: boolean
@@ -3019,6 +3342,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   archivedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  customerOrders?: boolean | Prisma.User$customerOrdersArgs<ExtArgs>
   globalRoleGrant_userRecords?: boolean | Prisma.User$globalRoleGrant_userRecordsArgs<ExtArgs>
   companyMembership_userRecords?: boolean | Prisma.User$companyMembership_userRecordsArgs<ExtArgs>
   shopMembership_userRecords?: boolean | Prisma.User$shopMembership_userRecordsArgs<ExtArgs>
@@ -3041,6 +3365,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 
 export type UserSelectScalar = {
+  customerEnabled?: boolean
   id?: boolean
   email?: boolean
   passwordHash?: boolean
@@ -3053,8 +3378,9 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "phone" | "status" | "emailVerifiedAt" | "archivedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"customerEnabled" | "id" | "email" | "passwordHash" | "fullName" | "phone" | "status" | "emailVerifiedAt" | "archivedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  customerOrders?: boolean | Prisma.User$customerOrdersArgs<ExtArgs>
   globalRoleGrant_userRecords?: boolean | Prisma.User$globalRoleGrant_userRecordsArgs<ExtArgs>
   companyMembership_userRecords?: boolean | Prisma.User$companyMembership_userRecordsArgs<ExtArgs>
   shopMembership_userRecords?: boolean | Prisma.User$shopMembership_userRecordsArgs<ExtArgs>
@@ -3077,6 +3403,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    customerOrders: Prisma.$OrderPayload<ExtArgs>[]
     globalRoleGrant_userRecords: Prisma.$GlobalRoleGrantPayload<ExtArgs>[]
     companyMembership_userRecords: Prisma.$CompanyMembershipPayload<ExtArgs>[]
     shopMembership_userRecords: Prisma.$ShopMembershipPayload<ExtArgs>[]
@@ -3095,6 +3422,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     auditLog_actorRecords: Prisma.$AuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
+    customerEnabled: boolean
     id: string
     email: string
     passwordHash: string
@@ -3188,8 +3516,8 @@ export interface UserDelegate<ExtArgs extends runtime.Types.Extensions.InternalA
    * // Get first 10 Users
    * const users = await prisma.user.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
+   * // Only select the `customerEnabled`
+   * const userWithCustomerEnabledOnly = await prisma.user.findMany({ select: { customerEnabled: true } })
    * 
    */
   findMany<T extends UserFindManyArgs>(args?: Prisma.SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -3445,6 +3773,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  customerOrders<T extends Prisma.User$customerOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customerOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   globalRoleGrant_userRecords<T extends Prisma.User$globalRoleGrant_userRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$globalRoleGrant_userRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GlobalRoleGrantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   companyMembership_userRecords<T extends Prisma.User$companyMembership_userRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$companyMembership_userRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   shopMembership_userRecords<T extends Prisma.User$shopMembership_userRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$shopMembership_userRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShopMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3490,6 +3819,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  * Fields of the User model
  */
 export interface UserFieldRefs {
+  readonly customerEnabled: Prisma.FieldRef<"User", 'Boolean'>
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
@@ -3845,6 +4175,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.customerOrders
+ */
+export type User$customerOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Order
+   */
+  select?: Prisma.OrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Order
+   */
+  omit?: Prisma.OrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderInclude<ExtArgs> | null
+  where?: Prisma.OrderWhereInput
+  orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[]
+  cursor?: Prisma.OrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderScalarFieldEnum | Prisma.OrderScalarFieldEnum[]
 }
 
 /**

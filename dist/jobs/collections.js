@@ -1,3 +1,4 @@
+import { reportJobResult, reportJobFailure } from "../utils/job-log.js";
 import "dotenv/config";
 import { getFinancialService } from "../modules/collections/routes.js";
 import { FinancialNotifications } from "../modules/collections/notifications.js";
@@ -11,7 +12,7 @@ try {
     const service = getFinancialService(), push = process.env.DELIVERY_PUSH_ENABLED === "true"
         ? expoNotification(service.db)
         : undefined;
-    console.log(await new FinancialNotifications(service).run({
+    await reportJobResult(await new FinancialNotifications(service).run({
         ...subscriptionMailer(),
         ...(push
             ? {
@@ -25,6 +26,7 @@ try {
     }, limit));
 }
 catch (e) {
+    await reportJobFailure(e);
     console.error(e instanceof Error ? e.name : "FinancialNotificationJobError");
     process.exitCode = 1;
 }

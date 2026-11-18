@@ -470,10 +470,6 @@ export type GlobalRoleGrantUncheckedUpdateManyWithoutRoleNestedInput = {
   deleteMany?: Prisma.GlobalRoleGrantScalarWhereInput | Prisma.GlobalRoleGrantScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type GlobalRoleGrantCreateNestedOneWithoutSubscriptionPayment_validatorRecordsInput = {
   create?: Prisma.XOR<Prisma.GlobalRoleGrantCreateWithoutSubscriptionPayment_validatorRecordsInput, Prisma.GlobalRoleGrantUncheckedCreateWithoutSubscriptionPayment_validatorRecordsInput>
   connectOrCreate?: Prisma.GlobalRoleGrantCreateOrConnectWithoutSubscriptionPayment_validatorRecordsInput

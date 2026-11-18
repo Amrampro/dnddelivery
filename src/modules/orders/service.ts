@@ -203,6 +203,22 @@ export class OrderService {
       recipientDetails: r as Prisma.InputJsonObject,
     };
   }
+  async customerLookup(c: OrderContext, email: string) {
+    return this.transaction(async (tx) => {
+      await access(tx, c, "create");
+      const user = await tx.user.findFirst({
+        where: {
+          email: email.trim().toLowerCase(),
+          customerEnabled: true,
+          emailVerifiedAt: { not: null },
+          status: "ACTIVE",
+          archivedAt: null,
+        },
+        select: { fullName: true, email: true, phone: true },
+      });
+      return { customer: user };
+    });
+  }
   fields(x: v.Content) {
     return {
       ...this.snapshot(x),
@@ -506,6 +522,25 @@ export class OrderService {
         where: { id },
         data: {
           ...this.fields(x),
+          ...(p.recipientEmail !== x.recipient.email
+            ? {
+                customerUserId: p.isDraft
+                  ? null
+                  : ((
+                      await tx.user.findFirst({
+                        where: {
+                          email: x.recipient.email,
+                          customerEnabled: true,
+                          emailVerifiedAt: { not: null },
+                          status: "ACTIVE",
+                          archivedAt: null,
+                        },
+                        select: { id: true },
+                      })
+                    )?.id ?? null),
+                trackingVersion: { increment: 1 },
+              }
+            : {}),
           ...(p.isDraft
             ? {
                 recipientId:
@@ -890,6 +925,21 @@ export class OrderService {
       recipientEmail: string;
     },
   ) {
+    const customer = await tx.user.findFirst({
+      where: {
+        email: p.recipientEmail,
+        customerEnabled: true,
+        emailVerifiedAt: { not: null },
+        status: "ACTIVE",
+        archivedAt: null,
+      },
+      select: { id: true },
+    });
+    if (customer)
+      await tx.order.updateMany({
+        where: { id: p.id, customerUserId: null, isDraft: false },
+        data: { customerUserId: customer.id },
+      });
     await tx.notification.create({
       data: {
         companyId: p.companyId,

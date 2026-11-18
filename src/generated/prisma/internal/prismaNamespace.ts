@@ -467,7 +467,8 @@ export const ModelName = {
   OtpException: 'OtpException',
   DeliveryEvidence: 'DeliveryEvidence',
   NotificationAttempt: 'NotificationAttempt',
-  FinancialEvent: 'FinancialEvent'
+  FinancialEvent: 'FinancialEvent',
+  CustomerRegistration: 'CustomerRegistration'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -483,7 +484,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permission" | "rolePermission" | "globalRoleGrant" | "companyAccessRequest" | "company" | "companyMembership" | "companyInvitation" | "agency" | "agencyMembership" | "driverProfile" | "shop" | "shopMembership" | "companyShop" | "product" | "session" | "accountToken" | "authEvent" | "stock" | "transfer" | "transferItem" | "transferEvent" | "recipient" | "order" | "orderItem" | "stockReservation" | "stockMovement" | "orderEvent" | "delivery" | "deliveryAssignment" | "deliveryEvent" | "deliveryOtp" | "deliveryProof" | "fileAsset" | "proofPhoto" | "collection" | "remittance" | "remittanceItem" | "collectionEvent" | "remittanceEvent" | "subscriptionPlan" | "subscriptionPrice" | "subscription" | "subscriptionPayment" | "subscriptionPeriod" | "subscriptionEvent" | "userDevice" | "notification" | "auditLog" | "shopInvitation" | "stockDeposit" | "stockDepositItem" | "stockWithdrawal" | "transferIncident" | "inventorySession" | "inventoryItem" | "parcelLeg" | "parcelHandover" | "deliveryAttempt" | "deliveryIncident" | "deliveryReturn" | "financialCorrection" | "financialDiscrepancy" | "trackingAccess" | "trackingThrottle" | "otpAttempt" | "otpException" | "deliveryEvidence" | "notificationAttempt" | "financialEvent"
+    modelProps: "user" | "role" | "permission" | "rolePermission" | "globalRoleGrant" | "companyAccessRequest" | "company" | "companyMembership" | "companyInvitation" | "agency" | "agencyMembership" | "driverProfile" | "shop" | "shopMembership" | "companyShop" | "product" | "session" | "accountToken" | "authEvent" | "stock" | "transfer" | "transferItem" | "transferEvent" | "recipient" | "order" | "orderItem" | "stockReservation" | "stockMovement" | "orderEvent" | "delivery" | "deliveryAssignment" | "deliveryEvent" | "deliveryOtp" | "deliveryProof" | "fileAsset" | "proofPhoto" | "collection" | "remittance" | "remittanceItem" | "collectionEvent" | "remittanceEvent" | "subscriptionPlan" | "subscriptionPrice" | "subscription" | "subscriptionPayment" | "subscriptionPeriod" | "subscriptionEvent" | "userDevice" | "notification" | "auditLog" | "shopInvitation" | "stockDeposit" | "stockDepositItem" | "stockWithdrawal" | "transferIncident" | "inventorySession" | "inventoryItem" | "parcelLeg" | "parcelHandover" | "deliveryAttempt" | "deliveryIncident" | "deliveryReturn" | "financialCorrection" | "financialDiscrepancy" | "trackingAccess" | "trackingThrottle" | "otpAttempt" | "otpException" | "deliveryEvidence" | "notificationAttempt" | "financialEvent" | "customerRegistration"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5173,6 +5174,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CustomerRegistration: {
+      payload: Prisma.$CustomerRegistrationPayload<ExtArgs>
+      fields: Prisma.CustomerRegistrationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CustomerRegistrationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CustomerRegistrationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload>
+        }
+        findFirst: {
+          args: Prisma.CustomerRegistrationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CustomerRegistrationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload>
+        }
+        findMany: {
+          args: Prisma.CustomerRegistrationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload>[]
+        }
+        create: {
+          args: Prisma.CustomerRegistrationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload>
+        }
+        createMany: {
+          args: Prisma.CustomerRegistrationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.CustomerRegistrationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload>
+        }
+        update: {
+          args: Prisma.CustomerRegistrationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload>
+        }
+        deleteMany: {
+          args: Prisma.CustomerRegistrationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CustomerRegistrationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.CustomerRegistrationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerRegistrationPayload>
+        }
+        aggregate: {
+          args: Prisma.CustomerRegistrationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCustomerRegistration>
+        }
+        groupBy: {
+          args: Prisma.CustomerRegistrationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerRegistrationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CustomerRegistrationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerRegistrationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -5213,6 +5280,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 
 export const UserScalarFieldEnum = {
+  customerEnabled: 'customerEnabled',
   id: 'id',
   email: 'email',
   passwordHash: 'passwordHash',
@@ -5647,6 +5715,7 @@ export type RecipientScalarFieldEnum = (typeof RecipientScalarFieldEnum)[keyof t
 
 
 export const OrderScalarFieldEnum = {
+  customerUserId: 'customerUserId',
   trackingVersion: 'trackingVersion',
   isDraft: 'isDraft',
   version: 'version',
@@ -6572,6 +6641,20 @@ export const FinancialEventScalarFieldEnum = {
 export type FinancialEventScalarFieldEnum = (typeof FinancialEventScalarFieldEnum)[keyof typeof FinancialEventScalarFieldEnum]
 
 
+export const CustomerRegistrationScalarFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  email: 'email',
+  fullName: 'fullName',
+  phone: 'phone',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CustomerRegistrationScalarFieldEnum = (typeof CustomerRegistrationScalarFieldEnum)[keyof typeof CustomerRegistrationScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -6934,6 +7017,7 @@ export type RecipientOrderByRelevanceFieldEnum = (typeof RecipientOrderByRelevan
 
 
 export const OrderOrderByRelevanceFieldEnum = {
+  customerUserId: 'customerUserId',
   clientKey: 'clientKey',
   requestHash: 'requestHash',
   recipientCountry: 'recipientCountry',
@@ -7635,10 +7719,28 @@ export const FinancialEventOrderByRelevanceFieldEnum = {
 export type FinancialEventOrderByRelevanceFieldEnum = (typeof FinancialEventOrderByRelevanceFieldEnum)[keyof typeof FinancialEventOrderByRelevanceFieldEnum]
 
 
+export const CustomerRegistrationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  tokenHash: 'tokenHash',
+  email: 'email',
+  fullName: 'fullName',
+  phone: 'phone'
+} as const
+
+export type CustomerRegistrationOrderByRelevanceFieldEnum = (typeof CustomerRegistrationOrderByRelevanceFieldEnum)[keyof typeof CustomerRegistrationOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
  */
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
 
 
 /**
@@ -7666,13 +7768,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'RoleScope'
  */
 export type EnumRoleScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoleScope'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -8079,6 +8174,7 @@ export type GlobalOmitConfig = {
   deliveryEvidence?: Prisma.DeliveryEvidenceOmit
   notificationAttempt?: Prisma.NotificationAttemptOmit
   financialEvent?: Prisma.FinancialEventOmit
+  customerRegistration?: Prisma.CustomerRegistrationOmit
 }
 
 /* Types for Logging */

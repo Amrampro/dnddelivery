@@ -372,3 +372,8 @@ export type NotificationAttempt = Prisma.NotificationAttemptModel
  * 
  */
 export type FinancialEvent = Prisma.FinancialEventModel
+/**
+ * Model CustomerRegistration
+ * 
+ */
+export type CustomerRegistration = Prisma.CustomerRegistrationModel

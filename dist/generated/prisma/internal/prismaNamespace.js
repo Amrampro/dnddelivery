@@ -137,7 +137,8 @@ export const ModelName = {
     OtpException: 'OtpException',
     DeliveryEvidence: 'DeliveryEvidence',
     NotificationAttempt: 'NotificationAttempt',
-    FinancialEvent: 'FinancialEvent'
+    FinancialEvent: 'FinancialEvent',
+    CustomerRegistration: 'CustomerRegistration'
 };
 /**
  * Enums
@@ -149,6 +150,7 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
     Serializable: 'Serializable'
 });
 export const UserScalarFieldEnum = {
+    customerEnabled: 'customerEnabled',
     id: 'id',
     email: 'email',
     passwordHash: 'passwordHash',
@@ -487,6 +489,7 @@ export const RecipientScalarFieldEnum = {
     updatedAt: 'updatedAt'
 };
 export const OrderScalarFieldEnum = {
+    customerUserId: 'customerUserId',
     trackingVersion: 'trackingVersion',
     isDraft: 'isDraft',
     version: 'version',
@@ -1224,6 +1227,16 @@ export const FinancialEventScalarFieldEnum = {
     requestHash: 'requestHash',
     createdAt: 'createdAt'
 };
+export const CustomerRegistrationScalarFieldEnum = {
+    id: 'id',
+    tokenHash: 'tokenHash',
+    email: 'email',
+    fullName: 'fullName',
+    phone: 'phone',
+    expiresAt: 'expiresAt',
+    usedAt: 'usedAt',
+    createdAt: 'createdAt'
+};
 export const SortOrder = {
     asc: 'asc',
     desc: 'desc'
@@ -1466,6 +1479,7 @@ export const RecipientOrderByRelevanceFieldEnum = {
     city: 'city'
 };
 export const OrderOrderByRelevanceFieldEnum = {
+    customerUserId: 'customerUserId',
     clientKey: 'clientKey',
     requestHash: 'requestHash',
     recipientCountry: 'recipientCountry',
@@ -1978,5 +1992,12 @@ export const FinancialEventOrderByRelevanceFieldEnum = {
     reason: 'reason',
     operationKey: 'operationKey',
     requestHash: 'requestHash'
+};
+export const CustomerRegistrationOrderByRelevanceFieldEnum = {
+    id: 'id',
+    tokenHash: 'tokenHash',
+    email: 'email',
+    fullName: 'fullName',
+    phone: 'phone'
 };
 export const defineExtension = runtime.Extensions.defineExtension;

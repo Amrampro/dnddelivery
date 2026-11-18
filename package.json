@@ -8,6 +8,8 @@
   },
   "scripts": {
     "ops:preflight": "node dist/jobs/preflight.js",
+    "ops:record": "node dist/jobs/record-operation.js",
+    "ops:monitor": "node dist/jobs/monitor.js",
     "confirmation:notifications": "node dist/jobs/confirmation.js",
     "confirmation:cleanup": "node dist/jobs/proof-cleanup.js",
     "collections:notifications": "node dist/jobs/collections.js",
@@ -21,7 +23,7 @@
     "build": "prisma generate && tsc",
     "start": "node dist/server.js",
     "lint": "eslint .",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "node scripts/test-unit.mjs",
     "typecheck": "prisma generate && tsc --noEmit && tsc -p tsconfig.tests.json",
     "db:validate": "prisma validate",
     "db:generate": "prisma generate",
@@ -30,7 +32,10 @@
     "db:migrate:status": "prisma migrate status",
     "db:seed": "prisma db seed",
     "test:db": "tsx scripts/test-database.ts",
-    "auth:bootstrap": "tsx scripts/bootstrap-super-admin.ts"
+    "auth:bootstrap": "tsx scripts/bootstrap-super-admin.ts",
+    "postinstall": "node scripts/picomatch-security.mjs install",
+    "audit:security": "node scripts/picomatch-security.mjs audit",
+    "test:dependency-security": "node --test ../shared/picomatch-security.test.mjs"
   },
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",

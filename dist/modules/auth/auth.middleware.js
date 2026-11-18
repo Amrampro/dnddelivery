@@ -5,6 +5,7 @@ export function principal(res) {
 }
 export function requireAuthentication(service, checkContext = true) {
     return async (req, res, next) => {
+        res.locals.securityEvent = (userId, metadata) => service().store.event(userId, "PERMISSIONS_CHANGED", metadata);
         try {
             const type = clientType(req);
             const bearer = req.get("Authorization");
@@ -16,6 +17,7 @@ export function requireAuthentication(service, checkContext = true) {
             if (typeof token !== "string")
                 throw unauthorized();
             const authenticated = await service().authenticate(token, type);
+            res.locals.principal = authenticated;
             const expected = req.get("X-DND-Context");
             if (req.get("X-DND-User") !== undefined && req.get("X-DND-User") !== authenticated.user.id)
                 throw new AuthError(403, "SESSION_CHANGED", "Le compte connecté a changé dans une autre fenêtre. Actualisez vos accès avant de poursuivre.");
@@ -23,7 +25,6 @@ export function requireAuthentication(service, checkContext = true) {
             const actual = selected && typeof selected === "object" && "key" in selected ? selected.key : null;
             if (checkContext && expected !== undefined && expected !== actual)
                 throw new AuthError(403, "CONTEXT_CHANGED", "Votre environnement a changé dans une autre fenêtre. Actualisez vos accès avant de poursuivre.");
-            res.locals.principal = authenticated;
             next();
         }
         catch (error) {

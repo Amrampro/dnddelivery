@@ -2,6 +2,7 @@ import { StockService } from "../stocks/service.js";
 import { stockError } from "../stocks/access.js";
 import { token, digest, seal, unseal, eligible } from "./security.js";
 import { ensureOtp } from "./otp.js";
+import { AuthError } from "../auth/errors.js";
 export const trackingUnavailable = () => stockError("TRACKING_UNAVAILABLE", "Ce suivi est expiré ou inaccessible. Demandez un nouveau lien.", 404);
 export const publicDeliveryEvents = {
     CREATED: "Livraison préparée",
@@ -51,7 +52,18 @@ export async function trackingLink(tx, o, now = new Date()) {
                 expiresAt: new Date(now.getTime() + 30 * 86400000),
             },
         });
-        await tx.auditLog.create({ data: { companyId: o.companyId, action: "TRACKING_LINK_ISSUED", entityType: "Order", entityId: o.id, metadata: { grantId: grant.id, expiresAt: grant.expiresAt.toISOString() } } });
+        await tx.auditLog.create({
+            data: {
+                companyId: o.companyId,
+                action: "TRACKING_LINK_ISSUED",
+                entityType: "Order",
+                entityId: o.id,
+                metadata: {
+                    grantId: grant.id,
+                    expiresAt: grant.expiresAt.toISOString(),
+                },
+            },
+        });
     }
     const origin = process.env.WEB_APP_URL || "http://localhost:5173";
     return `${origin}/suivi#reference=${encodeURIComponent(o.publicNumber)}&token=${unseal(grant.sealedToken, "tracking:" + o.id)}`;
@@ -127,6 +139,73 @@ export class TrackingService {
             message: "Si ces informations correspondent à une commande, un lien personnel sera envoyé à l’adresse enregistrée. Consultez votre messagerie.",
         };
     }
+    async publicStatus(input, ip) {
+        const result = await this.transaction(async (tx) => {
+            if (!(await this.throttle(tx, "public-status:" + ip, 60, 3600000)))
+                return null;
+            const o = await tx.order.findFirst({
+                where: {
+                    publicNumber: input.reference.trim().toUpperCase(),
+                    recipientEmail: input.email.trim().toLowerCase(),
+                    isDraft: false,
+                    archivedAt: null,
+                    company: { status: "ACTIVE", archivedAt: null },
+                },
+                select: {
+                    id: true,
+                    companyId: true,
+                    publicNumber: true,
+                    status: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    delivery_orderRecords: { select: { id: true, phase: true } },
+                },
+            });
+            if (!o)
+                return null;
+            const d = o.delivery_orderRecords[0];
+            const events = d
+                ? await tx.deliveryEvent.findMany({
+                    where: {
+                        companyId: o.companyId,
+                        deliveryId: d.id,
+                        action: { in: Object.keys(publicDeliveryEvents) },
+                    },
+                    select: { id: true, action: true, createdAt: true },
+                    orderBy: { sequence: "asc" },
+                })
+                : [];
+            // Deliberately no recipient, address, actors, proofs or handover code.
+            const cancellations = await tx.orderEvent.findMany({
+                where: { companyId: o.companyId, orderId: o.id, action: "CANCELLED" },
+                select: { id: true, createdAt: true },
+            });
+            return {
+                reference: o.publicNumber,
+                status: o.status,
+                phase: d?.phase,
+                createdAt: o.createdAt,
+                updatedAt: new Date(Math.max(o.updatedAt.getTime(), ...events.map((e) => e.createdAt.getTime()))),
+                refreshedAt: this.clock(),
+                events: [
+                    { id: o.id, label: "Commande enregistrée", createdAt: o.createdAt },
+                    ...events.map((e) => ({
+                        id: e.id,
+                        label: publicDeliveryEvents[e.action],
+                        createdAt: e.createdAt,
+                    })),
+                    ...cancellations.map((e) => ({
+                        id: e.id,
+                        label: "Commande annulée",
+                        createdAt: e.createdAt,
+                    })),
+                ].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()),
+            };
+        });
+        if (!result)
+            throw new AuthError(404, "TRACKING_NOT_FOUND", "Aucun suivi disponible pour ces informations. Vérifiez la référence et l'e-mail du destinataire, puis réessayez plus tard si nécessaire.");
+        return result;
+    }
     async verify(reference, raw, ip) {
         const result = await this.transaction(async (tx) => {
             if (!(await this.throttle(tx, "verify-ip:" + ip, 30, 900000)))
@@ -161,29 +240,53 @@ export class TrackingService {
                     expiresAt: new Date(Math.min(link.expiresAt.getTime(), now.getTime() + 86400000)),
                 },
             });
-            await tx.auditLog.create({ data: { companyId: o.companyId, action: "TRACKING_ACCESS_VERIFIED", entityType: "Order", entityId: o.id, metadata: { linkId: link.id } } });
+            await tx.auditLog.create({
+                data: {
+                    companyId: o.companyId,
+                    action: "TRACKING_ACCESS_VERIFIED",
+                    entityType: "Order",
+                    entityId: o.id,
+                    metadata: { linkId: link.id },
+                },
+            });
             return { session, reference: o.publicNumber };
         });
         if (!result)
             throw trackingUnavailable();
         return result;
     }
-    async authorized(tx, reference, raw) {
-        const grant = await tx.trackingAccess.findUnique({
-            where: { tokenHash: digest(raw) },
-        });
-        if (!grant ||
-            grant.kind !== "SESSION" ||
-            grant.revokedAt ||
-            grant.expiresAt <= this.clock())
+    async authorized(tx, reference, raw, customerId) {
+        const grant = customerId
+            ? null
+            : await tx.trackingAccess.findUnique({
+                where: { tokenHash: digest(raw) },
+            });
+        if (!customerId &&
+            (!grant ||
+                grant.kind !== "SESSION" ||
+                grant.revokedAt ||
+                grant.expiresAt <= this.clock()))
             throw trackingUnavailable();
         const o = await tx.order.findFirst({
             where: {
-                id: grant.orderId,
-                companyId: grant.companyId,
+                ...(customerId
+                    ? {
+                        customerUserId: customerId,
+                        customer: {
+                            customerEnabled: true,
+                            emailVerifiedAt: { not: null },
+                            status: "ACTIVE",
+                            archivedAt: null,
+                        },
+                    }
+                    : {
+                        id: grant.orderId,
+                        companyId: grant.companyId,
+                        trackingVersion: grant.version,
+                    }),
                 publicNumber: reference,
                 isDraft: false,
-                trackingVersion: grant.version,
+                archivedAt: null,
                 company: { status: "ACTIVE", archivedAt: null },
             },
             include: {
@@ -204,9 +307,9 @@ export class TrackingService {
             throw trackingUnavailable();
         return o;
     }
-    detail(reference, raw) {
+    detail(reference, raw, customerId) {
         return this.transaction(async (tx) => {
-            const o = await this.authorized(tx, reference, raw), d = o.delivery_orderRecords[0];
+            const o = await this.authorized(tx, reference, raw, customerId), d = o.delivery_orderRecords[0];
             const events = d
                 ? await tx.deliveryEvent.findMany({
                     where: {
@@ -245,7 +348,14 @@ export class TrackingService {
                     ["FINAL_DISTRIBUTION", "AT_DESTINATION", "AWAITING_PROOF"].includes(d.phase ?? "") &&
                     d.status === "IN_PROGRESS",
                 failure: d?.status === "FAILED"
-                    ? { ABSENT: "Le destinataire était absent.", UNREACHABLE: "Le destinataire n’a pas pu être joint.", ADDRESS_NOT_FOUND: "L’adresse de remise n’a pas pu être trouvée.", REFUSED: "Le colis a été refusé.", OTP_UNAVAILABLE: "Le code de remise n’a pas pu être obtenu." }[d.failureReason ?? ""] ?? "La remise n’a pas pu aboutir. Contactez votre expéditeur pour la suite."
+                    ? ({
+                        ABSENT: "Le destinataire était absent.",
+                        UNREACHABLE: "Le destinataire n’a pas pu être joint.",
+                        ADDRESS_NOT_FOUND: "L’adresse de remise n’a pas pu être trouvée.",
+                        REFUSED: "Le colis a été refusé.",
+                        OTP_UNAVAILABLE: "Le code de remise n’a pas pu être obtenu.",
+                    }[d.failureReason ?? ""] ??
+                        "La remise n’a pas pu aboutir. Contactez votre expéditeur pour la suite.")
                     : null,
                 events: [
                     { id: o.id, label: "Commande enregistrée", createdAt: o.createdAt },
@@ -264,16 +374,21 @@ export class TrackingService {
             };
         });
     }
-    async code(reference, raw) {
-        const hint = await this.db.trackingAccess.findUnique({
-            where: { tokenHash: digest(raw) },
-            select: { companyId: true },
-        });
+    async code(reference, raw, customerId) {
+        const hint = customerId
+            ? await this.db.order.findFirst({
+                where: { publicNumber: reference, customerUserId: customerId },
+                select: { companyId: true },
+            })
+            : await this.db.trackingAccess.findUnique({
+                where: { tokenHash: digest(raw) },
+                select: { companyId: true },
+            });
         if (!hint)
             throw trackingUnavailable();
         return this.transaction(async (tx) => {
             await tx.$queryRaw `SELECT id FROM Company WHERE id=${hint.companyId} FOR UPDATE`;
-            const o = await this.authorized(tx, reference, raw);
+            const o = await this.authorized(tx, reference, raw, customerId);
             const p = await tx.delivery.findUnique({
                 where: { companyId_orderId: { companyId: o.companyId, orderId: o.id } },
             });

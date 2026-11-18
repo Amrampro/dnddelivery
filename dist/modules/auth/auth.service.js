@@ -18,6 +18,7 @@ export class AuthService {
     }
     publicUser(user) {
         return {
+            customerEnabled: user.customerEnabled === true,
             id: user.id,
             email: user.email,
             fullName: user.fullName,
@@ -44,6 +45,8 @@ export class AuthService {
         if (!active(user) || !verified) {
             await this.store.event(user?.id ?? null, "LOGIN_FAILURE", {
                 reason: "invalid_credentials",
+                attemptedEmail: email.trim().toLowerCase().slice(0, 254),
+                client: meta.client,
             });
             throw new AuthError(401, "INVALID_CREDENTIALS", "E-mail ou mot de passe incorrect.");
         }
@@ -71,7 +74,7 @@ export class AuthService {
                 userAgent: meta.userAgent,
                 ipHash: meta.ipHash,
             });
-            await tx.event(user.id, "LOGIN_SUCCESS", { client: meta.client });
+            await tx.event(user.id, "LOGIN_SUCCESS", { client: meta.client, sessionId: value.id });
             return value;
         });
         return this.bundle(user, session, refresh);
@@ -150,7 +153,7 @@ export class AuthService {
         this.checkCsrf(session, csrf);
         await this.store.transaction(async (tx) => {
             await tx.revokeFamily(session.familyId, this.clock());
-            await tx.event(session.userId, "LOGOUT", { scope: "device" });
+            await tx.event(session.userId, "LOGOUT", { scope: "device", sessionId: session.id });
         });
     }
     async logoutAll(principal) {
@@ -213,8 +216,10 @@ export class AuthService {
             throw new AuthError(403, "CONTEXT_DENIED", "Votre environnement ou vos autorisations ont changé. Sélectionnez un accès valide.");
         if (value.scope === "GLOBAL")
             await authorizeGlobal(this.store.authorization(), p.user.id, permission);
-        else if (value.scope === "SHOP" && value.shopId &&
-            (permission.startsWith("shop.") || (!value.companyId && permission === "workspace.access")))
+        else if (value.scope === "SHOP" &&
+            value.shopId &&
+            (permission.startsWith("shop.") ||
+                (!value.companyId && permission === "workspace.access")))
             await authorizeShop(this.store.authorization(), p.user.id, value.shopId, permission);
         else if (value.companyId)
             await authorizeTenant(this.store.authorization(), {
@@ -245,7 +250,7 @@ export class AuthService {
             if (!value || value.userId !== p.user.id)
                 throw new AuthError(404, "SESSION_NOT_FOUND", "Session introuvable.");
             await tx.revokeFamily(value.familyId, this.clock());
-            await tx.event(p.user.id, "TOKEN_REVOKED", { reason: "device_revoked" });
+            await tx.event(p.user.id, "TOKEN_REVOKED", { reason: "device_revoked", sessionId: id });
         });
     }
     async updateProfile(p, data) {

@@ -34,6 +34,18 @@ export function createOrderRouter(auth = getAuthService, service = getOrderServi
     });
     const id = (x) => z.uuid().parse(x);
     r.get("/orders/options", async (_q, s) => s.json(await service().options(c(s))));
+    r.post("/orders/customer-lookup", rateLimit({
+        windowMs: 3600000,
+        limit: 30,
+        standardHeaders: "draft-8",
+        legacyHeaders: false,
+        keyGenerator: (_q, s) => principal(s).user.id,
+    }), async (q, s) => {
+        s.json(await service().customerLookup(c(s), z
+            .object({ email: z.email().max(254) })
+            .strict()
+            .parse(q.body).email));
+    });
     r.get("/orders/catalogue", async (q, s) => s.json(await service().catalogue(c(s), z
         .object({
         companyId: z.uuid(),

@@ -9,9 +9,10 @@ import { adminController } from "./controller.js";
 import { acceptInvitation, inspectInvitation } from "./validation.js";
 import { OrganizationService } from "../organization/service.js";
 import { listShops, shopDetail } from "./shops.js";
-import { idSchema, listQuery, statusChange, versionSchema } from "./validation.js";
+import { administrationLogs, logsQuery } from "./logs.js";
+import { idSchema, listQuery, statusChange, versionSchema, } from "./validation.js";
 import { z } from "zod";
-import { accessRequestQuery, accessRequestDecision, listAccessRequests, decideAccessRequest } from "./access-requests.js";
+import { accessRequestQuery, accessRequestDecision, listAccessRequests, decideAccessRequest, } from "./access-requests.js";
 export function createAdminRouter(auth = getAuthService, service = getAdminService, origins = env.CORS_ORIGINS) {
     const router = Router(), controller = adminController(service);
     router.use((_req, res, next) => {
@@ -52,6 +53,9 @@ export function createAdminRouter(auth = getAuthService, service = getAdminServi
         ? writes(req, res, next)
         : next());
     router.get("/dashboard", controller.dashboard);
+    router.get("/logs", async (req, res) => {
+        res.json(await administrationLogs(service().db, logsQuery.parse(req.query)));
+    });
     router.get("/access-requests", async (req, res) => {
         res.json(await listAccessRequests(service(), accessRequestQuery.parse(req.query)));
     });
@@ -68,7 +72,10 @@ export function createAdminRouter(auth = getAuthService, service = getAdminServi
         res.json(await service().shopStatus(principal(res).user.id, idSchema.parse(req.params.id), statusChange.parse(req.body)));
     });
     router.delete("/shops/:id", async (req, res) => {
-        const input = versionSchema.extend({ reason: z.string().trim().min(3).max(500) }).strict().parse(req.body);
+        const input = versionSchema
+            .extend({ reason: z.string().trim().min(3).max(500) })
+            .strict()
+            .parse(req.body);
         res.json(await service().shopStatus(principal(res).user.id, idSchema.parse(req.params.id), { ...input, status: "ARCHIVED" }));
     });
     router.get("/invitations", controller.invitations);
@@ -86,6 +93,46 @@ export function createAdminRouter(auth = getAuthService, service = getAdminServi
     router.post("/invitations/:id/revoke", controller.revoke);
     router.get("/activity", controller.history);
     router.get("/users/lookup", controller.users);
+    router.get("/users", async (q, s) => {
+        const { page, search, kind } = z
+            .object({
+            page: z.coerce.number().int().min(1).max(100000).default(1),
+            search: z.string().trim().max(160).default(""),
+            kind: z.enum(["all", "customer"]).default("all"),
+        })
+            .parse(q.query);
+        const where = {
+            ...(kind === "customer" ? { customerEnabled: true } : {}),
+            ...(search
+                ? {
+                    OR: [
+                        { email: { contains: search } },
+                        { fullName: { contains: search } },
+                    ],
+                }
+                : {}),
+        };
+        const [items, total] = await Promise.all([
+            service().db.user.findMany({
+                where,
+                skip: (page - 1) * 20,
+                take: 20,
+                orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+                select: {
+                    id: true,
+                    email: true,
+                    fullName: true,
+                    phone: true,
+                    status: true,
+                    customerEnabled: true,
+                    emailVerifiedAt: true,
+                    createdAt: true,
+                },
+            }),
+            service().db.user.count({ where }),
+        ]);
+        s.json({ items, total, page });
+    });
     router.put("/companies/:id/logo", express.raw({
         type: ["image/png", "image/jpeg", "image/webp"],
         limit: "2mb",

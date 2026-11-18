@@ -32,6 +32,8 @@ export function createAuthRouter(
     auth = requireAuthentication(service, false),
     csrf = requireCsrf(service);
   router.use((_req, res, next) => {
+    res.locals.securityEvent = (userId: string | null, metadata: Record<string, string>) =>
+      service().store.event(userId, "PERMISSIONS_CHANGED", metadata);
     res.set("Cache-Control", "no-store");
     res.set("Pragma", "no-cache");
     next();
